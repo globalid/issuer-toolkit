@@ -8,7 +8,7 @@ test('should not throw if signature is valid', () => {
 });
 
 test('should throw InvalidSignatureError if signature is invalid', () => {
-  const { publicKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
-  
+  const { publicKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
+
   expect(() => verifySignature(gidCredentialRequest, publicKey)).toThrow(InvalidSignatureError);
 });

@@ -1,4 +1,4 @@
-import * as identityNamespace from '../services/identity-namespace'
+import * as identityNamespace from '../services/identity-namespace';
 
 export class PublicKeyProvider {
   constructor(gidApiHost: string = 'api.global.id') {
@@ -6,7 +6,7 @@ export class PublicKeyProvider {
     identityNamespace.init(`https://${gidApiHost}`);
   }
 
-  async getPublicKey (gidUuid: string): Promise<string> {
+  async getPublicKey(gidUuid: string): Promise<string> {
     let identity: identityNamespace.Identity;
     try {
       identity = await identityNamespace.getIdentityPublic(gidUuid);
@@ -21,13 +21,13 @@ export class PublicKeyProvider {
 }
 
 export class IdentityNotFoundError extends Error {
-  constructor (gidUuid: string) {
+  constructor(gidUuid: string) {
     super(`No identity found with GlobaliD UUID ${gidUuid}`);
   }
 }
 
 export class PublicKeyNotFoundError extends Error {
-  constructor (gidUuid: string) {
+  constructor(gidUuid: string) {
     super(`No public key found corresponding to the GlobaliD UUID ${gidUuid}`);
   }
 }

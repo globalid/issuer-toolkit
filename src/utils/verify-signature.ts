@@ -20,7 +20,7 @@ export function verifySignature(request: GidCredentialRequest, publicKey: Public
 }
 
 export class InvalidSignatureError extends Error {
-  constructor () {
+  constructor() {
     super('Credential request signature is invalid');
   }
 }

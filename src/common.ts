@@ -33,7 +33,7 @@ export enum PrimitiveClaimValueType {
   String = 'string',
   Date = 'date',
   Time = 'time',
-  DateTime = 'date-time',
+  DateTime = 'date-time'
 }
 
 export interface GidCredentialRequest<T = unknown> {

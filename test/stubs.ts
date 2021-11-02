@@ -10,7 +10,7 @@ const threadId = 'some-thread-id';
 const payload = {
   foo: 'bar',
   bar: 42,
-  baz: true,
+  baz: true
 };
 
 export const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
@@ -23,8 +23,8 @@ export function stubGidCredentialRequest(timestamp: number): GidCredentialReques
     threadId,
     timestamp,
     payload,
-    signature,
-  }
+    signature
+  };
 }
 
 export const gidCredentialRequest = stubGidCredentialRequest(Date.now());
