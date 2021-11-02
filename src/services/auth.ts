@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
 
-let baseUrl: string
+let baseUrl: string;
 
 export function init(serviceUrl: string): void {
-  baseUrl = serviceUrl
+  baseUrl = serviceUrl;
 }
 
 export async function issueTokens(body: IssueTokenRequestBody): Promise<AuthTokenResponse> {
@@ -12,27 +12,27 @@ export async function issueTokens(body: IssueTokenRequestBody): Promise<AuthToke
     baseURL: baseUrl,
     method: 'post',
     data: body
-  })
-  return response.data
+  });
+  return response.data;
 }
 
 export interface IssueTokenRequestBody {
-  client_id: string
-  client_secret?: string
-  code_verifier?: string
-  grant_type: 'client_credentials' | 'authorization_code' | 'implicit' | 'refresh_token' | 'password'
-  refresh_token?: string
-  code?: string
-  redirect_uri?: string
-  globalid?: string
-  password?: string
+  client_id: string;
+  client_secret?: string;
+  code_verifier?: string;
+  grant_type: 'client_credentials' | 'authorization_code' | 'implicit' | 'refresh_token' | 'password';
+  refresh_token?: string;
+  code?: string;
+  redirect_uri?: string;
+  globalid?: string;
+  password?: string;
 }
 
 export interface AuthTokenResponse {
-  access_token: string
-  expires_in: number
-  id_token?: string
-  refresh_token?: string
-  scope: string
-  token_type: string
+  access_token: string;
+  expires_in: number;
+  id_token?: string;
+  refresh_token?: string;
+  scope: string;
+  token_type: string;
 }

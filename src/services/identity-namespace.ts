@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
 
-let baseUrl: string
+let baseUrl: string;
 
 export function init(serviceUrl: string): void {
-  baseUrl = serviceUrl
+  baseUrl = serviceUrl;
 }
 
 export async function getIdentityPublic(gidUuid: string): Promise<Identity> {
@@ -11,8 +11,8 @@ export async function getIdentityPublic(gidUuid: string): Promise<Identity> {
     url: `/v1/identities/${gidUuid}`,
     baseURL: baseUrl,
     method: 'get'
-  })
-  return response.data
+  });
+  return response.data;
 }
 
 export interface Identity extends PrivateIdentity {
@@ -52,6 +52,6 @@ export interface PrivateIdentity {
 }
 
 export enum IdentitySignupType {
-  Localid = "localid",
-  Globalid = "globalid"
+  Localid = 'localid',
+  Globalid = 'globalid'
 }
