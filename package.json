@@ -1,0 +1,32 @@
+{
+  "name": "@globalid/issuer-agent-sdk",
+  "version": "0.1.0",
+  "description": "SDK for integrating credential issuer agents with GlobaliD",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/globalid/credentials-issuer/issuer-agent-sdk.git"
+  },
+  "keywords": ["credential", "issuer", "identity", "self-sovereign", "SSI", "verifiable"],
+  "author": "GlobaliD",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/globalid/credentials-issuer/issuer-agent-sdk/issues"
+  },
+  "homepage": "https://gitlab.com/globalid/credentials-issuer/issuer-agent-sdk#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.6",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "dayjs": "^1.10.7"
+  }
+}

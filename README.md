@@ -1,6 +1,4 @@
-# issuer-agent-sdk
-
-
+# Issuer Agent SDK
 
 ## Getting started
 
