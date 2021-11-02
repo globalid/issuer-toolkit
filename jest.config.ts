@@ -9,6 +9,12 @@ const config: Config.InitialOptions = {
       functions: 100,
       lines: 100,
       statements: 100
+    },
+    'services/**': {
+      branches: 0,
+      functions: 0,
+      lines: 0,
+      statements: 0
     }
   },
   preset: 'ts-jest',
