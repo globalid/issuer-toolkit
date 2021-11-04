@@ -33,7 +33,7 @@ describe('PublicKeyProvider', () => {
     });
 
     it('should throw PublicKeyNotFoundError if public key missing from response', async () => {
-      mockedIdentityNamespace.getIdentityPublic.mockResolvedValueOnce(stub({}));
+      mockedIdentityNamespace.getIdentityPublic.mockResolvedValueOnce(stub());
 
       await expect(publicKeyProvider.getPublicKey(gidUuid)).rejects.toThrow(PublicKeyNotFoundError);
     });
