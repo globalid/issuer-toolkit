@@ -22,27 +22,19 @@ jest.mock('../utils/public-key-provider', () => ({
     getPublicKey: mockedGetPublicKey
   }))
 }));
-jest.mock('../utils/validate-timestamp', () => {
-  const originalModule = jest.requireActual('../utils/validate-timestamp');
-  return {
-    __esModule: true,
-    ...originalModule,
-    validateTimestamp: jest.fn()
-  };
-});
-jest.mock('../utils/verify-signature', () => {
-  const originalModule = jest.requireActual('../utils/verify-signature');
-  return {
-    __esModule: true,
-    ...originalModule,
-    verifySignature: jest.fn()
-  };
-});
+jest.mock('../utils/validate-timestamp', () => ({
+  ...jest.requireActual('../utils/validate-timestamp'),
+  validateTimestamp: jest.fn()
+}));
+jest.mock('../utils/verify-signature', () => ({
+  ...jest.requireActual('../utils/verify-signature'),
+  verifySignature: jest.fn()
+}));
 jest.mock('./epam-client');
 
-const { InvalidSignatureError } = jest.requireActual('../utils/verify-signature');
-const { EagerRequestError, StaleRequestError } = jest.requireActual('../utils/validate-timestamp');
 const { PublicKeyNotFoundError } = jest.requireActual('../utils/public-key-provider');
+const { EagerRequestError, StaleRequestError } = jest.requireActual('../utils/validate-timestamp');
+const { InvalidSignatureError } = jest.requireActual('../utils/verify-signature');
 
 const MockedAccessTokenProvider = mocked(AccessTokenProvider);
 const MockedEpamClient = mocked(EpamClient);
