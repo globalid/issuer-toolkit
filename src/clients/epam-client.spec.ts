@@ -1,72 +1,51 @@
-import { ERROR_DESCRIPTIONS } from '../error';
+import { mocked } from 'ts-jest/utils';
+
+import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
+import { GidCredentialOffer } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from '../utils/access-token-provider';
-import { EpamClient, ErrorCodes, GidCredentialOffer, PrimitiveClaimValueType } from './epam-client';
-
-const accessToken = 'some-access-token';
+import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
+import { EpamClient, ERROR_DESCRIPTIONS, ErrorCodes } from './epam-client';
 
 jest.mock('../services/epam');
-jest.mock('../utils/access-token-provider', () => {
-  return function () {
-    return {
-      getAccessToken: () => accessToken
-    };
-  };
+const mockedGetAccessToken = jest.fn().mockResolvedValue(accessToken);
+jest.mock('../utils/access-token-provider', () =>
+  jest.fn(() => ({
+    clientId,
+    clientSecret,
+    getAccessToken: mockedGetAccessToken
+  }))
+);
+jest.mock('../utils/epam-credential-offer-factory');
+
+const mockedCreateEpamCredentialOffer = mocked(createEpamCredentialOffer);
+
+beforeEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('EpamClient', () => {
-  const accessTokenProvider = new AccessTokenProvider('some-client-id', 'some-client-secret');
-  const epamClient = new EpamClient(accessTokenProvider);
   const threadId = 'some-thread-id';
+  let accessTokenProvider: AccessTokenProvider;
+  let epamClient: EpamClient;
+
+  beforeEach(() => {
+    accessTokenProvider = new AccessTokenProvider(clientId, clientSecret);
+    epamClient = new EpamClient(accessTokenProvider);
+  });
 
   describe('#offerCredential', () => {
     it('should not throw when offering valid credential', async () => {
-      const contextIri = 'https://ssi.globalid.construction/v1/schema-registry/contexts/Person/versions/1';
-      const subjectType = 'Person';
-      const offer: GidCredentialOffer = {
-        threadId,
-        contextIri,
-        subjectType,
-        claims: {
-          givenName: {
-            type: PrimitiveClaimValueType.String,
-            value: 'Harry'
-          },
-          familyName: {
-            type: PrimitiveClaimValueType.String,
-            value: 'Potter'
-          },
-          birthDate: {
-            type: PrimitiveClaimValueType.Date,
-            value: '1980-07-31'
-          }
-        }
-      };
+      const offer = stub<GidCredentialOffer>();
+      const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
 
       await expect(epamClient.sendOffer(offer)).resolves.toBeUndefined();
+      expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
+      expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledTimes(1);
+      expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, {
-        thread_id: threadId,
-        schema_url: contextIri,
-        schema_type: subjectType,
-        credential_attributes: [
-          {
-            name: 'givenName',
-            value: 'Harry',
-            mime_type: 'string'
-          },
-          {
-            name: 'familyName',
-            value: 'Potter',
-            mime_type: 'string'
-          },
-          {
-            name: 'birthDate',
-            value: '1980-07-31',
-            mime_type: 'date'
-          }
-        ]
-      });
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
     });
   });
 
@@ -75,6 +54,7 @@ describe('EpamClient', () => {
       const errorCode = ErrorCodes.GLOBALID_UNAVAILABLE;
 
       await expect(epamClient.reportError(threadId, ErrorCodes.GLOBALID_UNAVAILABLE)).resolves.toBeUndefined();
+      expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledWith(accessToken, {
         code: errorCode,
