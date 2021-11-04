@@ -25,5 +25,4 @@ export class InvalidSignatureError extends Error {
   }
 }
 
-export { GidCredentialRequest } from '../common';
 export default verifySignature;
