@@ -54,6 +54,7 @@ describe('GidClient', () => {
     expect(MockedAccessTokenProvider).toHaveBeenCalledTimes(1);
     expect(MockedAccessTokenProvider).toHaveBeenCalledWith(clientId, clientSecret, undefined);
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);
+    // TODO: improve assertion
     expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), undefined);
     expect(MockedPublicKeyProvider).toHaveBeenCalledTimes(1);
     expect(MockedPublicKeyProvider).toHaveBeenCalledWith(undefined);
@@ -71,6 +72,9 @@ describe('GidClient', () => {
     new GidClient(clientId, clientSecret, { gidApiHost, gidSsiHost });
 
     expect(MockedAccessTokenProvider).toHaveBeenCalledWith(clientId, clientSecret, gidApiHost);
+    // TODO: improve assertion
+    expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), gidSsiHost);
+    expect(MockedPublicKeyProvider).toHaveBeenCalledWith(gidApiHost);
   });
 
   describe('#getAccessToken', () => {
