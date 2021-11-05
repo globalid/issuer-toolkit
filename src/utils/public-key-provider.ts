@@ -1,7 +1,7 @@
 import * as identityNamespace from '../services/identity-namespace';
 
 export class PublicKeyProvider {
-  constructor(gidApiHost: string = 'api.global.id') {
+  constructor(gidApiHost = 'api.global.id') {
     // TODO: validate parameters
     identityNamespace.init(`https://${gidApiHost}`);
   }

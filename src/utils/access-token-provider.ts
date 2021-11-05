@@ -4,7 +4,7 @@ export class AccessTokenProvider {
   #clientId: string;
   #clientSecret: string;
 
-  constructor(clientId: string, clientSecret: string, gidApiHost: string = 'api.global.id') {
+  constructor(clientId: string, clientSecret: string, gidApiHost = 'api.global.id') {
     // TODO: validate parameters
     this.#clientId = clientId;
     this.#clientSecret = clientSecret;

@@ -1,5 +1,7 @@
 import { GidCredentialOffer, GidCredentialRequest } from '../common';
 import AccessTokenProvider from '../utils/access-token-provider';
+// imports needed for JSDocs
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from '../utils/public-key-provider';
 import { EagerRequestError, StaleRequestError, validateTimestamp } from '../utils/validate-timestamp';
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';

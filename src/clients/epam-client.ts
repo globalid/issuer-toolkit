@@ -4,7 +4,7 @@ import AccessTokenProvider from '../utils/access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 
 export class EpamClient {
-  constructor(readonly accessTokenProvider: AccessTokenProvider, gidSsiHost: string = 'ssi.global.id') {
+  constructor(readonly accessTokenProvider: AccessTokenProvider, gidSsiHost = 'ssi.global.id') {
     // TODO: validate parameters
     epam.init(`https://${gidSsiHost}`);
   }
