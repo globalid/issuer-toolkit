@@ -1,7 +1,7 @@
 {
   "name": "@globalid/issuer-agent-sdk",
   "version": "0.1.0",
-  "description": "SDK for integrating credential issuer agents with GlobaliD",
+  "description": "SDK for integrating a credential issuer agent with GlobaliD",
   "main": "index.js",
   "scripts": {
     "build": "npm run clean && npm run compile && npm run test && npm run lint && npm run format:check",
@@ -11,7 +11,8 @@
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
