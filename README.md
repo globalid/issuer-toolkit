@@ -12,7 +12,7 @@ npm install @globalid/issuer-agent-sdk
 
 The following NPM scripts are available for development:
 
-- `build` – Runs the `clean`, `compile`, `test`, `lint`, and `format:check` scripts to build the project
+- `build` – Runs the `clean`, `compile`, `lint`, and `format:check` scripts to build the project
 - `clean` – Removes the output directory for a clean build
 - `compile` – Compiles TypeScript files with `tsc`
 - `format` – Formats the files with [Prettier](https://prettier.io/)

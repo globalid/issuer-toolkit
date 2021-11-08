@@ -1,0 +1,45 @@
+image: registry.gitlab.com/globalid/infrastructure/container-images/node-16-builder:latest
+
+default:
+  tags:
+    - globalid
+
+include:
+  - project: 'globalid/infrastructure/gitlab-ci'
+    ref: master
+    file:
+      - '/include/code-scanning.yaml'
+      - '/include/publish-npm.yaml'
+
+cache:
+  untracked: false
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+  - node_modules/
+
+.before: &before
+  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}">.npmrc
+  - npm install --quiet
+
+stages:
+ - build
+ - test
+ - scan
+ - publish-npm
+
+test:
+  stage: test
+  script:
+  - *before
+  - npm run test
+
+build:
+  stage: build
+  script:
+  - *before
+  - npm run build
+  artifacts:
+    when: always
+    paths:
+      - dist/
+    expire_in: 1 day
