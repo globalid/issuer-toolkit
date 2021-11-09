@@ -55,7 +55,7 @@ describe('EpamClient', () => {
       const errorCode = ErrorCodes.GLOBALID_UNAVAILABLE;
 
       await epamClient.reportError(threadId, ErrorCodes.GLOBALID_UNAVAILABLE);
-      
+
       expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledWith(accessToken, {
