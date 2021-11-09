@@ -40,7 +40,8 @@ describe('EpamClient', () => {
       const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
 
-      await expect(epamClient.sendOffer(offer)).resolves.toBeUndefined();
+      await epamClient.sendOffer(offer);
+
       expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledTimes(1);
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
@@ -53,7 +54,8 @@ describe('EpamClient', () => {
     it('should report error to EPAM', async () => {
       const errorCode = ErrorCodes.GLOBALID_UNAVAILABLE;
 
-      await expect(epamClient.reportError(threadId, ErrorCodes.GLOBALID_UNAVAILABLE)).resolves.toBeUndefined();
+      await epamClient.reportError(threadId, ErrorCodes.GLOBALID_UNAVAILABLE);
+      
       expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledWith(accessToken, {

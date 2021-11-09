@@ -4,7 +4,7 @@ import * as epam from '../services/epam';
 export function createEpamCredentialOffer(offer: GidCredentialOffer): epam.EpamCreateCredentialsOfferV2 {
   return {
     thread_id: offer.threadId,
-    name: offer.title,
+    name: offer.name,
     description: offer.description,
     schema_url: offer.contextIri,
     schema_type: offer.subjectType,

@@ -4,13 +4,13 @@ import { ValueType } from '../services/epam';
 import createEpamCredentialOffer from './epam-credential-offer-factory';
 
 test('should transform GidCredentialOffer into EPAM credential offer', () => {
-  const title = 'Foo Bar';
+  const name = 'Foo Bar';
   const description = 'Lorem ipsum dolor sit amet';
   const contextIri = 'https://example.com/context';
   const subjectType = 'Foo';
   const offer: GidCredentialOffer = {
     threadId,
-    title,
+    name,
     description,
     contextIri,
     subjectType,
@@ -50,7 +50,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
 
   expect(result).toEqual({
     thread_id: threadId,
-    name: title,
+    name: name,
     description,
     schema_url: contextIri,
     schema_type: subjectType,

@@ -2,7 +2,7 @@
   "name": "@globalid/issuer-agent-sdk",
   "version": "0.1.0",
   "description": "SDK for integrating a credential issuer agent with GlobaliD",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npm run clean && npm run compile && npm run lint && npm run format:check",
     "clean": "rimraf dist",
@@ -20,8 +20,9 @@
   },
   "keywords": [
     "credential",
-    "issuer",
+    "decentralized",
     "identity",
+    "issuer",
     "self-sovereign",
     "SSI",
     "verifiable"

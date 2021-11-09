@@ -18,7 +18,7 @@ jest.mock('../utils/access-token-provider', () =>
 );
 const mockedGetPublicKey = jest.fn().mockResolvedValue(publicKey);
 jest.mock('../utils/public-key-provider', () => ({
-  PublicKeyProvider: jest.fn().mockImplementation(() => ({
+  PublicKeyProvider: jest.fn(() => ({
     getPublicKey: mockedGetPublicKey
   }))
 }));
@@ -122,6 +122,7 @@ describe('GidClient', () => {
       expect(mockedVerifySignature).toHaveBeenCalledWith(request, publicKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
       expect(mockedValidateTimestamp).toHaveBeenCalledWith(request);
+      expect(MockedEpamClient.mock.instances[0].reportError).not.toHaveBeenCalled();
     });
 
     it('should report 600-16 on InvalidSignatureError', async () => {

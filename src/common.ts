@@ -4,11 +4,11 @@ export interface GidCredentialOffer {
    */
   threadId: string;
   /**
-   * Title of the credential offer displayed to the holder
+   * Name of the credential being offered
    */
-  title: string;
+  name: string;
   /**
-   * Descriptive text about the credential offer displayed to the holder
+   * Descriptive text about the credential being offered
    */
   description?: string;
   /**
