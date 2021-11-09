@@ -7,9 +7,9 @@ import { AES_KEY_LENGTH, encrypt } from './crypto';
 jest.mock('globalid-crypto-library');
 
 const mockedAesEncryptBuffer = mocked(gidCrypto.AES.encryptBuffer, true);
-const mockedRsaEncrypt = mocked(gidCrypto.RSA.encrypt, true);
-const mockedRandomBytes = mocked(gidCrypto.Util.randomBytes, true);
 const mockedBytesToHex = mocked(gidCrypto.Util.bytesToHex, true);
+const mockedRandomBytes = mocked(gidCrypto.Util.randomBytes, true);
+const mockedRsaEncrypt = mocked(gidCrypto.RSA.encrypt, true);
 
 describe('#encrypt', () => {
   it('should return ciphertext and encrypted key', () => {
