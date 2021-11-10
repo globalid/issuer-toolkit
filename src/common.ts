@@ -66,3 +66,6 @@ export interface GidCredentialRequest<T = unknown> {
    */
   signature: string;
 }
+
+export const DEFAULT_BASE_API_URL = 'https://api.global.id';
+export const DEFAULT_BASE_SSI_URL = 'https://ssi.global.id';

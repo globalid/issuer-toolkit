@@ -1,4 +1,4 @@
-import { GidCredentialOffer } from '../common';
+import { DEFAULT_BASE_SSI_URL, GidCredentialOffer } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from '../utils/access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
@@ -6,10 +6,10 @@ import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
 
-  constructor(accessTokenProvider: AccessTokenProvider, gidSsiHost = 'ssi.global.id') {
+  constructor(accessTokenProvider: AccessTokenProvider, baseSsiUrl = DEFAULT_BASE_SSI_URL) {
     // TODO: validate parameters
     this.#accessTokenProvider = accessTokenProvider;
-    epam.init(`https://${gidSsiHost}`);
+    epam.init(baseSsiUrl);
   }
 
   async sendOffer(offer: GidCredentialOffer): Promise<void> {

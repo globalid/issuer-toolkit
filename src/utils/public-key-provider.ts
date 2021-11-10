@@ -1,9 +1,10 @@
+import { DEFAULT_BASE_API_URL } from '../common';
 import * as identityNamespace from '../services/identity-namespace';
 
 export class PublicKeyProvider {
-  constructor(gidApiHost = 'api.global.id') {
+  constructor(baseApiUrl = DEFAULT_BASE_API_URL) {
     // TODO: validate parameters
-    identityNamespace.init(`https://${gidApiHost}`);
+    identityNamespace.init(baseApiUrl);
   }
 
   async getPublicKey(gidUuid: string): Promise<string> {
