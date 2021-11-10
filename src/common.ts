@@ -44,6 +44,17 @@ export enum PrimitiveClaimValueType {
   DateTime = 'date-time'
 }
 
+export interface FileClaimValueObject {
+  decryptionKey: string;
+  sha512sum: string;
+  type: FileClaimValueType;
+  url: string;
+}
+
+export enum FileClaimValueType {
+  JPEG = 'image/jpeg'
+}
+
 export interface GidCredentialRequest<T = unknown> {
   /**
    * Thread ID received from the holder
