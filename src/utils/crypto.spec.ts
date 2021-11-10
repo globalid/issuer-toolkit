@@ -11,7 +11,7 @@ const mockedBytesToHex = mocked(gidCrypto.Util.bytesToHex);
 const mockedRandomBytes = mocked(gidCrypto.Util.randomBytes);
 const mockedRsaEncrypt = mocked(gidCrypto.RSA.encrypt);
 
-describe('#encrypt', () => {
+describe('encrypt', () => {
   it('should return ciphertext and encrypted key', () => {
     const plaintext = Buffer.from('Lorem ipsum dolor sit amet');
     const ciphertext = Buffer.from('abcdefghijklmnopqrstuvwxyz');
