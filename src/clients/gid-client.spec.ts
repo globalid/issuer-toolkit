@@ -63,16 +63,16 @@ describe('GidClient', () => {
     expect(MockedPublicKeyProvider).toHaveBeenCalledWith(undefined);
   });
 
-  it('should pass host options', () => {
-    const gidApiHost = 'api.example.com';
-    const gidSsiHost = 'ssi.example.com';
+  it('should pass base URL options', () => {
+    const baseApiUrl = 'https://api.globalid.dev';
+    const baseSsiUrl = 'https://ssi.globalid.dev';
 
-    new GidClient(clientId, clientSecret, { gidApiHost, gidSsiHost });
+    new GidClient(clientId, clientSecret, { baseApiUrl, baseSsiUrl });
 
-    expect(MockedAccessTokenProvider).toHaveBeenCalledWith(clientId, clientSecret, gidApiHost);
+    expect(MockedAccessTokenProvider).toHaveBeenCalledWith(clientId, clientSecret, baseApiUrl);
     // TODO: improve assertion
-    expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), gidSsiHost);
-    expect(MockedPublicKeyProvider).toHaveBeenCalledWith(gidApiHost);
+    expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), baseSsiUrl);
+    expect(MockedPublicKeyProvider).toHaveBeenCalledWith(baseApiUrl);
   });
 
   it('should expose client credentials', () => {

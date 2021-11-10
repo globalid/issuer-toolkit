@@ -14,9 +14,9 @@ export class GidClient {
 
   constructor(clientId: string, clientSecret: string, options?: GidClientOptions) {
     // TODO: validate parameters
-    this.#accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.gidApiHost);
-    this.#epamClient = new EpamClient(this.#accessTokenProvider, options?.gidSsiHost);
-    this.#publicKeyProvider = new PublicKeyProvider(options?.gidApiHost);
+    this.#accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.baseApiUrl);
+    this.#epamClient = new EpamClient(this.#accessTokenProvider, options?.baseSsiUrl);
+    this.#publicKeyProvider = new PublicKeyProvider(options?.baseApiUrl);
   }
 
   get clientId(): string {
@@ -89,8 +89,8 @@ const isSignatureError = (error: unknown): error is Error =>
   error instanceof InvalidSignatureError || error instanceof StaleRequestError || error instanceof EagerRequestError;
 
 export interface GidClientOptions {
-  gidApiHost?: string;
-  gidSsiHost?: string;
+  baseApiUrl?: string;
+  baseSsiUrl?: string;
 }
 
 export { GidCredentialOffer, GidCredentialRequest } from '../common';
