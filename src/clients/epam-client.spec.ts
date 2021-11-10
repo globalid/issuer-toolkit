@@ -8,14 +8,7 @@ import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 import { EpamClient, ERROR_DESCRIPTIONS, ErrorCodes } from './epam-client';
 
 jest.mock('../services/epam');
-const mockedGetAccessToken = jest.fn().mockResolvedValue(accessToken);
-jest.mock('../utils/access-token-provider', () =>
-  jest.fn(() => ({
-    clientId,
-    clientSecret,
-    getAccessToken: mockedGetAccessToken
-  }))
-);
+jest.mock('../utils/access-token-provider');
 jest.mock('../utils/epam-credential-offer-factory');
 
 const mockedCreateEpamCredentialOffer = mocked(createEpamCredentialOffer);
@@ -42,7 +35,7 @@ describe('EpamClient', () => {
 
       await epamClient.sendOffer(offer);
 
-      expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
+      expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledTimes(1);
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
@@ -56,7 +49,7 @@ describe('EpamClient', () => {
 
       await epamClient.reportError(threadId, ErrorCodes.GLOBALID_UNAVAILABLE);
 
-      expect(mockedGetAccessToken).toHaveBeenCalledTimes(1);
+      expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledWith(accessToken, {
         code: errorCode,
