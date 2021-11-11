@@ -7,7 +7,7 @@ export const clientSecret = 'some-client-secret';
 
 export const threadId = 'some-thread-id';
 export const gidUuid = 'some-gid-uuid';
-const payload = {
+const defaultPayload = {
   foo: 'bar',
   bar: 42,
   baz: true
@@ -29,8 +29,9 @@ export { publicKey };
 
 export const gidCredentialRequest = stubGidCredentialRequest(Date.now());
 
-export function stubGidCredentialRequest(timestamp: number): GidCredentialRequest {
-  const dataToSign = Buffer.from(`${threadId}${timestamp}${JSON.stringify(payload)}`);
+export function stubGidCredentialRequest(timestamp: number, withPayload = true): GidCredentialRequest {
+  const payload = withPayload ? defaultPayload : undefined;
+  const dataToSign = Buffer.from(`${threadId}${timestamp}${payload === undefined ? '' : JSON.stringify(payload)}`);
   const signature = crypto.sign(null, dataToSign, privateKey).toString('base64');
   return {
     gidUuid,
