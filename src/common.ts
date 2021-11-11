@@ -60,7 +60,7 @@ export interface GidCredentialRequest<T = unknown> {
   /**
    * Data about the credential being requested
    */
-  payload: T;
+  payload?: T;
   /**
    * Holder's signature of the `threadId`, `timestamp`, and `payload`
    */
