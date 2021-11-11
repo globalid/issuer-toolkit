@@ -45,9 +45,22 @@ export enum PrimitiveClaimValueType {
 }
 
 export interface FileClaimValueObject {
+  /**
+   * Symmetric key used to decrypt (via AES) the payload received by dereferencing the `url`. The key is encrypted using
+   * RSA and the holder's public key.
+   */
   decryptionKey: string;
+  /**
+   * Checksum of the file's content
+   */
   sha512sum: string;
+  /**
+   * Media type of the file's content
+   */
   type: FileClaimValueType;
+  /**
+   * Location of the encrypted file
+   */
   url: string;
 }
 
