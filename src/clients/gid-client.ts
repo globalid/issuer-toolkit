@@ -1,5 +1,7 @@
-import { GidCredentialOffer, GidCredentialRequest } from '../common';
+import { FileClaimValueObject, FileClaimValueType, GidCredentialOffer, GidCredentialRequest } from '../common';
 import AccessTokenProvider from '../utils/access-token-provider';
+import crypto from '../utils/crypto';
+import FileUploader from '../utils/file-uploader';
 // imports needed for JSDocs
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from '../utils/public-key-provider';
@@ -10,12 +12,14 @@ import { EpamClient, ErrorCode, ErrorCodes } from './epam-client';
 export class GidClient {
   #accessTokenProvider: AccessTokenProvider;
   #epamClient: EpamClient;
+  #fileUploader: FileUploader;
   #publicKeyProvider: PublicKeyProvider;
 
   constructor(clientId: string, clientSecret: string, options?: GidClientOptions) {
     // TODO: validate parameters
     this.#accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.baseApiUrl);
     this.#epamClient = new EpamClient(this.#accessTokenProvider, options?.baseSsiUrl);
+    this.#fileUploader = new FileUploader(this.#accessTokenProvider, options?.baseApiUrl);
     this.#publicKeyProvider = new PublicKeyProvider(options?.baseApiUrl);
   }
 
@@ -56,6 +60,24 @@ export class GidClient {
   }
 
   /**
+   * Encrypts and uploads a file to GlobaliD's S3 instance.
+   * @param gidUuid UUID of the holder's GlobaliD identity
+   * @param file Content and metadata of the file to upload
+   * @returns `FileClaimValueObject` to be used in a credential offer
+   */
+  async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValueObject> {
+    const publicKey = await this.#publicKeyProvider.getPublicKey(gidUuid);
+    const [encryptedContent, decryptionKey] = crypto.encrypt(file.content, publicKey);
+    const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.mediaType, encryptedContent);
+    return {
+      url,
+      decryptionKey,
+      type: file.mediaType,
+      sha512sum: crypto.sha512sum(file.content)
+    };
+  }
+
+  /**
    * Validates the given credential request and throws an error if the request is invalid. This method also handles
    * boilerplate error reporting (via {@link GidClient.reportError}). Namely, errors are reported as follows:
    * * {@link errors.InvalidSignatureError InvalidSignatureError} &rarr; `600-16`
@@ -91,6 +113,21 @@ const isSignatureError = (error: unknown): error is Error =>
 export interface GidClientOptions {
   baseApiUrl?: string;
   baseSsiUrl?: string;
+}
+
+export interface FileObject {
+  /**
+   * Content of the file
+   */
+  content: Buffer;
+  /**
+   * Media type of the file's `content`
+   */
+  mediaType: FileClaimValueType;
+  /**
+   * Name of the file
+   */
+  name: string;
 }
 
 export { GidCredentialOffer, GidCredentialRequest } from '../common';

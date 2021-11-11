@@ -1,7 +1,10 @@
 import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, gidUuid, publicKey, stub, threadId } from '../../test/stubs';
+import { FileClaimValueType } from '../common';
+import crypto from '../utils/crypto';
 import AccessTokenProvider from '../utils/access-token-provider';
+import FileUploader from '../utils/file-uploader';
 import { PublicKeyProvider } from '../utils/public-key-provider';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import { verifySignature } from '../utils/verify-signature';
@@ -14,6 +17,13 @@ jest.mock('../utils/access-token-provider', () =>
     clientId,
     clientSecret,
     getAccessToken: mockedGetAccessToken
+  }))
+);
+jest.mock('../utils/crypto');
+const mockedUploadEncryptedFile = jest.fn();
+jest.mock('../utils/file-uploader', () =>
+  jest.fn(() => ({
+    uploadEncryptedFile: mockedUploadEncryptedFile
   }))
 );
 const mockedGetPublicKey = jest.fn().mockResolvedValue(publicKey);
@@ -38,9 +48,12 @@ const { InvalidSignatureError } = jest.requireActual('../utils/verify-signature'
 
 const MockedAccessTokenProvider = mocked(AccessTokenProvider);
 const MockedEpamClient = mocked(EpamClient);
+const MockedFilerUploader = mocked(FileUploader);
 const MockedPublicKeyProvider = mocked(PublicKeyProvider);
 const mockedValidateTimestamp = mocked(validateTimestamp);
 const mockedVerifySignature = mocked(verifySignature);
+const mockedEncrypt = mocked(crypto.encrypt);
+const mockedSha512Sum = mocked(crypto.sha512sum);
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -59,6 +72,9 @@ describe('GidClient', () => {
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);
     // TODO: improve assertion
     expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), undefined);
+    expect(MockedFilerUploader).toHaveBeenCalledTimes(1);
+    // TODO: improve assertion
+    expect(MockedFilerUploader).toHaveBeenCalledWith(expect.anything(), undefined);
     expect(MockedPublicKeyProvider).toHaveBeenCalledTimes(1);
     expect(MockedPublicKeyProvider).toHaveBeenCalledWith(undefined);
   });
@@ -72,6 +88,8 @@ describe('GidClient', () => {
     expect(MockedAccessTokenProvider).toHaveBeenCalledWith(clientId, clientSecret, baseApiUrl);
     // TODO: improve assertion
     expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), baseSsiUrl);
+    // TODO: improve assertion
+    expect(MockedFilerUploader).toHaveBeenCalledWith(expect.anything(), baseApiUrl);
     expect(MockedPublicKeyProvider).toHaveBeenCalledWith(baseApiUrl);
   });
 
@@ -108,6 +126,42 @@ describe('GidClient', () => {
 
       expect(MockedEpamClient.mock.instances[0].sendOffer).toHaveBeenCalledTimes(1);
       expect(MockedEpamClient.mock.instances[0].sendOffer).toHaveBeenCalledWith(offer);
+    });
+  });
+
+  describe('#uploadFile', () => {
+    it('should encrypt file and delegate upload to FileUploader', async () => {
+      const fileName = 'foo.jpeg';
+      const mediaType = FileClaimValueType.JPEG;
+      const fileContent = Buffer.from('definitely a valid image');
+      const encryptedFileContent = Buffer.from('lorem ipsum dolor sit amet');
+      const url = 'https://example.com/uploads/some-key';
+      const decryptionKey = 'foobar';
+      const sha512sum = 'abcdefg1234567';
+      mockedEncrypt.mockReturnValueOnce([encryptedFileContent, decryptionKey]);
+      mockedUploadEncryptedFile.mockResolvedValueOnce(url);
+      mockedSha512Sum.mockReturnValueOnce(sha512sum);
+
+      const result = await gidClient.uploadFile(gidUuid, {
+        mediaType,
+        name: fileName,
+        content: fileContent
+      });
+
+      expect(result).toEqual({
+        url,
+        decryptionKey,
+        type: mediaType,
+        sha512sum
+      });
+      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicKey).toHaveBeenCalledWith(gidUuid);
+      expect(mockedEncrypt).toHaveBeenCalledTimes(1);
+      expect(mockedEncrypt).toHaveBeenCalledWith(fileContent, publicKey);
+      expect(mockedUploadEncryptedFile).toHaveBeenCalledTimes(1);
+      expect(mockedUploadEncryptedFile).toHaveBeenCalledWith(fileName, mediaType, encryptedFileContent);
+      expect(mockedSha512Sum).toHaveBeenCalledTimes(1);
+      expect(mockedSha512Sum).toHaveBeenCalledWith(fileContent);
     });
   });
 
