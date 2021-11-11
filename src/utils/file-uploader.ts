@@ -51,3 +51,5 @@ export class FileUploadError extends Error {
     super(`Failed to upload file ${fileName}`);
   }
 }
+
+export default FileUploader;
