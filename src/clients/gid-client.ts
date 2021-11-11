@@ -62,7 +62,7 @@ export class GidClient {
   /**
    * Encrypts and uploads a file to GlobaliD's S3 instance.
    * @param gidUuid UUID of the holder's GlobaliD identity
-   * @param file Content and metadata of the file to upload
+   * @param file Content and metadata of the file to encrypt and upload
    * @returns `FileClaimValueObject` to be used in a credential offer
    */
   async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValueObject> {
@@ -117,7 +117,7 @@ export interface GidClientOptions {
 
 export interface FileObject {
   /**
-   * Content of the file
+   * Unencrypted content of the file
    */
   content: Buffer;
   /**
