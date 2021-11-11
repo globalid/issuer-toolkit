@@ -1,11 +1,7 @@
 import { accessToken, clientId, clientSecret } from '../../../test/stubs';
 
-const mockedGetAccessToken = jest.fn().mockResolvedValue(accessToken);
-
-const mock = jest.fn(() => ({
+export default jest.fn(() => ({
   clientId,
   clientSecret,
-  getAccessToken: mockedGetAccessToken
+  getAccessToken: jest.fn().mockResolvedValue(accessToken)
 }));
-
-export default mock;
