@@ -1,6 +1,6 @@
 import FormData from 'form-data';
 
-import { DEFAULT_BASE_API_URL, FileClaimValueType } from '../common';
+import { DEFAULT_BASE_API_URL, FileType } from '../common';
 import * as s3 from '../services/s3';
 import * as upload from '../services/upload';
 import AccessTokenProvider from './access-token-provider';
@@ -14,12 +14,12 @@ export class FileUploader {
     upload.init(baseApiUrl);
   }
 
-  async uploadEncryptedFile(name: string, mediaType: FileClaimValueType, content: Buffer): Promise<string> {
+  async uploadEncryptedFile(name: string, type: FileType, content: Buffer): Promise<string> {
     const accessToken = await this.#accessTokenProvider.getAccessToken();
     const uploadInfo = await createMediaUpload(accessToken, {
       type: 'encrypted',
       file_name: name,
-      content_type: mediaType
+      content_type: type
     });
     await uploadFile(content, uploadInfo.s3_upload_url, uploadInfo.s3_upload_fields);
     return `${uploadInfo.base_serve_url}/${uploadInfo.s3_upload_fields.key}`;

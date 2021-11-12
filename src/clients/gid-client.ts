@@ -1,4 +1,4 @@
-import { FileClaimValueObject, FileClaimValueType, GidCredentialOffer, GidCredentialRequest } from '../common';
+import { FileClaimValue, FileType, GidCredentialOffer, GidCredentialRequest } from '../common';
 import AccessTokenProvider from '../utils/access-token-provider';
 import crypto from '../utils/crypto';
 import FileUploader from '../utils/file-uploader';
@@ -65,14 +65,14 @@ export class GidClient {
    * @param file Content and metadata of the file to encrypt and upload
    * @returns `FileClaimValueObject` to be used in a credential offer
    */
-  async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValueObject> {
+  async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValue> {
     const publicKey = await this.#publicKeyProvider.getPublicKey(gidUuid);
     const [encryptedContent, decryptionKey] = crypto.encrypt(file.content, publicKey);
-    const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.mediaType, encryptedContent);
+    const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.type, encryptedContent);
     return {
       url,
       decryptionKey,
-      type: file.mediaType,
+      type: file.type,
       sha512sum: crypto.sha512sum(file.content)
     };
   }
@@ -123,7 +123,7 @@ export interface FileObject {
   /**
    * Media type of the file's `content`
    */
-  mediaType: FileClaimValueType;
+  type: FileType;
   /**
    * Name of the file
    */

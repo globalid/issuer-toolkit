@@ -1,7 +1,7 @@
 import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, gidUuid, publicKey, stub, threadId } from '../../test/stubs';
-import { FileClaimValueType } from '../common';
+import { FileType } from '../common';
 import crypto from '../utils/crypto';
 import AccessTokenProvider from '../utils/access-token-provider';
 import FileUploader from '../utils/file-uploader';
@@ -131,37 +131,37 @@ describe('GidClient', () => {
 
   describe('#uploadFile', () => {
     it('should encrypt file and delegate upload to FileUploader', async () => {
-      const fileName = 'foo.jpeg';
-      const mediaType = FileClaimValueType.JPEG;
-      const fileContent = Buffer.from('definitely a valid image');
-      const encryptedFileContent = Buffer.from('lorem ipsum dolor sit amet');
+      const name = 'foo.jpg';
+      const type = FileType.JPEG;
+      const content = Buffer.from('definitely a valid image');
+      const encryptedContent = Buffer.from('lorem ipsum dolor sit amet');
       const url = 'https://example.com/uploads/some-key';
       const decryptionKey = 'foobar';
       const sha512sum = 'abcdefg1234567';
-      mockedEncrypt.mockReturnValueOnce([encryptedFileContent, decryptionKey]);
+      mockedEncrypt.mockReturnValueOnce([encryptedContent, decryptionKey]);
       mockedUploadEncryptedFile.mockResolvedValueOnce(url);
       mockedSha512Sum.mockReturnValueOnce(sha512sum);
 
       const result = await gidClient.uploadFile(gidUuid, {
-        mediaType,
-        name: fileName,
-        content: fileContent
+        type: type,
+        name: name,
+        content: content
       });
 
       expect(result).toEqual({
         url,
         decryptionKey,
-        type: mediaType,
+        type: type,
         sha512sum
       });
       expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
       expect(mockedGetPublicKey).toHaveBeenCalledWith(gidUuid);
       expect(mockedEncrypt).toHaveBeenCalledTimes(1);
-      expect(mockedEncrypt).toHaveBeenCalledWith(fileContent, publicKey);
+      expect(mockedEncrypt).toHaveBeenCalledWith(content, publicKey);
       expect(mockedUploadEncryptedFile).toHaveBeenCalledTimes(1);
-      expect(mockedUploadEncryptedFile).toHaveBeenCalledWith(fileName, mediaType, encryptedFileContent);
+      expect(mockedUploadEncryptedFile).toHaveBeenCalledWith(name, type, encryptedContent);
       expect(mockedSha512Sum).toHaveBeenCalledTimes(1);
-      expect(mockedSha512Sum).toHaveBeenCalledWith(fileContent);
+      expect(mockedSha512Sum).toHaveBeenCalledWith(content);
     });
   });
 

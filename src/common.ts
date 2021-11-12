@@ -1,3 +1,5 @@
+import { isInStringEnum, isPrimitive, isRecord, isString } from './utils/type-guards';
+
 export interface GidCredentialOffer {
   /**
    * Thread ID received from the holder
@@ -26,15 +28,15 @@ export interface GidCredentialOffer {
 }
 
 export type Claims = Record<string, ClaimValue>;
-export type ClaimValue = /* boolean | number | string | */ ClaimValueObject;
-export type ClaimValueObject = PrimitiveClaimValueObject /* | FileClaimValueObject */;
+export type ClaimValue = boolean | number | string | ClaimValueObject;
+export type ClaimValueObject = TypedClaimValue | FileClaimValue;
 
-export interface PrimitiveClaimValueObject {
-  type: PrimitiveClaimValueType;
+export interface TypedClaimValue {
+  type: ClaimValueType;
   value: boolean | number | string;
 }
 
-export enum PrimitiveClaimValueType {
+export enum ClaimValueType {
   Boolean = 'boolean',
   Integer = 'integer',
   Number = 'number',
@@ -44,7 +46,7 @@ export enum PrimitiveClaimValueType {
   DateTime = 'date-time'
 }
 
-export interface FileClaimValueObject {
+export interface FileClaimValue {
   /**
    * Symmetric key used to decrypt (via AES) the payload received by dereferencing the `url`. The key is encrypted using
    * RSA and the holder's public key.
@@ -57,15 +59,30 @@ export interface FileClaimValueObject {
   /**
    * Media type of the file's content
    */
-  type: FileClaimValueType;
+  type: FileType;
   /**
    * Location of the encrypted file
    */
   url: string;
 }
 
-export enum FileClaimValueType {
-  JPEG = 'image/jpeg'
+export enum FileType {
+  JPEG = 'image/jpeg',
+  PNG = 'image/png'
+}
+
+export function isTypedClaimValue(value: unknown): value is TypedClaimValue {
+  return isRecord(value) && isInStringEnum(value.type, ClaimValueType) && isPrimitive(value.value);
+}
+
+export function isFileClaimValue(value: unknown): value is FileClaimValue {
+  return (
+    isRecord(value) &&
+    isString(value.decryptionKey) &&
+    isString(value.sha512sum) &&
+    isInStringEnum(value.type, FileType) &&
+    isString(value.url)
+  );
 }
 
 export interface GidCredentialRequest<T = unknown> {
