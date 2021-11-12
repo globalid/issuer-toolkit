@@ -2,7 +2,7 @@ import FormData from 'form-data';
 import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
-import { FileClaimValueType } from '../common';
+import { FileType } from '../common';
 import * as s3 from '../services/s3';
 import * as upload from '../services/upload';
 import AccessTokenProvider from './access-token-provider';
@@ -31,9 +31,9 @@ describe('FileUploader', () => {
   });
 
   describe('#uploadEncryptedFile', () => {
-    const fileName = 'foo.jpeg';
-    const mediaType = FileClaimValueType.JPEG;
-    const fileContent = Buffer.from('definitely a valid image');
+    const name = 'foo.jpg';
+    const type = FileType.JPEG;
+    const content = Buffer.from('definitely a valid image');
 
     it('should upload file as encrypted media', async () => {
       const mediaUploadInfo = stub<upload.MediaUploadInfo>({
@@ -47,7 +47,7 @@ describe('FileUploader', () => {
       });
       mockedUploadFileV2.mockResolvedValueOnce([mediaUploadInfo]);
 
-      const url = await fileUploader.uploadEncryptedFile(fileName, mediaType, fileContent);
+      const url = await fileUploader.uploadEncryptedFile(name, type, content);
 
       expect(url).toBe('https://example.com/uploads/some-key');
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
@@ -56,8 +56,8 @@ describe('FileUploader', () => {
         media: [
           {
             type: 'encrypted',
-            file_name: fileName,
-            content_type: mediaType
+            file_name: name,
+            content_type: type
           }
         ]
       });
@@ -66,7 +66,7 @@ describe('FileUploader', () => {
       expect(MockedFormData.mock.instances[0].append).toHaveBeenNthCalledWith(1, 'foo', 'bar');
       expect(MockedFormData.mock.instances[0].append).toHaveBeenNthCalledWith(2, 'bar', 'baz');
       expect(MockedFormData.mock.instances[0].append).toHaveBeenNthCalledWith(3, 'key', 'some-key');
-      expect(MockedFormData.mock.instances[0].append).toHaveBeenNthCalledWith(4, 'file', fileContent);
+      expect(MockedFormData.mock.instances[0].append).toHaveBeenNthCalledWith(4, 'file', content);
       expect(mockedS3UploadFile).toHaveBeenCalledTimes(1);
       expect(mockedS3UploadFile).toHaveBeenCalledWith(mediaUploadInfo.s3_upload_url, MockedFormData.mock.instances[0]);
     });
@@ -74,15 +74,15 @@ describe('FileUploader', () => {
     it('should throw error if upload service fails', async () => {
       mockedUploadFileV2.mockResolvedValueOnce([]);
 
-      await expect(fileUploader.uploadEncryptedFile(fileName, mediaType, fileContent)).rejects.toThrow(FileUploadError);
+      await expect(fileUploader.uploadEncryptedFile(name, type, content)).rejects.toThrow(FileUploadError);
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(mockedUploadFileV2).toHaveBeenCalledTimes(1);
       expect(mockedUploadFileV2).toHaveBeenCalledWith(accessToken, {
         media: [
           {
             type: 'encrypted',
-            file_name: fileName,
-            content_type: mediaType
+            file_name: name,
+            content_type: type
           }
         ]
       });
