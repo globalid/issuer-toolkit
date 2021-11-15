@@ -45,9 +45,9 @@ describe('EpamClient', () => {
 
   describe('#reportError', () => {
     it('should report error to EPAM', async () => {
-      const errorCode = ErrorCodes.GLOBALID_UNAVAILABLE;
+      const errorCode = ErrorCodes.GidUnavailable;
 
-      await epamClient.reportError(threadId, ErrorCodes.GLOBALID_UNAVAILABLE);
+      await epamClient.reportError(threadId, ErrorCodes.GidUnavailable);
 
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledTimes(1);

@@ -109,7 +109,7 @@ describe('GidClient', () => {
 
   describe('#reportError', () => {
     it('should delegate to EpamClient', async () => {
-      const errorCode = ErrorCodes.GLOBALID_UNAVAILABLE;
+      const errorCode = ErrorCodes.GidUnavailable;
 
       await gidClient.reportError(threadId, errorCode);
 
@@ -193,7 +193,7 @@ describe('GidClient', () => {
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledTimes(1);
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledWith(
         threadId,
-        ErrorCodes.REQUEST_VALIDATION_FAILED
+        ErrorCodes.RequestValidationFailed
       );
     });
 
@@ -212,7 +212,7 @@ describe('GidClient', () => {
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledTimes(1);
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledWith(
         threadId,
-        ErrorCodes.REQUEST_VALIDATION_FAILED
+        ErrorCodes.RequestValidationFailed
       );
     });
 
@@ -231,7 +231,7 @@ describe('GidClient', () => {
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledTimes(1);
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledWith(
         threadId,
-        ErrorCodes.REQUEST_VALIDATION_FAILED
+        ErrorCodes.RequestValidationFailed
       );
     });
 
@@ -244,10 +244,7 @@ describe('GidClient', () => {
       expect(mockedVerifySignature).not.toHaveBeenCalled();
       expect(mockedValidateTimestamp).not.toHaveBeenCalled();
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledTimes(1);
-      expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledWith(
-        threadId,
-        ErrorCodes.GLOBALID_UNAVAILABLE
-      );
+      expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledWith(threadId, ErrorCodes.GidUnavailable);
     });
   });
 });

@@ -32,13 +32,17 @@ export class EpamClient {
 export type ErrorCode = keyof typeof ERROR_DESCRIPTIONS;
 
 export const ERROR_DESCRIPTIONS = {
-  '600-7': 'globaliD system had an error or is not available at the moment',
+  '600-1': 'Credential request failed because some information could not be verified',
+  '600-7': 'GlobaliD erred or is not available at the moment',
+  '600-8': 'Issuer erred or is not available at the moment',
   '600-16': 'Validation of credential request failed'
 };
 
 export enum ErrorCodes {
-  GLOBALID_UNAVAILABLE = '600-7',
-  REQUEST_VALIDATION_FAILED = '600-16'
+  CredentialRequestFailed = '600-1',
+  GidUnavailable = '600-7',
+  IssuerUnavailable = '600-8',
+  RequestValidationFailed = '600-16'
 }
 
 export default EpamClient;

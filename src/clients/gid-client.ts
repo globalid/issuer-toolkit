@@ -98,9 +98,9 @@ export class GidClient {
       validateTimestamp(request);
     } catch (error) {
       if (isSignatureError(error)) {
-        await this.reportError(request.threadId, ErrorCodes.REQUEST_VALIDATION_FAILED);
+        await this.reportError(request.threadId, ErrorCodes.RequestValidationFailed);
       } else {
-        await this.reportError(request.threadId, ErrorCodes.GLOBALID_UNAVAILABLE);
+        await this.reportError(request.threadId, ErrorCodes.GidUnavailable);
       }
       throw error;
     }
