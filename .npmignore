@@ -1,5 +1,9 @@
-.vscode
+.*
+
 coverage
 node_modules
 src
 test
+
+jest.config.ts
+tsconfig.*
