@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { GidCredentialRequest } from '../src/common';
+import { CredentialRequest } from '../src/common';
 
 export const accessToken = 'some-access-token';
 export const clientId = 'some-client-id';
@@ -27,9 +27,9 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
 
 export { publicKey };
 
-export const gidCredentialRequest = stubGidCredentialRequest(Date.now());
+export const credentialRequest = stubCredentialRequest(Date.now());
 
-export function stubGidCredentialRequest(timestamp: number, withPayload = true): GidCredentialRequest {
+export function stubCredentialRequest(timestamp: number, withPayload = true): CredentialRequest {
   const payload = withPayload ? defaultPayload : undefined;
   const dataToSign = Buffer.from(`${threadId}${timestamp}${payload === undefined ? '' : JSON.stringify(payload)}`);
   const signature = crypto.sign(null, dataToSign, privateKey).toString('base64');

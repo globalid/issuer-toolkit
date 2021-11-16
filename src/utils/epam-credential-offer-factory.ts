@@ -3,13 +3,13 @@ import {
   ClaimValue,
   ClaimValueType,
   FileType,
-  GidCredentialOffer,
+  CredentialOffer,
   isFileClaimValue,
   isTypedClaimValue
 } from '../common';
 import * as epam from '../services/epam';
 
-export function createEpamCredentialOffer(offer: GidCredentialOffer): epam.EpamCreateCredentialsOfferV2 {
+export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCreateCredentialsOfferV2 {
   return {
     thread_id: offer.threadId,
     name: offer.name,

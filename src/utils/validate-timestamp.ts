@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { GidCredentialRequest } from '../common';
+import { CredentialRequest } from '../common';
 
 /**
  * Validates the `timestamp` of the given credential request and throws an error if it's outside the required bounds.
@@ -8,7 +8,7 @@ import { GidCredentialRequest } from '../common';
  * @throws {@link StaleRequestError} if `timestamp` is more the 5 minutes in the past
  * @throws {@link EagerRequestError} if `timestamp` is more than 1 minute in the future
  */
-export function validateTimestamp(request: GidCredentialRequest): void {
+export function validateTimestamp(request: CredentialRequest): void {
   const now = dayjs();
   const timestamp = dayjs(request.timestamp);
   const stalenessThreshold = makeStalenessThreshold(now);
