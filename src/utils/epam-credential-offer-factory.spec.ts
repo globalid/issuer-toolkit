@@ -1,5 +1,5 @@
 import { threadId } from '../../test/stubs';
-import { ClaimValueType, FileType, GidCredentialOffer } from '../common';
+import { ClaimValueType, FileType, CredentialOffer } from '../common';
 import { ValueType } from '../services/epam';
 import createEpamCredentialOffer from './epam-credential-offer-factory';
 
@@ -9,7 +9,7 @@ const contextIri = 'https://example.com/context';
 const subjectType = 'Foo';
 
 test('should transform GidCredentialOffer into EPAM credential offer', () => {
-  const offer: GidCredentialOffer = {
+  const offer: CredentialOffer = {
     threadId,
     name,
     description,
@@ -96,7 +96,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
 });
 
 test('should string file claims', () => {
-  const offer: GidCredentialOffer = {
+  const offer: CredentialOffer = {
     threadId,
     name,
     description,
@@ -152,7 +152,7 @@ test('should string file claims', () => {
 });
 
 test('should infer primitive value types', () => {
-  const offer: GidCredentialOffer = {
+  const offer: CredentialOffer = {
     threadId,
     name,
     description,

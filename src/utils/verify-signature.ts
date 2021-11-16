@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-import { GidCredentialRequest } from '../common';
+import { CredentialRequest } from '../common';
 
 export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.VerifyPublicKeyInput;
 
@@ -10,7 +10,7 @@ export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.Ve
  * @param publicKey Public key used to verify signature
  * @throws {@link InvalidSignatureError} if `signature` is invalid
  */
-export function verifySignature(request: GidCredentialRequest, publicKey: PublicKey): void {
+export function verifySignature(request: CredentialRequest, publicKey: PublicKey): void {
   const payload = request.payload === undefined ? '' : JSON.stringify(request.payload);
   const data = Buffer.from(`${request.threadId}${request.timestamp}${payload}`);
   const signature = Buffer.from(request.signature, 'base64');

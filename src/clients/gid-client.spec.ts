@@ -9,7 +9,7 @@ import { PublicKeyProvider } from '../utils/public-key-provider';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import { verifySignature } from '../utils/verify-signature';
 import EpamClient from './epam-client';
-import { ErrorCodes, GidClient, GidCredentialOffer, GidCredentialRequest } from './gid-client';
+import { ErrorCodes, GidClient, CredentialOffer, CredentialRequest } from './gid-client';
 
 const mockedGetAccessToken = jest.fn().mockResolvedValue(accessToken);
 jest.mock('../utils/access-token-provider', () =>
@@ -120,7 +120,7 @@ describe('GidClient', () => {
 
   describe('#sendOffer', () => {
     it('should delegate to EpamClient', async () => {
-      const offer = stub<GidCredentialOffer>();
+      const offer = stub<CredentialOffer>();
 
       await gidClient.sendOffer(offer);
 
@@ -166,7 +166,7 @@ describe('GidClient', () => {
   });
 
   describe('#validateRequest', () => {
-    const request = stub<GidCredentialRequest>({ threadId, gidUuid });
+    const request = stub<CredentialRequest>({ threadId, gidUuid });
 
     it('should not report error when request is valid', async () => {
       await gidClient.validateRequest(request);

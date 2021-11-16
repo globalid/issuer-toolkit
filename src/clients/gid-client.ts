@@ -1,4 +1,4 @@
-import { FileClaimValue, FileType, GidCredentialOffer, GidCredentialRequest } from '../common';
+import { FileClaimValue, FileType, CredentialOffer, CredentialRequest } from '../common';
 import AccessTokenProvider from '../utils/access-token-provider';
 import crypto from '../utils/crypto';
 import FileUploader from '../utils/file-uploader';
@@ -54,7 +54,7 @@ export class GidClient {
    * @param threadId Thread ID received from the holder
    * @param offer Credential offer to send
    */
-  async sendOffer(offer: GidCredentialOffer): Promise<void> {
+  async sendOffer(offer: CredentialOffer): Promise<void> {
     // TODO: validate parameter
     this.#epamClient.sendOffer(offer);
   }
@@ -91,7 +91,7 @@ export class GidClient {
    * @throws {@link StaleRequestError} if request's `timestamp` is more the 5 minutes in the past
    * @throws {@link EagerRequestError} if request's `timestamp` is more than 1 minute in the future
    */
-  async validateRequest(request: GidCredentialRequest): Promise<void> {
+  async validateRequest(request: CredentialRequest): Promise<void> {
     try {
       const publicKey = await this.#publicKeyProvider.getPublicKey(request.gidUuid);
       verifySignature(request, publicKey);
@@ -130,7 +130,7 @@ export interface FileObject {
   name: string;
 }
 
-export { GidCredentialOffer, GidCredentialRequest } from '../common';
+export * from '../common';
 export { ErrorCode, ErrorCodes } from './epam-client';
 export { IdentityNotFoundError, PublicKeyNotFoundError } from '../utils/public-key-provider';
 export { EagerRequestError, StaleRequestError } from '../utils/validate-timestamp';

@@ -1,6 +1,6 @@
 import { isInStringEnum, isPrimitive, isRecord, isString } from './utils/type-guards';
 
-export interface GidCredentialOffer {
+export interface CredentialOffer {
   /**
    * Thread ID received from the holder
    */
@@ -85,7 +85,7 @@ export function isFileClaimValue(value: unknown): value is FileClaimValue {
   );
 }
 
-export interface GidCredentialRequest<T = unknown> {
+export interface CredentialRequest<T = unknown> {
   /**
    * Thread ID received from the holder
    */

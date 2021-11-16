@@ -1,7 +1,7 @@
 import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
-import { GidCredentialOffer } from '../common';
+import { CredentialOffer } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from '../utils/access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
@@ -29,7 +29,7 @@ describe('EpamClient', () => {
 
   describe('#offerCredential', () => {
     it('should not throw when offering valid credential', async () => {
-      const offer = stub<GidCredentialOffer>();
+      const offer = stub<CredentialOffer>();
       const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
 
