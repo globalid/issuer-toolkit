@@ -46,7 +46,7 @@ export class GidClient {
    */
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
     // TODO: validate parameters
-    return this.#epamClient.reportError(threadId, errorCode);
+    await this.#epamClient.reportError(threadId, errorCode);
   }
 
   /**
@@ -56,7 +56,7 @@ export class GidClient {
    */
   async sendOffer(offer: CredentialOffer): Promise<void> {
     // TODO: validate parameter
-    return this.#epamClient.sendOffer(offer);
+    await this.#epamClient.sendOffer(offer);
   }
 
   /**
