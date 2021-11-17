@@ -3,7 +3,7 @@ import FormData from 'form-data';
 import { DEFAULT_BASE_API_URL, FileType } from '../common';
 import * as s3 from '../services/s3';
 import * as upload from '../services/upload';
-import AccessTokenProvider from './access-token-provider';
+import AccessTokenProvider from '../clients/access-token-provider';
 
 export class FileUploader {
   #accessTokenProvider: AccessTokenProvider;

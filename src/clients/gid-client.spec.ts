@@ -3,46 +3,54 @@ import { mocked } from 'ts-jest/utils';
 import { accessToken, clientId, clientSecret, gidUuid, publicKey, stub, threadId } from '../../test/stubs';
 import { FileType } from '../common';
 import crypto from '../utils/crypto';
-import AccessTokenProvider from '../utils/access-token-provider';
-import FileUploader from '../utils/file-uploader';
-import { PublicKeyProvider } from '../utils/public-key-provider';
+import AccessTokenProvider from './access-token-provider';
+import FileUploader from './file-uploader';
+import { PublicKeyProvider } from './public-key-provider';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import { verifySignature } from '../utils/verify-signature';
 import EpamClient from './epam-client';
 import { ErrorCodes, GidClient, CredentialOffer, CredentialRequest } from './gid-client';
 
 const mockedGetAccessToken = jest.fn().mockResolvedValue(accessToken);
-jest.mock('../utils/access-token-provider', () =>
+jest.mock('./access-token-provider', () =>
   jest.fn(() => ({
     clientId,
     clientSecret,
     getAccessToken: mockedGetAccessToken
   }))
 );
-jest.mock('../utils/crypto');
+
 const mockedUploadEncryptedFile = jest.fn();
-jest.mock('../utils/file-uploader', () =>
+jest.mock('./file-uploader', () =>
   jest.fn(() => ({
     uploadEncryptedFile: mockedUploadEncryptedFile
   }))
 );
-const mockedGetPublicKey = jest.fn().mockResolvedValue(publicKey);
-jest.mock('../utils/public-key-provider', () => ({
+
+const mockedGetPublicEncryptionKey = jest.fn().mockResolvedValue(publicKey);
+const mockedGetPublicSigningKey = jest.fn().mockResolvedValue(publicKey);
+jest.mock('./public-key-provider', () => ({
   PublicKeyProvider: jest.fn(() => ({
-    getPublicKey: mockedGetPublicKey
+    getPublicEncryptionKey: mockedGetPublicEncryptionKey,
+    getPublicSigningKey: mockedGetPublicSigningKey
   }))
 }));
+
+jest.mock('../utils/crypto');
+
 jest.mock('../utils/validate-timestamp', () => ({
   ...jest.requireActual('../utils/validate-timestamp'),
   validateTimestamp: jest.fn()
 }));
+
 jest.mock('../utils/verify-signature', () => ({
   ...jest.requireActual('../utils/verify-signature'),
   verifySignature: jest.fn()
 }));
+
 jest.mock('./epam-client');
 
-const { PublicKeyNotFoundError } = jest.requireActual('../utils/public-key-provider');
+const { PublicKeyNotFoundError } = jest.requireActual('./public-key-provider');
 const { EagerRequestError, StaleRequestError } = jest.requireActual('../utils/validate-timestamp');
 const { InvalidSignatureError } = jest.requireActual('../utils/verify-signature');
 
@@ -154,8 +162,8 @@ describe('GidClient', () => {
         type: type,
         sha512sum
       });
-      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
-      expect(mockedGetPublicKey).toHaveBeenCalledWith(gidUuid);
+      expect(mockedGetPublicEncryptionKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicEncryptionKey).toHaveBeenCalledWith(gidUuid);
       expect(mockedEncrypt).toHaveBeenCalledTimes(1);
       expect(mockedEncrypt).toHaveBeenCalledWith(content, publicKey);
       expect(mockedUploadEncryptedFile).toHaveBeenCalledTimes(1);
@@ -171,7 +179,7 @@ describe('GidClient', () => {
     it('should not report error when request is valid', async () => {
       await gidClient.validateRequest(request);
 
-      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledWith(request, publicKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
@@ -186,7 +194,7 @@ describe('GidClient', () => {
       });
 
       await expect(gidClient.validateRequest(request)).rejects.toThrow(error);
-      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledWith(request, publicKey);
       expect(mockedValidateTimestamp).not.toHaveBeenCalled();
@@ -204,7 +212,7 @@ describe('GidClient', () => {
       });
 
       await expect(gidClient.validateRequest(request)).rejects.toThrow(error);
-      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledWith(request, publicKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
@@ -223,7 +231,7 @@ describe('GidClient', () => {
       });
 
       await expect(gidClient.validateRequest(request)).rejects.toThrow(EagerRequestError);
-      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledWith(request, publicKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
@@ -237,10 +245,10 @@ describe('GidClient', () => {
 
     it('should report 600-7 for any other error', async () => {
       const error = new PublicKeyNotFoundError();
-      mockedGetPublicKey.mockRejectedValueOnce(error);
+      mockedGetPublicSigningKey.mockRejectedValueOnce(error);
 
       await expect(gidClient.validateRequest(request)).rejects.toThrow(error);
-      expect(mockedGetPublicKey).toHaveBeenCalledTimes(1);
+      expect(mockedGetPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).not.toHaveBeenCalled();
       expect(mockedValidateTimestamp).not.toHaveBeenCalled();
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledTimes(1);

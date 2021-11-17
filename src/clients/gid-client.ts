@@ -1,13 +1,13 @@
-import { FileClaimValue, FileType, CredentialOffer, CredentialRequest } from '../common';
-import AccessTokenProvider from '../utils/access-token-provider';
+import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
 import crypto from '../utils/crypto';
-import FileUploader from '../utils/file-uploader';
-// imports needed for JSDocs
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from '../utils/public-key-provider';
 import { EagerRequestError, StaleRequestError, validateTimestamp } from '../utils/validate-timestamp';
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';
+import AccessTokenProvider from './access-token-provider';
 import { EpamClient, ErrorCode, ErrorCodes } from './epam-client';
+import FileUploader from './file-uploader';
+// imports needed for JSDocs
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from './public-key-provider';
 
 export class GidClient {
   #accessTokenProvider: AccessTokenProvider;
@@ -66,7 +66,7 @@ export class GidClient {
    * @returns `FileClaimValueObject` to be used in a credential offer
    */
   async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValue> {
-    const publicKey = await this.#publicKeyProvider.getPublicKey(gidUuid);
+    const publicKey = await this.#publicKeyProvider.getPublicEncryptionKey(gidUuid);
     const [encryptedContent, decryptionKey] = crypto.encrypt(file.content, publicKey);
     const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.type, encryptedContent);
     return {
@@ -93,7 +93,7 @@ export class GidClient {
    */
   async validateRequest(request: CredentialRequest): Promise<void> {
     try {
-      const publicKey = await this.#publicKeyProvider.getPublicKey(request.gidUuid);
+      const publicKey = await this.#publicKeyProvider.getPublicSigningKey(request.gidUuid);
       verifySignature(request, publicKey);
       validateTimestamp(request);
     } catch (error) {
@@ -132,7 +132,7 @@ export interface FileObject {
 
 export * from '../common';
 export { ErrorCode, ErrorCodes } from './epam-client';
-export { IdentityNotFoundError, PublicKeyNotFoundError } from '../utils/public-key-provider';
+export { IdentityNotFoundError, PublicKeyNotFoundError } from './public-key-provider';
 export { EagerRequestError, StaleRequestError } from '../utils/validate-timestamp';
 export { InvalidSignatureError } from '../utils/verify-signature';
 export default GidClient;
