@@ -3,12 +3,12 @@ import { mocked } from 'ts-jest/utils';
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
 import { CredentialOffer } from '../common';
 import * as epam from '../services/epam';
-import AccessTokenProvider from '../utils/access-token-provider';
+import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 import { EpamClient, ERROR_DESCRIPTIONS, ErrorCodes } from './epam-client';
 
+jest.mock('./access-token-provider');
 jest.mock('../services/epam');
-jest.mock('../utils/access-token-provider');
 jest.mock('../utils/epam-credential-offer-factory');
 
 const mockedCreateEpamCredentialOffer = mocked(createEpamCredentialOffer);

@@ -1,6 +1,6 @@
 import { DEFAULT_BASE_SSI_URL, CredentialOffer } from '../common';
 import * as epam from '../services/epam';
-import AccessTokenProvider from '../utils/access-token-provider';
+import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 
 export class EpamClient {
