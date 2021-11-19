@@ -4,7 +4,7 @@ export const AES_KEY_LENGTH_IN_BYTES = 32;
 
 /**
  * Decrypts the given ciphertext using AES and the given key.
- * 
+ *
  * If `privateKey` is provided, then the `decryptionKey` is assumed to have been encrypted with RSA and the
  * corresponding public key.
  * @param ciphertext Data to decrypt
