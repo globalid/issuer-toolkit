@@ -13,7 +13,7 @@ const defaultPayload = {
   baz: true
 };
 
-const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
+export const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
   modulusLength: 2048,
   publicKeyEncoding: {
     type: 'spki',
@@ -24,8 +24,6 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
     format: 'pem'
   }
 });
-
-export { publicKey };
 
 export const credentialRequest = stubCredentialRequest(Date.now());
 
