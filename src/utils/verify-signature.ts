@@ -8,7 +8,7 @@ export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.Ve
  * Verifies the `signature` of the given credential request and throws an error if it's invalid.
  * @param request Credential request to be validated
  * @param publicKey Public key used to verify signature
- * @throws {@link InvalidSignatureError} if `signature` is invalid
+ * @throws {@linkcode InvalidSignatureError} if `signature` is invalid
  */
 export function verifySignature(request: CredentialRequest, publicKey: PublicKey): void {
   const payload = request.payload === undefined ? '' : JSON.stringify(request.payload);
