@@ -6,10 +6,6 @@ export function isString(value: unknown): value is string {
   return typeof value === 'string';
 }
 
-export function isPrimitive(value: unknown): value is boolean | number | string {
-  return ['boolean', 'number', 'string'].includes(typeof value);
-}
-
 export function isInStringEnum<T>(value: unknown, enumeration: T): value is T {
   return Object.values(enumeration).includes(value);
 }

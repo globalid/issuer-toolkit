@@ -1,50 +1,38 @@
-import { isInStringEnum, isPrimitive, isRecord, isString } from './utils/type-guards';
+import { isInStringEnum, isRecord, isString } from './utils/type-guards';
 
 export interface CredentialOffer {
   /**
-   * Thread ID received from the holder
+   * Claims about the credential subject
    */
-  threadId: string;
+  claims: Claims;
   /**
-   * Name of the credential being offered
+   * URI of a JSON-LD context describing the credential subject
    */
-  name: string;
+  contextUri: string;
   /**
    * Descriptive text about the credential being offered
    */
   description?: string;
   /**
-   * IRI of a JSON-LD context describing the credential subject
+   * Name of the credential being offered
    */
-  contextIri: string;
+  name: string;
+  /**
+   * URI of a JSON Schema describing the data schema of the credential subject's claims
+   */
+  schemaUri: string;
   /**
    * JSON-LD `@type` of the credential subject
    */
   subjectType: string;
   /**
-   * Claims about the credential subject
+   * Thread ID received from the holder
    */
-  claims: Claims;
+  threadId: string;
 }
 
 export type Claims = Record<string, ClaimValue>;
-export type ClaimValue = boolean | number | string | ClaimValueObject;
-export type ClaimValueObject = TypedClaimValue | FileClaimValue;
-
-export interface TypedClaimValue {
-  type: ClaimValueType;
-  value: boolean | number | string;
-}
-
-export enum ClaimValueType {
-  Boolean = 'boolean',
-  Integer = 'integer',
-  Number = 'number',
-  String = 'string',
-  Date = 'date',
-  Time = 'time',
-  DateTime = 'date-time'
-}
+export type ClaimValue = boolean | number | string | FileClaimValue;
 
 export interface FileClaimValue {
   /**
@@ -69,10 +57,6 @@ export interface FileClaimValue {
 export enum FileType {
   JPEG = 'image/jpeg',
   PNG = 'image/png'
-}
-
-export function isTypedClaimValue(value: unknown): value is TypedClaimValue {
-  return isRecord(value) && isInStringEnum(value.type, ClaimValueType) && isPrimitive(value.value);
 }
 
 export function isFileClaimValue(value: unknown): value is FileClaimValue {
