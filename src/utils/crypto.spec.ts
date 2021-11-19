@@ -1,3 +1,5 @@
+import '../../test/setup';
+
 import * as gidCrypto from 'globalid-crypto-library';
 import { mocked } from 'ts-jest/utils';
 

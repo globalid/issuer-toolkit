@@ -1,15 +1,17 @@
+import '../../test/setup';
+
 import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, gidUuid, publicKey, stub, threadId } from '../../test/stubs';
 import { FileType } from '../common';
 import crypto from '../utils/crypto';
-import AccessTokenProvider from './access-token-provider';
-import FileUploader from './file-uploader';
-import { PublicKeyProvider } from './public-key-provider';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import { verifySignature } from '../utils/verify-signature';
+import AccessTokenProvider from './access-token-provider';
 import EpamClient from './epam-client';
-import { ErrorCodes, GidClient, CredentialOffer, CredentialRequest } from './gid-client';
+import FileUploader from './file-uploader';
+import { CredentialOffer, CredentialRequest, ErrorCodes, GidClient } from './gid-client';
+import { PublicKeyProvider } from './public-key-provider';
 
 const mockedGetAccessToken = jest.fn().mockResolvedValue(accessToken);
 jest.mock('./access-token-provider', () =>
@@ -62,10 +64,6 @@ const mockedValidateTimestamp = mocked(validateTimestamp);
 const mockedVerifySignature = mocked(verifySignature);
 const mockedEncrypt = mocked(crypto.encrypt);
 const mockedSha512Sum = mocked(crypto.sha512sum);
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
 
 describe('GidClient', () => {
   let gidClient: GidClient;
