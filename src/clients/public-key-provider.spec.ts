@@ -1,3 +1,5 @@
+import '../../test/setup';
+
 import { mocked } from 'ts-jest/utils';
 
 import { stub } from '../../test/stubs';
@@ -7,10 +9,6 @@ import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from
 jest.mock('../services/identity-namespace');
 
 const mockedIdentityNamespace = mocked(identityNamespace);
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
 
 describe('PublicKeyProvider', () => {
   let publicKeyProvider: PublicKeyProvider;

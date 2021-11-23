@@ -5,8 +5,8 @@ import { CredentialRequest } from '../common';
 /**
  * Validates the `timestamp` of the given credential request and throws an error if it's outside the required bounds.
  * @param request Credential request to be validated
- * @throws {@link StaleRequestError} if `timestamp` is more the 5 minutes in the past
- * @throws {@link EagerRequestError} if `timestamp` is more than 1 minute in the future
+ * @throws {@linkcode StaleRequestError} if `timestamp` is more the 5 minutes in the past
+ * @throws {@linkcode EagerRequestError} if `timestamp` is more than 1 minute in the future
  */
 export function validateTimestamp(request: CredentialRequest): void {
   const now = dayjs();
