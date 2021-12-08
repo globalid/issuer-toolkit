@@ -1,0 +1,4 @@
+{
+  "main": "../../dist/testing/sinon.js",
+  "types": "../../dist/testing/sinon.d.ts"
+}
