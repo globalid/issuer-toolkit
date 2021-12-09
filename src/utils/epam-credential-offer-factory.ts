@@ -14,7 +14,13 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
 }
 
 function toAttributes(claims: Claims): epam.Attributes {
-  return Object.fromEntries(Object.entries(claims).map(([name, value]) => [name, toAttributeValue(value)]));
+  const attributes = Object.entries(claims).reduce<[string, epam.AttributeValue][]>((attributes, [name, value]) => {
+    if (value != null) {
+      attributes.push([name, toAttributeValue(value)]);
+    }
+    return attributes;
+  }, []);
+  return Object.fromEntries(attributes);
 }
 
 function toAttributeValue(value: ClaimValue): epam.AttributeValue {

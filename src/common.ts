@@ -1,10 +1,10 @@
 import { isInStringEnum, isRecord, isString } from './utils/type-guards';
 
-export interface CredentialOffer {
+export interface CredentialOffer<T extends Claims = Claims> {
   /**
    * Claims about the credential subject
    */
-  claims: Claims;
+  claims: T;
   /**
    * URI of a JSON-LD context describing the credential subject
    */
@@ -31,7 +31,7 @@ export interface CredentialOffer {
   threadId: string;
 }
 
-export type Claims = Record<string, ClaimValue>;
+export type Claims = Record<string, ClaimValue | undefined>;
 export type ClaimValue = boolean | number | string | FileClaimValue;
 
 export interface FileClaimValue {
