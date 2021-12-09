@@ -10,7 +10,7 @@ export async function uploadFileV2(accessToken: string, body: PublicMediaRequest
   return (
     await axios.request<MediaUploadInfo[]>({
       baseURL: baseUrl,
-      url: `/v2/upload`,
+      url: '/v2/upload',
       method: 'post',
       data: body,
       headers: {
