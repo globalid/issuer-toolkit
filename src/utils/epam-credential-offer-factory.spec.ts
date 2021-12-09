@@ -20,6 +20,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
       boolean: false,
       number: 42,
       string: 'foobar',
+      undefined: undefined,
       file: {
         type: FileType.JPEG,
         decryptionKey: 'foobar',
