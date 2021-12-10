@@ -1,3 +1,5 @@
+import '../services/interceptors';
+
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
 import crypto from '../utils/crypto';
 import { downloadFile, DownloadOptions } from '../utils/download-file';
