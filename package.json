@@ -13,7 +13,8 @@
     "genver": "genversion src/version.ts --es6 --semi",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "prepublishOnly": "npm run genver && npm run compile",
+    "postversion": "npm run genver",
+    "prepublishOnly": "npm run compile",
     "test": "jest",
     "test:watch": "npm run test -- --watch"
   },
