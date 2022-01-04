@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { version } from '../../package.json';
+import { version } from '../version';
 
 axios.interceptors.request.use((config) => {
   config.headers = {
