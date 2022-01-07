@@ -1,11 +1,11 @@
-# Issuer Agent SDK
+# Issuer Toolkit
 
-An SDK for integrating a credential issuer agent with GlobaliD.
+This is a library for credential issuers integrated with GlobaliD.
 
 ## Installation
 
 ```sh
-npm install @globalid/issuer-agent-sdk
+npm install @globalid/issuer-toolkit
 ```
 
 ## Development

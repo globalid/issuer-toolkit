@@ -1,7 +1,7 @@
 {
-  "name": "@globalid/issuer-agent-sdk",
+  "name": "@globalid/issuer-toolkit",
   "version": "0.1.0",
-  "description": "SDK for integrating a credential issuer agent with GlobaliD",
+  "description": "Library for credential issuers integrated with GlobaliD",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/globalid/credentials-issuer/issuer-agent-sdk.git"
+    "url": "git+https://gitlab.com/globalid/credentials-issuer/issuer-toolkit.git"
   },
   "keywords": [
     "credential",
@@ -34,9 +34,9 @@
   "author": "GlobaliD",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/globalid/credentials-issuer/issuer-agent-sdk/issues"
+    "url": "https://gitlab.com/globalid/credentials-issuer/issuer-toolkit/issues"
   },
-  "homepage": "https://gitlab.com/globalid/credentials-issuer/issuer-agent-sdk#readme",
+  "homepage": "https://gitlab.com/globalid/credentials-issuer/issuer-toolkit#readme",
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.6",
