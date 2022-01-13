@@ -26,7 +26,7 @@ export interface CredentialOffer<T extends Claims = Claims> {
    */
   subjectType: string;
   /**
-   * Thread ID received from the holder
+   * ID correlating interactions related to this credential request
    */
   threadId: string;
 }
@@ -71,25 +71,26 @@ export function isFileClaimValue(value: unknown): value is FileClaimValue {
 
 export interface CredentialRequest<T = unknown> {
   /**
-   * Thread ID received from the holder
-   */
-  threadId: string;
-  /**
    * UUID of the holder's GlobaliD identity
    */
   gidUuid: string;
-  /**
-   * Time of the request as the number of milliseconds since the Unix epoch
-   */
-  timestamp: number;
   /**
    * Data about the credential being requested
    */
   payload?: T;
   /**
-   * Holder's signature of the `threadId`, `timestamp`, and `payload`
+   * Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `threadId`,
+   * `timestamp`, and (if present) `payload`, using the holder's private key
    */
   signature: string;
+  /**
+   * ID correlating interactions related to this credential request
+   */
+  threadId: string;
+  /**
+   * Time of the request as the number of milliseconds since the Unix epoch
+   */
+  timestamp: number;
 }
 
 export const DEFAULT_BASE_API_URL = 'https://api.global.id';

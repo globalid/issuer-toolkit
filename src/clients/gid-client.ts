@@ -102,7 +102,7 @@ export class GidClient {
    * @throws {@linkcode IdentityNotFoundError} if request's `gidUuid` is invalid
    * @throws {@linkcode PublicKeyNotFoundError} if no public key found corresponding to request's `gidUuid`
    * @throws {@linkcode InvalidSignatureError} if request's `signature` is invalid
-   * @throws {@linkcode StaleRequestError} if request's `timestamp` is more the 5 minutes in the past
+   * @throws {@linkcode StaleRequestError} if request's `timestamp` is more than 5 minutes in the past
    * @throws {@linkcode EagerRequestError} if request's `timestamp` is more than 1 minute in the future
    */
   async validateRequest(request: CredentialRequest): Promise<void> {
