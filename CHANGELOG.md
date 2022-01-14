@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Renamed package to `@globalid/issuer-toolkit`
 - Aligned JSDocs with usage documentation
 
 ### Fixed
