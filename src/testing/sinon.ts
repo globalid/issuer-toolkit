@@ -5,7 +5,6 @@ export function stubGidClient(clientId = 'default-client-id', clientSecret = 'de
   return {
     clientId,
     clientSecret,
-    downloadFile: stub(GidClient.prototype, 'downloadFile'),
     getAccessToken: stub(GidClient.prototype, 'getAccessToken'),
     reportError: stub(GidClient.prototype, 'reportError'),
     sendOffer: stub(GidClient.prototype, 'sendOffer'),
