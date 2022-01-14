@@ -9,6 +9,7 @@ This is a library for credential issuers integrated with GlobaliD.
   - [Sending a Credential Offer](#sending-a-credential-offer)
   - [Reporting an Error](#reporting-an-error)
     - [Error Codes](#error-codes)
+  - [Downloading a File](#downloading-a-file)
   - [Testing Utilities](#testing-utilities)
     - [Nock](#nock)
     - [Sinon](#sinon)
@@ -153,6 +154,27 @@ await client.reportError(threadId, '600-1');
 | `600-7`  | GlobaliD erred or is unavailable                              |
 | `600-8`  | Issuer is unavailable                                         |
 | `600-16` | [Request validation](#validating-a-credential-request) failed |
+
+### Downloading a File
+
+The toolkit offers the `downloadFile` utility function for downloading and (optionally) decrypting a file from a URL, presumably sent in the initial credential request. This function is essentially the inverse of `GidClient`'s `uploadFile`.
+
+In addition to a URL string, `downloadFile` accepts the following options:
+
+- `decryptionKey` - Symmetric key used to decrypt the downloaded file via AES. The file is assumed to be in plaintext if this option is absent.
+- `privateKey` - Asymmetric private key (typically the issuer's) used to decrypt the `decryptionKey` via RSA. The `decryptionKey` is assumed to be plaintext if this option is absent.
+- `sha512sum` - Checksum used to validate the integrity of the downloaded (and possibly decrypted) file
+
+```js
+import { downloadFile } from '@globalid/issuer-toolkit';
+
+const buffer1 = await downloadFile('http://example.com/unencrypted-file');
+const buffer2 = await downloadFile('https://example.com/encrypted-file', {
+  decryptionKey: request.data.avatar.key,
+  privateKey: process.env.PRIVATE_KEY,
+  sha512sum: request.data.avatar.checksum
+})
+```
 
 ### Testing Utilities
 

@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Corrected a couple typos in the JSDocs
+
+### Removed
+
+- `downloadFile` is now only a utility and no longer a method of `GidClient`
+
 ## [0.1.1] - 2022-01-04
 
 ### Fixed
