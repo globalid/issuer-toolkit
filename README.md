@@ -46,9 +46,9 @@ If anything goes wrong in that process, issuers can [report an error](#reporting
 
 The `validateRequest` method will check the validity of a `CredentialRequest`, which consists of the following properties:
 
+- `data` - (Optional) information about the credential being requested
 - `gidUuid` - UUID of the holder's GlobaliD identity
-- `payload` - (Optional) data about the credential being requested
-- `signature` - Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `threadId`, `timestamp`, and (if present) `payload`, using the holder's private key
+- `signature` - Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `threadId`, `timestamp`, and (if present) `data`, using the holder's private key
 - `threadId` - ID correlating interactions related to this credential request
 - `timestamp` - Time of the request as the number of milliseconds since the Unix epoch
 
@@ -64,7 +64,7 @@ const credentialRequest = {
   gidUuid,
   timestamp: 1640995200000,
   signature: 'abcdefghijklmnopqrstuvwxyz',
-  payload: {
+  data: {
     givenName: 'Neville',
     birthDate: '1980-07-30'
   }
@@ -173,7 +173,7 @@ const buffer2 = await downloadFile('https://example.com/encrypted-file', {
   decryptionKey: request.data.avatar.key,
   privateKey: process.env.PRIVATE_KEY,
   sha512sum: request.data.avatar.checksum
-})
+});
 ```
 
 ### Testing Utilities

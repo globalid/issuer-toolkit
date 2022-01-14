@@ -71,16 +71,16 @@ export function isFileClaimValue(value: unknown): value is FileClaimValue {
 
 export interface CredentialRequest<T = unknown> {
   /**
+   * Information about the credential being requested
+   */
+  data?: T;
+  /**
    * UUID of the holder's GlobaliD identity
    */
   gidUuid: string;
   /**
-   * Data about the credential being requested
-   */
-  payload?: T;
-  /**
    * Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `threadId`,
-   * `timestamp`, and (if present) `payload`, using the holder's private key
+   * `timestamp`, and (if present) `data`, using the holder's private key
    */
   signature: string;
   /**

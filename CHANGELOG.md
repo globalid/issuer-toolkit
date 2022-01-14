@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed package to `@globalid/issuer-toolkit`
+- Renamed `payload` to `data` in the `CredentialRequest` interface
 - Aligned JSDocs with usage documentation
 
 ### Fixed
