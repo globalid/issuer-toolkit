@@ -37,7 +37,7 @@ const client = new GidClient(clientId, clientSecret);
 The `GidClient` supports the typical flow for issuing a credential:
 
 1. Receive and [validate a credential request](#validating-a-credential-request).
-1. (Optional) [encrypt and upload file claims](#uploading-a-file).
+1. [Encrypt and upload file claims](#uploading-a-file) (optional).
 1. Build and [send a credential offer](#sending-a-credential-offer).
 
 If anything goes wrong in that process, issuers can [report an error](#reporting-an-error), which notifies the prospective holder of a problem in the credential issuance.
@@ -46,7 +46,7 @@ If anything goes wrong in that process, issuers can [report an error](#reporting
 
 The `validateRequest` method will check the validity of a `CredentialRequest`, which consists of the following properties:
 
-- `data` - (Optional) information about the credential being requested
+- `data` (optional) - Information about the credential being requested
 - `gidUuid` - UUID of the holder's GlobaliD identity
 - `signature` - Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `threadId`, `timestamp`, and (if present) `data`, using the holder's private key
 - `threadId` - ID correlating interactions related to this credential request
@@ -57,8 +57,8 @@ Of those, the `signature` and `timestamp` are validated. The `signature` is [ver
 This method also handles boilerplate [error reporting](#reporting-an-error). An `InvalidSignatureError`, `StaleRequestError`, or `EagerRequestError` is reported as a `600-16`. All other errors are reported as a `600-7`.
 
 ```js
-const threadId = '...'; // thread ID from the agent initiating the request
-const gidUuid = '...'; // UUID of the holder's identity
+const threadId = '...';
+const gidUuid = '...';
 const credentialRequest = {
   threadId,
   gidUuid,
@@ -110,7 +110,7 @@ The `sendOffer` method allows sending an offer for a credential following a cred
 
 - `claims` - Claims about the credential subject
 - `contextUri` - URI of a JSON-LD context describing the credential subject
-- `description` - (Optional) descriptive text about the credential being offered
+- `description` (optional) - Descriptive text about the credential being offered
 - `name` - Name of the credential being offered
 - `schemaUri` - URI of a JSON Schema describing the data schema of the credential subject's claims
 - `subjectType` - JSON-LD `@type` of the credential subject
@@ -157,7 +157,7 @@ await client.reportError(threadId, '600-1');
 
 ### Downloading a File
 
-The toolkit offers the `downloadFile` utility function for downloading and (optionally) decrypting a file from a URL, presumably sent in the initial credential request. This function is essentially the inverse of `GidClient`'s `uploadFile`.
+The toolkit offers the `downloadFile` utility function for downloading and optionally decrypting a file from a URL, presumably sent in the initial credential request. This function is essentially the inverse of `GidClient`'s `uploadFile`.
 
 In addition to a URL string, `downloadFile` accepts the following options:
 
