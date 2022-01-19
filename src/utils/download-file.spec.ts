@@ -49,3 +49,24 @@ test('should throw DataIntegrityError on checksum mismatch', async () => {
   expect(mockedDownload).toHaveBeenCalledWith(url);
   expect(mockedDecrypt).not.toHaveBeenCalled();
 });
+
+test('should throw TypeError if URL is not a string', async () => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  await expect(downloadFile(<any>undefined)).rejects.toThrow(TypeError);
+  await expect(downloadFile(<any>null)).rejects.toThrow(TypeError);
+  await expect(downloadFile(<any>true)).rejects.toThrow(TypeError);
+  await expect(downloadFile(<any>42)).rejects.toThrow(TypeError);
+  await expect(downloadFile(<any>[])).rejects.toThrow(TypeError);
+  await expect(downloadFile(<any>{})).rejects.toThrow(TypeError);
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+});
+
+test('should throw TypeError if DownloadOptions is invalid', async () => {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  await expect(downloadFile('http://example.com', <any>null)).rejects.toThrow(TypeError);
+  await expect(downloadFile('http://example.com', <any>true)).rejects.toThrow(TypeError);
+  await expect(downloadFile('http://example.com', <any>42)).rejects.toThrow(TypeError);
+  await expect(downloadFile('http://example.com', <any>"foo")).rejects.toThrow(TypeError);
+  await expect(downloadFile('http://example.com', <any>[])).rejects.toThrow(TypeError);
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+});
