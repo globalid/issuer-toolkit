@@ -27,6 +27,7 @@ function toAttributeValue(value: ClaimValue): epam.AttributeValue {
   if (isFileClaimValue(value)) {
     return {
       decryption_key: value.decryptionKey,
+      file_name: value.name,
       media_type: value.type,
       sha_512_sum: value.sha512sum,
       url: value.url
