@@ -5,13 +5,12 @@ import { mocked } from 'ts-jest/utils';
 import { accessToken, clientId, clientSecret, gidUuid, publicKey, stub, threadId } from '../../test/stubs';
 import { FileType } from '../common';
 import crypto from '../utils/crypto';
-import downloadFile from '../utils/download-file';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import { verifySignature } from '../utils/verify-signature';
 import AccessTokenProvider from './access-token-provider';
 import EpamClient from './epam-client';
 import FileUploader from './file-uploader';
-import { CredentialOffer, CredentialRequest, DownloadOptions, ErrorCodes, GidClient } from './gid-client';
+import { CredentialOffer, CredentialRequest, ErrorCodes, GidClient } from './gid-client';
 import { PublicKeyProvider } from './public-key-provider';
 
 jest.mock('../utils/crypto');
@@ -67,7 +66,6 @@ const mockedValidateTimestamp = mocked(validateTimestamp);
 const mockedVerifySignature = mocked(verifySignature);
 const mockedEncrypt = mocked(crypto.encrypt);
 const mockedSha512Sum = mocked(crypto.sha512sum);
-const mockedDownloadFile = mocked(downloadFile);
 
 describe('GidClient', () => {
   let gidClient: GidClient;
@@ -106,21 +104,6 @@ describe('GidClient', () => {
   it('should expose client credentials', () => {
     expect(gidClient.clientId).toEqual(clientId);
     expect(gidClient.clientSecret).toEqual(clientSecret);
-  });
-
-  describe('#downloadFile', () => {
-    it('should delegate to downloadFile function', async () => {
-      const url = 'https://example.com/file';
-      const options = stub<DownloadOptions>();
-      const file = Buffer.from('Lorem ipsum dolor sit amet');
-      mockedDownloadFile.mockResolvedValueOnce(file);
-
-      const result = await gidClient.downloadFile(url, options);
-
-      expect(result).toBe(file);
-      expect(mockedDownloadFile).toHaveBeenCalledTimes(1);
-      expect(mockedDownloadFile).toHaveBeenCalledWith(url, options);
-    });
   });
 
   describe('#getAccessToken', () => {

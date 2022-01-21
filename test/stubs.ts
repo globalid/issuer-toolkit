@@ -7,7 +7,7 @@ export const clientSecret = 'some-client-secret';
 
 export const threadId = 'some-thread-id';
 export const gidUuid = 'some-gid-uuid';
-const defaultPayload = {
+const defaultRequestData = {
   foo: 'bar',
   bar: 42,
   baz: true
@@ -27,15 +27,17 @@ export const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
 
 export const credentialRequest = stubCredentialRequest(Date.now());
 
-export function stubCredentialRequest(timestamp: number, withPayload = true): CredentialRequest {
-  const payload = withPayload ? defaultPayload : undefined;
-  const dataToSign = Buffer.from(`${threadId}${timestamp}${payload === undefined ? '' : JSON.stringify(payload)}`);
+export function stubCredentialRequest(timestamp: number, withData = true): CredentialRequest {
+  const requestData = withData ? defaultRequestData : undefined;
+  const dataToSign = Buffer.from(
+    `${threadId}${timestamp}${requestData === undefined ? '' : JSON.stringify(requestData)}`
+  );
   const signature = crypto.sign(null, dataToSign, privateKey).toString('base64');
   return {
     gidUuid,
     threadId,
     timestamp,
-    payload,
+    data: requestData,
     signature
   };
 }

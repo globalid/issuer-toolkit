@@ -22,15 +22,17 @@ export async function downloadFile(url: string, options?: DownloadOptions): Prom
 
 export interface DownloadOptions {
   /**
-   * Symmetric key used to decrypt the downloaded file via AES
+   * Symmetric key used to decrypt the downloaded file via AES. The file is assumed to be in plaintext if this option is
+   * absent.
    */
   decryptionKey?: string;
   /**
-   * Asymmetric private key used to decrypt the `decryptionKey` via RSA
+   * Asymmetric private key (typically the issuer's) used to decrypt the `decryptionKey` via RSA. The `decryptionKey` is
+   * assumed to be plaintext if this option is absent.
    */
   privateKey?: string;
   /**
-   * Used to validate the checksum of the downloaded file
+   * Checksum used to validate the integrity of the downloaded (and possibly decrypted) file
    */
   sha512sum?: string;
 }

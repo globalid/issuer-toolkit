@@ -2,7 +2,6 @@ import '../services/interceptors';
 
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
 import crypto from '../utils/crypto';
-import { downloadFile, DownloadOptions } from '../utils/download-file';
 import { EagerRequestError, StaleRequestError, validateTimestamp } from '../utils/validate-timestamp';
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';
 import AccessTokenProvider from './access-token-provider';
@@ -32,17 +31,6 @@ export class GidClient {
 
   get clientSecret(): string {
     return this.#accessTokenProvider.clientSecret;
-  }
-
-  /**
-   * Downloads and optionally processes a file at the given URL.
-   * @param url URL of the file to download
-   * @param options {@linkcode DownloadOptions} for additional file processing
-   * @returns Downloaded and processed file as a `Buffer`
-   * @throws {@linkcode DataIntegrityError} if the checksum of the downloaded file doesn't match the provided `sha512sum`
-   */
-  async downloadFile(url: string, options?: DownloadOptions): Promise<Buffer> {
-    return downloadFile(url, options);
   }
 
   /**
@@ -102,7 +90,7 @@ export class GidClient {
    * @throws {@linkcode IdentityNotFoundError} if request's `gidUuid` is invalid
    * @throws {@linkcode PublicKeyNotFoundError} if no public key found corresponding to request's `gidUuid`
    * @throws {@linkcode InvalidSignatureError} if request's `signature` is invalid
-   * @throws {@linkcode StaleRequestError} if request's `timestamp` is more the 5 minutes in the past
+   * @throws {@linkcode StaleRequestError} if request's `timestamp` is more than 5 minutes in the past
    * @throws {@linkcode EagerRequestError} if request's `timestamp` is more than 1 minute in the future
    */
   async validateRequest(request: CredentialRequest): Promise<void> {
@@ -145,7 +133,6 @@ export interface FileObject {
 }
 
 export * from '../common';
-export { DownloadOptions } from '../utils/download-file';
 export { EagerRequestError, StaleRequestError } from '../utils/validate-timestamp';
 export { InvalidSignatureError } from '../utils/verify-signature';
 export { ErrorCode, ErrorCodes } from './epam-client';
