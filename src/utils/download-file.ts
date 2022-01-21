@@ -1,5 +1,5 @@
-import Joi from 'joi';
 import download from '../services/download';
+import { schemas, validate } from './validation';
 import { decrypt, sha512sum } from './crypto';
 
 /**
@@ -10,8 +10,8 @@ import { decrypt, sha512sum } from './crypto';
  * @throws {@linkcode DataIntegrityError} if the checksum of the downloaded file doesn't match the provided `sha512sum`
  */
 export async function downloadFile(url: string, options?: DownloadOptions): Promise<Buffer> {
-  validateUrl(url);
-  validateDownloadOptions(options);
+  validate(url, schemas.url);
+  validate(options, schemas.downloadOptions);
   let data = await download(url);
   if (options?.decryptionKey != null) {
     data = decrypt(data, options.decryptionKey, options.privateKey);
@@ -37,28 +37,6 @@ export interface DownloadOptions {
    * Checksum used to validate the integrity of the downloaded (and possibly decrypted) file
    */
   sha512sum?: string;
-}
-
-const urlSchema = Joi.string().uri().required();
-
-function validateUrl(value: unknown): void {
-  const { error } = urlSchema.validate(value);
-  if (error != null) {
-    throw new TypeError(error.message);
-  }
-}
-
-const downloadOptionsSchema = Joi.object({
-  decryptionKey: Joi.string(),
-  privateKey: Joi.string(),
-  sha512sum: Joi.string()
-}).unknown();
-
-function validateDownloadOptions(value: unknown): void {
-  const { error } = downloadOptionsSchema.validate(value);
-  if (error != null) {
-    throw new TypeError(error.message);
-  }
 }
 
 export class DataIntegrityError extends Error {}
