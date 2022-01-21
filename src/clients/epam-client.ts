@@ -7,19 +7,16 @@ export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
 
   constructor(accessTokenProvider: AccessTokenProvider, baseSsiUrl = DEFAULT_BASE_SSI_URL) {
-    // TODO: validate parameters
     this.#accessTokenProvider = accessTokenProvider;
     epam.init(baseSsiUrl);
   }
 
   async sendOffer(offer: CredentialOffer): Promise<void> {
-    // TODO: validate parameter
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
     await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
-    // TODO: validate parameters
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
     await epam.createErrorReport(accessToken, {
       code: errorCode,
