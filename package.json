@@ -60,6 +60,7 @@
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",
     "form-data": "^4.0.0",
-    "globalid-crypto-library": "^5.0.1"
+    "globalid-crypto-library": "^5.0.1",
+    "joi": "^17.5.0"
   }
 }

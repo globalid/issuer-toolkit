@@ -1,5 +1,5 @@
 import download from '../services/download';
-
+import { schemas, validate } from './validation';
 import { decrypt, sha512sum } from './crypto';
 
 /**
@@ -10,6 +10,8 @@ import { decrypt, sha512sum } from './crypto';
  * @throws {@linkcode DataIntegrityError} if the checksum of the downloaded file doesn't match the provided `sha512sum`
  */
 export async function downloadFile(url: string, options?: DownloadOptions): Promise<Buffer> {
+  validate(url, schemas.url);
+  validate(options, schemas.downloadOptions);
   let data = await download(url);
   if (options?.decryptionKey != null) {
     data = decrypt(data, options.decryptionKey, options.privateKey);
