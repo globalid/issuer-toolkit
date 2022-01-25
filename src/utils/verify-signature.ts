@@ -11,8 +11,8 @@ export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.Ve
  * @throws {@linkcode InvalidSignatureError} if `signature` is invalid
  */
 export function verifySignature(request: CredentialRequest, publicKey: PublicKey): void {
-  const payload = request.payload === undefined ? '' : JSON.stringify(request.payload);
-  const data = Buffer.from(`${request.threadId}${request.timestamp}${payload}`);
+  const requestData = request.data === undefined ? '' : JSON.stringify(request.data);
+  const data = Buffer.from(`${request.threadId}${request.timestamp}${requestData}`);
   const signature = Buffer.from(request.signature, 'base64');
   const valid = crypto.verify(null, data, publicKey, signature);
   if (!valid) {
