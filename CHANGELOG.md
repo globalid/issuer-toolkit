@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed package to `@globalid/issuer-toolkit`
 - Renamed `payload` to `data` in the `CredentialRequest` interface
+- File names must have the format `{UUID}.{name}.{extension}`.
 - Aligned JSDocs with usage documentation
 
 ### Fixed

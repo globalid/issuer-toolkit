@@ -41,6 +41,10 @@ export interface FileClaimValue {
    */
   decryptionKey: string;
   /**
+   * Name of the original file. Should have the form `{UUID}[-_.]{human_readable_name}.{extension}`.
+   */
+  name: string;
+  /**
    * Checksum of the file's content
    */
   sha512sum: string;

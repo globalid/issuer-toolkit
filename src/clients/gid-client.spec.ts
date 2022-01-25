@@ -161,7 +161,7 @@ describe('GidClient', () => {
 
   describe('#uploadFile', () => {
     it('should encrypt file and delegate upload to FileUploader', async () => {
-      const name = 'foo.jpg';
+      const name = 'uuid.foo.jpg';
       const type = FileType.JPEG;
       const content = Buffer.from('definitely a valid image');
       const fileObject: FileObject = { name, type, content };
@@ -175,7 +175,7 @@ describe('GidClient', () => {
 
       const result = await gidClient.uploadFile(stubs.gidUuid, fileObject);
 
-      expect(result).toEqual({ url, decryptionKey, type, sha512sum });
+      expect(result).toEqual({ url, decryptionKey, name, type, sha512sum });
       expect(mockedValidation.validate).toHaveBeenCalledTimes(5);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(4, stubs.gidUuid, validation.schemas.uuid);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(5, fileObject, validation.schemas.fileObject);

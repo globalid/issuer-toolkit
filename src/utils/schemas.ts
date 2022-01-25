@@ -18,6 +18,8 @@ const fileClaimValueSchema = Joi.object<FileClaimValue>({
 
 const claimValueSchema = [Joi.boolean(), Joi.number(), Joi.string().allow(''), fileClaimValueSchema];
 
+const fileNamePattern = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}[-_.]\w+\.[a-z]+$/i;
+
 const schemas = {
   credentialOffer: Joi.object<CredentialOffer>({
     claims: Joi.object().pattern(/.*/, claimValueSchema).required(),
@@ -53,7 +55,7 @@ const schemas = {
 
   fileObject: Joi.object({
     content: Joi.binary().required(),
-    name: Joi.string().required(),
+    name: Joi.string().pattern(fileNamePattern).required(),
     type: fileTypeSchema.required()
   })
     .required()

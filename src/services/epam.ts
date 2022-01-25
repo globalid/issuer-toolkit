@@ -53,6 +53,7 @@ export type Attributes = Record<string, AttributeValue>;
 export type AttributeValue = boolean | number | string | FileAttribute;
 export interface FileAttribute {
   decryption_key: string;
+  file_name: string;
   media_type: string;
   sha_512_sum: string;
   url: string;

@@ -80,6 +80,7 @@ export class GidClient {
     return {
       url,
       decryptionKey,
+      name: file.name,
       type: file.type,
       sha512sum: crypto.sha512sum(file.content)
     };
