@@ -3,7 +3,6 @@ import * as identityNamespace from '../services/identity-namespace';
 
 export class PublicKeyProvider {
   constructor(baseApiUrl = DEFAULT_BASE_API_URL) {
-    // TODO: validate parameters
     identityNamespace.init(baseApiUrl);
   }
 

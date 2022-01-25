@@ -23,6 +23,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
       undefined: undefined,
       file: {
         type: FileType.JPEG,
+        name: 'uuid.some-file.jpg',
         decryptionKey: 'foobar',
         sha512sum: 'abcdefg',
         url: 'https://example.com/some-file'
@@ -45,6 +46,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
       string: 'foobar',
       file: {
         media_type: FileType.JPEG,
+        file_name: 'uuid.some-file.jpg',
         decryption_key: 'foobar',
         sha_512_sum: 'abcdefg',
         url: 'https://example.com/some-file'

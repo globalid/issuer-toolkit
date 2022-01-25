@@ -6,7 +6,6 @@ export class AccessTokenProvider {
   #clientSecret: string;
 
   constructor(clientId: string, clientSecret: string, baseApiUrl = DEFAULT_BASE_API_URL) {
-    // TODO: validate parameters
     this.#clientId = clientId;
     this.#clientSecret = clientSecret;
     auth.init(baseApiUrl);

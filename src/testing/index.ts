@@ -5,10 +5,6 @@ export function clearMocks() {
   nock.cleanAll();
 }
 
-export function mockDownloadFile(url: string, result: Buffer): void {
-  nock(url).get('/').reply(200, result);
-}
-
 export function mockGetAccessToken(accessToken = 'mock.access.token'): void {
   nock(DEFAULT_BASE_API_URL).post('/v1/auth/token').reply(200, {
     access_token: accessToken
@@ -65,7 +61,6 @@ export function mockValidateRequest(gidUuid: string, publicKey: string): void {
 
 export default {
   clearMocks,
-  mockDownloadFile,
   mockGetAccessToken,
   mockReportError,
   mockSendOffer,

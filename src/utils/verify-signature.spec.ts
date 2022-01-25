@@ -7,7 +7,7 @@ test('should verify signature', () => {
   expect(() => verifySignature(credentialRequest, publicKey)).not.toThrow();
 });
 
-test('should verify signature with no payload', () => {
+test('should verify signature with no request data', () => {
   const request = stubCredentialRequest(Date.now(), false);
 
   expect(() => verifySignature(request, publicKey)).not.toThrow();

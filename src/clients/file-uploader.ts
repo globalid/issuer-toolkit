@@ -9,7 +9,6 @@ export class FileUploader {
   #accessTokenProvider: AccessTokenProvider;
 
   constructor(accessTokenProvider: AccessTokenProvider, baseApiUrl = DEFAULT_BASE_API_URL) {
-    // TODO: validate parameters
     this.#accessTokenProvider = accessTokenProvider;
     upload.init(baseApiUrl);
   }

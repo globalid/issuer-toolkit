@@ -11,7 +11,7 @@ const config: Config.InitialOptions = {
       statements: 100
     },
     'src/clients/gid-client.ts': {
-      functions: 68.75
+      functions: 66.66
     },
     'src/services/**': {
       branches: 0,
