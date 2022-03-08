@@ -21,7 +21,7 @@ export class FileUploader {
       content_type: type
     });
     await uploadFile(content, uploadInfo.s3_upload_url, uploadInfo.s3_upload_fields);
-    return `${uploadInfo.base_serve_url}/${uploadInfo.s3_upload_fields.key}`;
+    return `${uploadInfo.base_serve_url}${uploadInfo.s3_upload_fields.key}`;
   }
 }
 
