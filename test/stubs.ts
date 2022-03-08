@@ -30,7 +30,7 @@ export const credentialRequest = stubCredentialRequest(Date.now());
 export function stubCredentialRequest(timestamp: number, withData = true): CredentialRequest {
   const requestData = withData ? defaultRequestData : undefined;
   const dataToSign = Buffer.from(
-    `${threadId}${timestamp}${requestData === undefined ? '' : JSON.stringify(requestData)}`
+    `${timestamp}${threadId}${requestData === undefined ? '' : JSON.stringify(requestData)}`
   );
   const signature = crypto.sign(null, dataToSign, privateKey).toString('base64');
   return {
