@@ -35,7 +35,7 @@ describe('FileUploader', () => {
 
     it('should upload file as encrypted media', async () => {
       const mediaUploadInfo = stub<upload.MediaUploadInfo>({
-        base_serve_url: 'https://example.com/uploads',
+        base_serve_url: 'https://example.com/uploads/',
         s3_upload_url: 'https://example.com/s3-upload',
         s3_upload_fields: {
           foo: 'bar',

@@ -48,7 +48,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
         media_type: FileType.JPEG,
         file_name: 'uuid.some-file.jpg',
         decryption_key: 'foobar',
-        sha512sum: 'abcdefg',
+        sha_512_sum: 'abcdefg',
         url: 'https://example.com/some-file'
       }
     }

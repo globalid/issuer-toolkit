@@ -55,6 +55,6 @@ export interface FileAttribute {
   decryption_key: string;
   file_name: string;
   media_type: string;
-  sha512sum: string;
+  sha_512_sum: string;
   url: string;
 }
