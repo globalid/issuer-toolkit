@@ -1,5 +1,4 @@
 import '../services/interceptors';
-import * as identitySDK from '@globalid/identity-namespace-service-sdk'
 
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
 import crypto from '../utils/crypto';
