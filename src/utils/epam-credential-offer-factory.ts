@@ -29,7 +29,7 @@ function toAttributeValue(value: ClaimValue): epam.AttributeValue {
       decryption_key: value.decryptionKey,
       file_name: value.name,
       media_type: value.type,
-      sha_512_sum: value.sha512sum,
+      sha512sum: value.sha512sum,
       url: value.url
     };
   } else {
