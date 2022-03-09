@@ -74,8 +74,8 @@ export class GidClient {
   async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValue> {
     validate(gidUuid, schemas.uuid);
     validate(file, schemas.fileObject);
-    const publicKey = await this.#publicKeyProvider.getPublicEncryptionKey(gidUuid);
-    const [encryptedContent, decryptionKey] = crypto.encrypt(file.content, publicKey);
+
+    const [encryptedContent, decryptionKey] = crypto.encrypt(file.content);
     const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.type, encryptedContent);
     return {
       url,

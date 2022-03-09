@@ -26,11 +26,11 @@ export function decrypt(ciphertext: Buffer, decryptionKey: string, privateKey?: 
  * @param publicKey Asymmetric public key used to encrypt the generated symmetric key
  * @returns Ciphertext and encrypted symmetric key as a `Buffer`-`string` pair
  */
-export function encrypt(plaintext: Buffer, publicKey: string): [Buffer, string] {
+export function encrypt(plaintext: Buffer): [Buffer, string] {
   const key = Util.bytesToHex(Util.randomBytes(AES_KEY_LENGTH_IN_BYTES));
   const ciphertext = AES.encryptBuffer(plaintext, key);
-  const encryptedKey = RSA.encrypt(publicKey, key);
-  return [ciphertext, encryptedKey];
+
+  return [ciphertext, key];
 }
 
 export function sha512sum(data: Buffer): string {

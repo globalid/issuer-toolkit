@@ -179,10 +179,8 @@ describe('GidClient', () => {
       expect(mockedValidation.validate).toHaveBeenCalledTimes(5);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(4, stubs.gidUuid, validation.schemas.uuid);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(5, fileObject, validation.schemas.fileObject);
-      expect(mockedGetPublicEncryptionKey).toHaveBeenCalledTimes(1);
-      expect(mockedGetPublicEncryptionKey).toHaveBeenCalledWith(stubs.gidUuid);
       expect(mockedEncrypt).toHaveBeenCalledTimes(1);
-      expect(mockedEncrypt).toHaveBeenCalledWith(content, stubs.publicKey);
+      expect(mockedEncrypt).toHaveBeenCalledWith(content);
       expect(mockedUploadEncryptedFile).toHaveBeenCalledTimes(1);
       expect(mockedUploadEncryptedFile).toHaveBeenCalledWith(name, type, encryptedContent);
       expect(mockedSha512Sum).toHaveBeenCalledTimes(1);
