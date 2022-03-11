@@ -12,7 +12,7 @@ export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.Ve
  */
 export function verifySignature(request: CredentialRequest, publicKey: PublicKey): void {
   const requestData = request.data === undefined ? '' : JSON.stringify(request.data);
-  const data = Buffer.from(`${request.threadId}${request.timestamp}${requestData}`);
+  const data = Buffer.from(`${request.timestamp}${request.threadId}${requestData}`);
   const signature = Buffer.from(request.signature, 'base64');
   const valid = crypto.verify(null, data, publicKey, signature);
   if (!valid) {

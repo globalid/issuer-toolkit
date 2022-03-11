@@ -3,7 +3,7 @@ import '../../test/setup';
 import * as gidCrypto from 'globalid-crypto-library';
 import { mocked } from 'ts-jest/utils';
 
-import { privateKey, publicKey } from '../../test/stubs';
+import { privateKey } from '../../test/stubs';
 import { AES_KEY_LENGTH_IN_BYTES, decrypt, encrypt, sha512sum } from './crypto';
 
 jest.mock('globalid-crypto-library');
@@ -46,28 +46,24 @@ describe('encrypt', () => {
   const mockedAesEncryptBuffer = mocked(gidCrypto.AES.encryptBuffer);
   const mockedBytesToHex = mocked(gidCrypto.Util.bytesToHex);
   const mockedRandomBytes = mocked(gidCrypto.Util.randomBytes);
-  const mockedRsaEncrypt = mocked(gidCrypto.RSA.encrypt);
 
   it('should return ciphertext Buffer and encrypted key', () => {
     const randomBytes = [1, 2, 3];
     mockedRandomBytes.mockReturnValueOnce(randomBytes);
     mockedBytesToHex.mockReturnValueOnce(decryptionKey);
     mockedAesEncryptBuffer.mockReturnValueOnce(ciphertext);
-    mockedRsaEncrypt.mockReturnValueOnce(encryptedDecryptionKey);
 
-    const result = encrypt(plaintext, publicKey);
+    const result = encrypt(plaintext);
 
     expect(result).toHaveLength(2);
     expect(result[0]).toBe(ciphertext);
-    expect(result[1]).toBe(encryptedDecryptionKey);
+    expect(result[1]).toBe(decryptionKey);
     expect(mockedRandomBytes).toHaveBeenCalledTimes(1);
     expect(mockedRandomBytes).toHaveBeenCalledWith(AES_KEY_LENGTH_IN_BYTES);
     expect(mockedBytesToHex).toHaveBeenCalledTimes(1);
     expect(mockedBytesToHex).toHaveBeenCalledWith(randomBytes);
     expect(mockedAesEncryptBuffer).toHaveBeenCalledTimes(1);
     expect(mockedAesEncryptBuffer).toHaveBeenCalledWith(plaintext, decryptionKey);
-    expect(mockedRsaEncrypt).toHaveBeenCalledTimes(1);
-    expect(mockedRsaEncrypt).toHaveBeenCalledWith(publicKey, decryptionKey);
   });
 });
 
