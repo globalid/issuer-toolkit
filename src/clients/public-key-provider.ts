@@ -30,7 +30,7 @@ enum PublicKeyType {
 
 async function getIdentity(gidUuid: string): Promise<identityNamespace.Identity> {
   try {
-    return await identityNamespace.getIdentityPublic(gidUuid);
+    return identityNamespace.getIdentityPublic(gidUuid);
   } catch (error) {
     throw new IdentityNotFoundError(gidUuid);
   }

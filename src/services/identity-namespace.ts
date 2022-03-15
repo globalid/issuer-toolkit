@@ -7,12 +7,22 @@ export function init(serviceUrl: string): void {
 }
 
 export async function getIdentityPublic(gidUuid: string): Promise<Identity> {
-  const response = await axios.request<Identity>({
-    url: `/v1/identities/${gidUuid}`,
-    baseURL: baseUrl,
-    method: 'get'
-  });
-  return response.data;
+  let response
+  try {
+    response = await axios.request<Identity>({
+      url: `/v1/identities/${gidUuid}`,
+      baseURL: baseUrl,
+      method: 'get'
+    });
+    return response.data;
+  } catch (e) {
+    console.log('getIdentityPublic: ',  {
+      response,
+      e
+    })
+
+    throw e
+  }
 }
 
 export interface Identity extends PrivateIdentity {
