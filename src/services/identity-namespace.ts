@@ -7,7 +7,7 @@ export function init(serviceUrl: string): void {
 }
 
 export async function getIdentityPublic(gidUuid: string): Promise<Identity> {
-  let response
+  let response;
   try {
     response = await axios.request<Identity>({
       url: `/v1/identities/${gidUuid}`,
@@ -16,12 +16,12 @@ export async function getIdentityPublic(gidUuid: string): Promise<Identity> {
     });
     return response.data;
   } catch (e) {
-    console.log('getIdentityPublic: ',  {
+    console.log('getIdentityPublic: ', {
       response,
       e
-    })
+    });
 
-    throw e
+    throw e;
   }
 }
 
