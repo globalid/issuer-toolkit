@@ -48,7 +48,7 @@ The `validateRequest` method will check the validity of a `CredentialRequest`, w
 
 - `data` (optional) - Information about the credential being requested
 - `gidUuid` - UUID of the holder's GlobaliD identity
-- `signature` - Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `threadId`, `timestamp`, and (if present) `data`, using the holder's private key
+- `signature` - Result of [digitally signing](https://en.wikipedia.org/wiki/Digital_signature) the concatenation of the `timestamp`, `threadId`, and (if present) `data`, using the holder's private key
 - `threadId` - ID correlating interactions related to this credential request
 - `timestamp` - Time of the request as the number of milliseconds since the Unix epoch
 
