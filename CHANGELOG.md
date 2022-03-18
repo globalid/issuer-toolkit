@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Corrected docs around credential request validation
+
+## [0.2.1] - 2022-03-16
+
+### Changed
+
+- Updated the default SSI URL's subdomain from `ssi` to `credentials`
+- Generated encryption key for files is no longer encrypted
+
+### Fixed
+
+- Corrected signature validation algorithm ([IDENTPD-757](https://global-id.atlassian.net/browse/IDENTPD-757))
+- File uploads to S3 now include required `Content-Length` header
+
 ## [0.2.0] - 2022-01-25
 
 ### Added
@@ -40,6 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GidClient` for working with issuer-specific operations in the GlobaliD API
 - Testing utilities for [`nock`](https://www.npmjs.com/package/nock) and [`sinon`](https://sinonjs.org/)
 
-[0.2.0]: https://gitlab.com/globalid/credentials-issuer/issuer-toolkit/-/compare/v0.1.1...v0.2.0
-[0.1.1]: https://gitlab.com/globalid/credentials-issuer/issuer-toolkit/-/compare/v0.1.0...v0.1.1
-[0.1.0]: https://gitlab.com/globalid/credentials-issuer/issuer-toolkit/-/tags/v0.1.0
+[Unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/globalid/issuer-toolkit/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/globalid/issuer-toolkit/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/globalid/issuer-toolkit/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/globalid/issuer-toolkit/releases/tag/v0.1.0
