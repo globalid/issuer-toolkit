@@ -1,6 +1,7 @@
 import '../services/interceptors';
 
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
+import { EpamCreateProofRequestBody, EpamCreateProofRequestResponse } from '../services/epam'
 import crypto from '../utils/crypto';
 import { EagerRequestError, StaleRequestError, validateTimestamp } from '../utils/validate-timestamp';
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';
@@ -114,6 +115,12 @@ export class GidClient {
       }
       throw error;
     }
+  }
+
+  async createProofRequest(request: EpamCreateProofRequestBody): Promise<EpamCreateProofRequestResponse> {
+    validate(request, schemas.proofRequest);
+
+    return this.#epamClient.createProofRequest(request);
   }
 }
 
