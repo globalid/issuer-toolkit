@@ -9,7 +9,8 @@ export function stubGidClient(clientId = 'default-client-id', clientSecret = 'de
     reportError: stub(GidClient.prototype, 'reportError'),
     sendOffer: stub(GidClient.prototype, 'sendOffer'),
     uploadFile: stub(GidClient.prototype, 'uploadFile'),
-    validateRequest: stub(GidClient.prototype, 'validateRequest')
+    validateRequest: stub(GidClient.prototype, 'validateRequest'),
+    createProofRequest: stub(GidClient.prototype, 'createProofRequest')
   };
 }
 
