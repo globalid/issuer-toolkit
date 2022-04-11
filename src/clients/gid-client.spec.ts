@@ -3,6 +3,7 @@ import '../../test/setup';
 import { mocked } from 'ts-jest/utils';
 
 import * as stubs from '../../test/stubs';
+import { EpamCreateProofRequestBody, EpamCreateProofRequestResponse } from '../services/epam'
 import crypto from '../utils/crypto';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import * as validation from '../utils/validation';
@@ -281,6 +282,26 @@ describe('GidClient', () => {
       expect(mockedValidateTimestamp).not.toHaveBeenCalled();
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledTimes(1);
       expect(MockedEpamClient.mock.instances[0].reportError).toHaveBeenCalledWith(stubs.threadId, errorCode);
+    });
+  });
+
+  describe('#createProofRequest', () => {
+    beforeEach(() => {
+      mockedValidation.validate.mockReset();
+    })
+
+    it('should delegate to EpamClient', async () => {
+      const proofRequest = stubs.stub<EpamCreateProofRequestBody>();
+      const proofRequestResponse = stubs.stub<EpamCreateProofRequestResponse>();
+
+      jest.spyOn(MockedEpamClient.mock.instances[0], 'createProofRequest').mockResolvedValue(proofRequestResponse);
+
+      const result: EpamCreateProofRequestResponse = await gidClient.createProofRequest(proofRequest);
+
+      expect(result).toEqual(proofRequestResponse);
+      expect(mockedValidation.validate).toHaveBeenCalledTimes(1);
+      expect(MockedEpamClient.mock.instances[0].createProofRequest).toHaveBeenCalledTimes(1);
+      expect(MockedEpamClient.mock.instances[0].createProofRequest).toHaveBeenCalledWith(proofRequest);
     });
   });
 });

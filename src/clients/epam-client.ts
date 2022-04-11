@@ -16,6 +16,11 @@ export class EpamClient {
     await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
   }
 
+  async createProofRequest(proofRequest: epam.EpamCreateProofRequestBody): Promise<epam.EpamCreateProofRequestResponse> {
+    const accessToken: string = await this.#accessTokenProvider.getAccessToken();
+    return epam.createProofRequest(accessToken, proofRequest);
+  }
+
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
     await epam.createErrorReport(accessToken, {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ProofRequirementAttributes } from './interfaces'
 
 let baseUrl: string;
 
@@ -32,6 +33,18 @@ export async function createErrorReport(accessToken: string, body: EpamCredentia
   return response.data;
 }
 
+export async function createProofRequest(accessToken: string, body: EpamCreateProofRequestBody): Promise<EpamCreateProofRequestResponse> {
+  return (await axios.request<EpamCreateProofRequestResponse>({
+    url: '/v2/aries-management/external-party/proof-requests',
+    baseURL: baseUrl,
+    method: 'post',
+    data: body,
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  })).data;
+}
+
 export interface EpamCreateCredentialsOfferV2 {
   thread_id: string;
   name: string;
@@ -46,6 +59,16 @@ export interface EpamCredentialErrorReportBody {
   thread_id: string;
   code: string;
   description: string;
+}
+
+export interface EpamCreateProofRequestBody {
+  proof_requirements: ProofRequirementAttributes;
+  tracking_id: string;
+  screening_webhook_url: string;
+}
+
+export interface EpamCreateProofRequestResponse {
+  pres_request: object;
 }
 
 // custom types

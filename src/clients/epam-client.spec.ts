@@ -19,6 +19,7 @@ describe('EpamClient', () => {
   const threadId = 'some-thread-id';
   let accessTokenProvider: AccessTokenProvider;
   let epamClient: EpamClient;
+  const mockedEpamService = epam as jest.Mocked<typeof epam>
 
   beforeEach(() => {
     accessTokenProvider = new AccessTokenProvider(clientId, clientSecret);
@@ -54,6 +55,19 @@ describe('EpamClient', () => {
         description: ERROR_DESCRIPTIONS[errorCode],
         thread_id: threadId
       });
+    });
+  });
+
+  describe('#createProofRequest', () => {
+    it('should request create proof to EPAM', async () => {
+      const proofRequest = stub<epam.EpamCreateProofRequestBody>();
+      const proofRequestResponse = stub<epam.EpamCreateProofRequestResponse>();
+      const mockedCreatedProofRequest = mockedEpamService.createProofRequest.mockResolvedValue(proofRequestResponse);
+
+      const result: epam.EpamCreateProofRequestResponse = await epamClient.createProofRequest(proofRequest);
+
+      expect(result).toEqual(proofRequestResponse);
+      expect(mockedCreatedProofRequest).toHaveBeenCalledWith(accessToken, proofRequest);
     });
   });
 });
