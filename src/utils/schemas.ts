@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import { ErrorCodes } from '../clients/epam-client';
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
-import { EpamCreateProofRequestBody } from '../services/epam'
+import { EpamCreateProofRequestBody } from '../services/epam';
 
 const fileTypeSchema = Joi.string().valid(...Object.values(FileType));
 
@@ -76,10 +76,10 @@ const schemas = {
   proofRequest: Joi.object<EpamCreateProofRequestBody>({
     proof_requirements: Joi.object().required(),
     tracking_id: uuidSchema.required().required(),
-    screening_webhook_url: Joi.string().required(),
+    screening_webhook_url: Joi.string().required()
   })
     .required()
-    .unknown(),
+    .unknown()
 };
 
 export default schemas;

@@ -3,7 +3,7 @@ import '../../test/setup';
 import { mocked } from 'ts-jest/utils';
 
 import * as stubs from '../../test/stubs';
-import { EpamCreateProofRequestBody, EpamCreateProofRequestResponse } from '../services/epam'
+import { EpamCreateProofRequestBody, EpamCreateProofRequestResponse } from '../services/epam';
 import crypto from '../utils/crypto';
 import { validateTimestamp } from '../utils/validate-timestamp';
 import * as validation from '../utils/validation';
@@ -288,7 +288,7 @@ describe('GidClient', () => {
   describe('#createProofRequest', () => {
     beforeEach(() => {
       mockedValidation.validate.mockReset();
-    })
+    });
 
     it('should delegate to EpamClient', async () => {
       const proofRequest = stubs.stub<EpamCreateProofRequestBody>();

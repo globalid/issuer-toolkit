@@ -19,7 +19,7 @@ describe('EpamClient', () => {
   const threadId = 'some-thread-id';
   let accessTokenProvider: AccessTokenProvider;
   let epamClient: EpamClient;
-  const mockedEpamService = epam as jest.Mocked<typeof epam>
+  const mockedEpamService = epam as jest.Mocked<typeof epam>;
 
   beforeEach(() => {
     accessTokenProvider = new AccessTokenProvider(clientId, clientSecret);

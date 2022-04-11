@@ -1,7 +1,7 @@
 import '../services/interceptors';
 
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
-import { EpamCreateProofRequestBody, EpamCreateProofRequestResponse } from '../services/epam'
+import { EpamCreateProofRequestBody, EpamCreateProofRequestResponse } from '../services/epam';
 import crypto from '../utils/crypto';
 import { EagerRequestError, StaleRequestError, validateTimestamp } from '../utils/validate-timestamp';
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';

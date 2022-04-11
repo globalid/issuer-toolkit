@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GidClient` for working with issuer-specific operations in the GlobaliD API
 - Testing utilities for [`nock`](https://www.npmjs.com/package/nock) and [`sinon`](https://sinonjs.org/)
 
-[Unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.2.1...HEAD
 [0.2.1]: https://github.com/globalid/issuer-toolkit/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/globalid/issuer-toolkit/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/globalid/issuer-toolkit/compare/v0.1.0...v0.1.1
