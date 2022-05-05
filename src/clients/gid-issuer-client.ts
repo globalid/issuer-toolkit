@@ -12,7 +12,7 @@ import FileUploader from './file-uploader';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from './public-key-provider';
 
-export class GidClient {
+export class GidIssuerClient {
   constructor(
     private readonly accessTokenProvider: AccessTokenProvider,
     private readonly epamClient: EpamClient,
@@ -80,7 +80,7 @@ export class GidClient {
 
   /**
    * Validates the given credential request and throws an error if the request is invalid. This method also handles
-   * boilerplate error reporting (via {@linkcode GidClient.reportError}). Namely, errors are reported as follows:
+   * boilerplate error reporting (via {@linkcode GidIssuerClient.reportError}). Namely, errors are reported as follows:
    * * {@linkcode errors.InvalidSignatureError InvalidSignatureError} &rarr; `600-16`
    * * {@linkcode errors.StaleRequestError StaleRequestError} &rarr; `600-16`
    * * {@linkcode errors.EagerRequestError EagerRequestError} &rarr; `600-16`
@@ -132,4 +132,4 @@ export { EagerRequestError, StaleRequestError } from '../utils/validate-timestam
 export { InvalidSignatureError } from '../utils/verify-signature';
 export { ErrorCode, ErrorCodes } from './epam-client';
 export { IdentityNotFoundError, PublicKeyNotFoundError } from './public-key-provider';
-export default GidClient;
+export default GidIssuerClient;

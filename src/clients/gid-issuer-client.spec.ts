@@ -11,7 +11,7 @@ import { verifySignature } from '../utils/verify-signature';
 import AccessTokenProvider from './access-token-provider';
 import EpamClient from './epam-client';
 import FileUploader from './file-uploader';
-import { CredentialOffer, ErrorCodes, FileObject, FileType, GidClient } from './gid-client';
+import { CredentialOffer, ErrorCodes, FileObject, FileType, GidIssuerClient } from './gid-issuer-client';
 import { PublicKeyProvider } from './public-key-provider';
 
 jest.mock('../utils/crypto');
@@ -44,23 +44,23 @@ const mockedVerifySignature = mocked(verifySignature);
 const mockedEncrypt = mocked(crypto.encrypt);
 const mockedSha512Sum = mocked(crypto.sha512sum);
 
-describe('GidClient', () => {
-  let gidClient: GidClient;
+describe('GidIssuerClient', () => {
+  let gidIssuerClient: GidIssuerClient;
 
   beforeEach(() => {
-    gidClient = new GidClient(accessTokenProvider, epamClient, fileUploader, publicKeyProvider);
+    gidIssuerClient = new GidIssuerClient(accessTokenProvider, epamClient, fileUploader, publicKeyProvider);
   });
 
   it('should expose client credentials', () => {
-    expect(gidClient.clientId).toEqual(accessTokenProvider.clientId);
-    expect(gidClient.clientSecret).toEqual(accessTokenProvider.clientSecret);
+    expect(gidIssuerClient.clientId).toEqual(accessTokenProvider.clientId);
+    expect(gidIssuerClient.clientSecret).toEqual(accessTokenProvider.clientSecret);
   });
 
   describe('#getAccessToken', () => {
     it('should delegate to AccessTokenProvider', async () => {
       accessTokenProvider.getAccessToken.mockResolvedValueOnce(stubs.accessToken);
 
-      const result = await gidClient.getAccessToken();
+      const result = await gidIssuerClient.getAccessToken();
 
       expect(result).toEqual(stubs.accessToken);
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
@@ -71,7 +71,7 @@ describe('GidClient', () => {
     it('should delegate to EpamClient', async () => {
       const errorCode = ErrorCodes.GidUnavailable;
 
-      await gidClient.reportError(stubs.threadId, errorCode);
+      await gidIssuerClient.reportError(stubs.threadId, errorCode);
 
       expect(mockedValidation.validate).toHaveBeenCalledTimes(2);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.threadId, validation.schemas.requiredString);
@@ -85,7 +85,7 @@ describe('GidClient', () => {
     it('should delegate to EpamClient', async () => {
       const offer = stubs.stub<CredentialOffer>();
 
-      await gidClient.sendOffer(offer);
+      await gidIssuerClient.sendOffer(offer);
 
       expect(mockedValidation.validate).toHaveBeenCalledTimes(1);
       // prettier-ignore
@@ -109,7 +109,7 @@ describe('GidClient', () => {
       fileUploader.uploadEncryptedFile.mockResolvedValueOnce(url);
       mockedSha512Sum.mockReturnValueOnce(sha512sum);
 
-      const result = await gidClient.uploadFile(stubs.gidUuid, fileObject);
+      const result = await gidIssuerClient.uploadFile(stubs.gidUuid, fileObject);
 
       expect(result).toEqual({ url, decryptionKey, name, type, sha512sum });
       expect(mockedValidation.validate).toHaveBeenCalledTimes(2);
@@ -130,7 +130,7 @@ describe('GidClient', () => {
     });
 
     it('should not report error when request is valid', async () => {
-      await gidClient.validateRequest(stubs.credentialRequest);
+      await gidIssuerClient.validateRequest(stubs.credentialRequest);
 
       expect(mockedValidation.validate).toHaveBeenCalledTimes(1);
       // prettier-ignore
@@ -150,7 +150,7 @@ describe('GidClient', () => {
         throw error;
       });
 
-      await expect(gidClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(error);
+      await expect(gidIssuerClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(error);
       expect(mockedValidation.validate).toHaveBeenCalledTimes(3);
       // prettier-ignore
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.credentialRequest, validation.schemas.credentialRequest);
@@ -171,7 +171,7 @@ describe('GidClient', () => {
         throw error;
       });
 
-      await expect(gidClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(error);
+      await expect(gidIssuerClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(error);
       // prettier-ignore
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.credentialRequest, validation.schemas.credentialRequest);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, stubs.threadId, validation.schemas.requiredString);
@@ -192,7 +192,7 @@ describe('GidClient', () => {
         throw error;
       });
 
-      await expect(gidClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(EagerRequestError);
+      await expect(gidIssuerClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(EagerRequestError);
       // prettier-ignore
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.credentialRequest, validation.schemas.credentialRequest);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, stubs.threadId, validation.schemas.requiredString);
@@ -211,7 +211,7 @@ describe('GidClient', () => {
       const error = new PublicKeyNotFoundError();
       publicKeyProvider.getPublicSigningKey.mockRejectedValueOnce(error);
 
-      await expect(gidClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(error);
+      await expect(gidIssuerClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(error);
       // prettier-ignore
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.credentialRequest, validation.schemas.credentialRequest);
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, stubs.threadId, validation.schemas.requiredString);

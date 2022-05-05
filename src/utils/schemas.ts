@@ -61,7 +61,7 @@ const schemas = {
     .required()
     .unknown(),
 
-  gidClientOptions: Joi.object({
+  gidIssuerClientOptions: Joi.object({
     baseApiUrl: uriSchema,
     baseSsiUrl: uriSchema
   }).unknown(),

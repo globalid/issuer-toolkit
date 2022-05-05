@@ -7,9 +7,9 @@ import * as validation from '../utils/validation';
 import AccessTokenProvider from './access-token-provider';
 import EpamClient from './epam-client';
 import FileUploader from './file-uploader';
-import { GidClient } from './gid-client';
+import { GidIssuerClient } from './gid-issuer-client';
 import { PublicKeyProvider } from './public-key-provider';
-import * as gidClientFactory from './gid-client-factory';
+import * as gidIssuerClientFactory from './gid-issuer-client-factory';
 
 jest.mock('../utils/validation');
 
@@ -46,17 +46,17 @@ const MockedFileUploader = mocked(FileUploader);
 const MockedPublicKeyProvider = mocked(PublicKeyProvider);
 const mockedValidation = mocked(validation);
 
-describe('createGidClient', () => {
-  let gidClient: GidClient;
+describe('createGidIssuerClient', () => {
+  let gidIssuerClient: GidIssuerClient;
 
   it('should instantiate dependencies', () => {
-    gidClient = gidClientFactory.createGidClient(stubs.clientId, stubs.clientSecret);
+    gidIssuerClient = gidIssuerClientFactory.createGidIssuerClient(stubs.clientId, stubs.clientSecret);
 
-    expect(gidClient).toBeInstanceOf(GidClient);
+    expect(gidIssuerClient).toBeInstanceOf(GidIssuerClient);
     expect(mockedValidation.validate).toHaveBeenCalledTimes(3);
     expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.clientId, validation.schemas.requiredString);
     expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, stubs.clientSecret, validation.schemas.requiredString);
-    expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, undefined, validation.schemas.gidClientOptions);
+    expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, undefined, validation.schemas.gidIssuerClientOptions);
     expect(MockedAccessTokenProvider).toHaveBeenCalledTimes(1);
     expect(MockedAccessTokenProvider).toHaveBeenCalledWith(stubs.clientId, stubs.clientSecret, undefined);
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);
@@ -73,14 +73,14 @@ describe('createGidClient', () => {
     jest.clearAllMocks();
     const baseApiUrl = 'https://api.globalid.dev';
     const baseSsiUrl = 'https://ssi.globalid.dev';
-    const options: gidClientFactory.GidClientOptions = { baseApiUrl, baseSsiUrl };
+    const options: gidIssuerClientFactory.GidIssuerClientOptions = { baseApiUrl, baseSsiUrl };
 
-    gidClient = gidClientFactory.createGidClient(stubs.clientId, stubs.clientSecret, options);
+    gidIssuerClient = gidIssuerClientFactory.createGidIssuerClient(stubs.clientId, stubs.clientSecret, options);
 
     expect(mockedValidation.validate).toHaveBeenCalledTimes(3);
     expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.clientId, validation.schemas.requiredString);
     expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, stubs.clientSecret, validation.schemas.requiredString);
-    expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, options, validation.schemas.gidClientOptions);
+    expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, options, validation.schemas.gidIssuerClientOptions);
     expect(MockedAccessTokenProvider).toHaveBeenCalledTimes(1);
     expect(MockedAccessTokenProvider).toHaveBeenCalledWith(stubs.clientId, stubs.clientSecret, baseApiUrl);
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);

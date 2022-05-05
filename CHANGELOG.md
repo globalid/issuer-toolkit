@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Corrected docs around credential request validation
 
+### Changed
+
+- `GidClient` was renamed to `GidIssuerClient`.
+- `GidIssuerClient` is instatiated with the `createGidIssuerClient` function.
+
 ## [0.2.1] - 2022-03-16
 
 ### Changed
