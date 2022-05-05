@@ -18,14 +18,16 @@ export class GidClient {
   #fileUploader: FileUploader;
   #publicKeyProvider: PublicKeyProvider;
 
-  constructor(clientId: string, clientSecret: string, options?: GidClientOptions) {
-    validate(clientId, schemas.requiredString);
-    validate(clientSecret, schemas.requiredString);
-    validate(options, schemas.gidClientOptions);
-    this.#accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.baseApiUrl);
-    this.#epamClient = new EpamClient(this.#accessTokenProvider, options?.baseSsiUrl);
-    this.#fileUploader = new FileUploader(this.#accessTokenProvider, options?.baseApiUrl);
-    this.#publicKeyProvider = new PublicKeyProvider(options?.baseApiUrl);
+  constructor(
+    accessTokenProvider: AccessTokenProvider,
+    epamClient: EpamClient,
+    fileUploader: FileUploader,
+    publicKeyProvider: PublicKeyProvider
+  ) {
+    this.#accessTokenProvider = accessTokenProvider;
+    this.#epamClient = epamClient;
+    this.#fileUploader = fileUploader;
+    this.#publicKeyProvider = publicKeyProvider;
   }
 
   get clientId(): string {
@@ -119,11 +121,6 @@ export class GidClient {
 
 const isSignatureError = (error: unknown): error is Error =>
   error instanceof InvalidSignatureError || error instanceof StaleRequestError || error instanceof EagerRequestError;
-
-export interface GidClientOptions {
-  baseApiUrl?: string;
-  baseSsiUrl?: string;
-}
 
 export interface FileObject {
   /**
