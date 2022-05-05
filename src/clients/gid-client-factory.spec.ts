@@ -42,11 +42,11 @@ jest.mock('./public-key-provider', () => ({
 
 const MockedAccessTokenProvider = mocked(AccessTokenProvider);
 const MockedEpamClient = mocked(EpamClient);
-const MockedFilerUploader = mocked(FileUploader);
+const MockedFileUploader = mocked(FileUploader);
 const MockedPublicKeyProvider = mocked(PublicKeyProvider);
 const mockedValidation = mocked(validation);
 
-describe('GidClient', () => {
+describe('createGidClient', () => {
   let gidClient: GidClient;
 
   it('should instantiate dependencies', () => {
@@ -62,9 +62,9 @@ describe('GidClient', () => {
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);
     // TODO: improve assertion
     expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), undefined);
-    expect(MockedFilerUploader).toHaveBeenCalledTimes(1);
+    expect(MockedFileUploader).toHaveBeenCalledTimes(1);
     // TODO: improve assertion
-    expect(MockedFilerUploader).toHaveBeenCalledWith(expect.anything(), undefined);
+    expect(MockedFileUploader).toHaveBeenCalledWith(expect.anything(), undefined);
     expect(MockedPublicKeyProvider).toHaveBeenCalledTimes(1);
     expect(MockedPublicKeyProvider).toHaveBeenCalledWith(undefined);
   });
@@ -86,9 +86,9 @@ describe('GidClient', () => {
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);
     // TODO: improve assertion
     expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), baseSsiUrl);
-    expect(MockedFilerUploader).toHaveBeenCalledTimes(1);
+    expect(MockedFileUploader).toHaveBeenCalledTimes(1);
     // TODO: improve assertion
-    expect(MockedFilerUploader).toHaveBeenCalledWith(expect.anything(), baseApiUrl);
+    expect(MockedFileUploader).toHaveBeenCalledWith(expect.anything(), baseApiUrl);
     expect(MockedPublicKeyProvider).toHaveBeenCalledTimes(1);
     expect(MockedPublicKeyProvider).toHaveBeenCalledWith(baseApiUrl);
   });

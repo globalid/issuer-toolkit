@@ -26,12 +26,12 @@ npm install @globalid/issuer-toolkit
 
 The `GidClient` class is the primary component of the toolkit, providing several methods for issuing a credential.
 
-The constructor requires the client ID and secret of a developer app created in [GlobaliD's developer portal](https://developer.global.id/).
+The function to create a `GidClient` requires the client ID and secret of a developer app created in [GlobaliD's developer portal](https://developer.global.id/).
 
 ```js
 const clientId = '...';
 const clientSecret = '...';
-const client = new GidClient(clientId, clientSecret);
+const client = createGidClient(clientId, clientSecret);
 ```
 
 The `GidClient` supports the typical flow for issuing a credential:

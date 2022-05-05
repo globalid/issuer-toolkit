@@ -13,29 +13,19 @@ import FileUploader from './file-uploader';
 import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from './public-key-provider';
 
 export class GidClient {
-  #accessTokenProvider: AccessTokenProvider;
-  #epamClient: EpamClient;
-  #fileUploader: FileUploader;
-  #publicKeyProvider: PublicKeyProvider;
-
   constructor(
-    accessTokenProvider: AccessTokenProvider,
-    epamClient: EpamClient,
-    fileUploader: FileUploader,
-    publicKeyProvider: PublicKeyProvider
-  ) {
-    this.#accessTokenProvider = accessTokenProvider;
-    this.#epamClient = epamClient;
-    this.#fileUploader = fileUploader;
-    this.#publicKeyProvider = publicKeyProvider;
-  }
+    private readonly accessTokenProvider: AccessTokenProvider,
+    private readonly epamClient: EpamClient,
+    private readonly fileUploader: FileUploader,
+    private readonly publicKeyProvider: PublicKeyProvider
+  ) {}
 
   get clientId(): string {
-    return this.#accessTokenProvider.clientId;
+    return this.accessTokenProvider.clientId;
   }
 
   get clientSecret(): string {
-    return this.#accessTokenProvider.clientSecret;
+    return this.accessTokenProvider.clientSecret;
   }
 
   /**
@@ -43,7 +33,7 @@ export class GidClient {
    * @returns OAuth 2.0 access token
    */
   async getAccessToken(): Promise<string> {
-    return this.#accessTokenProvider.getAccessToken();
+    return this.accessTokenProvider.getAccessToken();
   }
 
   /**
@@ -54,7 +44,7 @@ export class GidClient {
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
     validate(threadId, schemas.requiredString);
     validate(errorCode, schemas.errorCode);
-    await this.#epamClient.reportError(threadId, errorCode);
+    await this.epamClient.reportError(threadId, errorCode);
   }
 
   /**
@@ -64,7 +54,7 @@ export class GidClient {
    */
   async sendOffer(offer: CredentialOffer): Promise<void> {
     validate(offer, schemas.credentialOffer);
-    await this.#epamClient.sendOffer(offer);
+    await this.epamClient.sendOffer(offer);
   }
 
   /**
@@ -78,7 +68,7 @@ export class GidClient {
     validate(file, schemas.fileObject);
 
     const [encryptedContent, decryptionKey] = crypto.encrypt(file.content);
-    const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.type, encryptedContent);
+    const url = await this.fileUploader.uploadEncryptedFile(file.name, file.type, encryptedContent);
     return {
       url,
       decryptionKey,
@@ -105,7 +95,7 @@ export class GidClient {
   async validateRequest(request: CredentialRequest): Promise<void> {
     validate(request, schemas.credentialRequest);
     try {
-      const publicKey = await this.#publicKeyProvider.getPublicSigningKey(request.gidUuid);
+      const publicKey = await this.publicKeyProvider.getPublicSigningKey(request.gidUuid);
       verifySignature(request, publicKey);
       validateTimestamp(request);
     } catch (error) {

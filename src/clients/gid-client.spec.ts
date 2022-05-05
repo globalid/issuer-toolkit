@@ -89,7 +89,7 @@ describe('GidClient', () => {
 
       expect(mockedValidation.validate).toHaveBeenCalledTimes(1);
       // prettier-ignore
-      expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, offer, validation.schemas.credentialOffer);
+      expect(mockedValidation.validate).toHaveBeenCalledWith(offer, validation.schemas.credentialOffer);
       expect(epamClient.sendOffer).toHaveBeenCalledTimes(1);
       expect(epamClient.sendOffer).toHaveBeenCalledWith(offer);
     });
@@ -134,7 +134,7 @@ describe('GidClient', () => {
 
       expect(mockedValidation.validate).toHaveBeenCalledTimes(1);
       // prettier-ignore
-      expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, stubs.credentialRequest, validation.schemas.credentialRequest);
+      expect(mockedValidation.validate).toHaveBeenCalledWith(stubs.credentialRequest, validation.schemas.credentialRequest);
       expect(publicKeyProvider.getPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicKey);
