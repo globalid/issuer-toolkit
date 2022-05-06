@@ -12,20 +12,22 @@ import FileUploader from './file-uploader';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from './public-key-provider';
 
-export class GidClient {
+export class GidIssuerClient {
   #accessTokenProvider: AccessTokenProvider;
   #epamClient: EpamClient;
   #fileUploader: FileUploader;
   #publicKeyProvider: PublicKeyProvider;
 
-  constructor(clientId: string, clientSecret: string, options?: GidClientOptions) {
-    validate(clientId, schemas.requiredString);
-    validate(clientSecret, schemas.requiredString);
-    validate(options, schemas.gidClientOptions);
-    this.#accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.baseApiUrl);
-    this.#epamClient = new EpamClient(this.#accessTokenProvider, options?.baseSsiUrl);
-    this.#fileUploader = new FileUploader(this.#accessTokenProvider, options?.baseApiUrl);
-    this.#publicKeyProvider = new PublicKeyProvider(options?.baseApiUrl);
+  constructor(
+    accessTokenProvider: AccessTokenProvider,
+    epamClient: EpamClient,
+    fileUploader: FileUploader,
+    publicKeyProvider: PublicKeyProvider
+  ) {
+    this.#accessTokenProvider = accessTokenProvider;
+    this.#epamClient = epamClient;
+    this.#fileUploader = fileUploader;
+    this.#publicKeyProvider = publicKeyProvider;
   }
 
   get clientId(): string {
@@ -88,7 +90,7 @@ export class GidClient {
 
   /**
    * Validates the given credential request and throws an error if the request is invalid. This method also handles
-   * boilerplate error reporting (via {@linkcode GidClient.reportError}). Namely, errors are reported as follows:
+   * boilerplate error reporting (via {@linkcode GidIssuerClient.reportError}). Namely, errors are reported as follows:
    * * {@linkcode errors.InvalidSignatureError InvalidSignatureError} &rarr; `600-16`
    * * {@linkcode errors.StaleRequestError StaleRequestError} &rarr; `600-16`
    * * {@linkcode errors.EagerRequestError EagerRequestError} &rarr; `600-16`
@@ -120,11 +122,6 @@ export class GidClient {
 const isSignatureError = (error: unknown): error is Error =>
   error instanceof InvalidSignatureError || error instanceof StaleRequestError || error instanceof EagerRequestError;
 
-export interface GidClientOptions {
-  baseApiUrl?: string;
-  baseSsiUrl?: string;
-}
-
 export interface FileObject {
   /**
    * Unencrypted content of the file
@@ -145,4 +142,4 @@ export { EagerRequestError, StaleRequestError } from '../utils/validate-timestam
 export { InvalidSignatureError } from '../utils/verify-signature';
 export { ErrorCode, ErrorCodes } from './epam-client';
 export { IdentityNotFoundError, PublicKeyNotFoundError } from './public-key-provider';
-export default GidClient;
+export default GidIssuerClient;

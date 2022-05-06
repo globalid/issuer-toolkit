@@ -38,6 +38,7 @@
   },
   "homepage": "https://gitlab.com/globalid/credentials-issuer/issuer-toolkit#readme",
   "devDependencies": {
+    "@golevelup/ts-jest": "0.3.3",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.6",
     "@types/sinon": "^10.0.6",

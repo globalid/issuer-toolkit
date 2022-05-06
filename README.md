@@ -24,17 +24,17 @@ npm install @globalid/issuer-toolkit
 
 ## Usage
 
-The `GidClient` class is the primary component of the toolkit, providing several methods for issuing a credential.
+The `GidIssuerClient` class is the primary component of the toolkit, providing several methods for issuing a credential.
 
-The constructor requires the client ID and secret of a developer app created in [GlobaliD's developer portal](https://developer.global.id/).
+The function to create a `GidIssuerClient` requires the client ID and secret of a developer app created in [GlobaliD's developer portal](https://developer.global.id/).
 
 ```js
 const clientId = '...';
 const clientSecret = '...';
-const client = new GidClient(clientId, clientSecret);
+const client = createGidIssuerClient(clientId, clientSecret);
 ```
 
-The `GidClient` supports the typical flow for issuing a credential:
+The `GidIssuerClient` supports the typical flow for issuing a credential:
 
 1. Receive and [validate a credential request](#validating-a-credential-request).
 1. [Encrypt and upload file claims](#uploading-a-file) (optional).
@@ -157,7 +157,7 @@ await client.reportError(threadId, '600-1');
 
 ### Downloading a File
 
-The toolkit offers the `downloadFile` utility function for downloading and optionally decrypting a file from a URL, presumably sent in the initial credential request. This function is essentially the inverse of `GidClient`'s `uploadFile`.
+The toolkit offers the `downloadFile` utility function for downloading and optionally decrypting a file from a URL, presumably sent in the initial credential request. This function is essentially the inverse of `GidIssuerClient`'s `uploadFile`.
 
 In addition to a URL string, `downloadFile` accepts the following options:
 
@@ -180,53 +180,53 @@ const buffer2 = await downloadFile('https://example.com/encrypted-file', {
 
 #### Nock
 
-The `@globalid/issuer-toolkit/testing` module provides functions for mocking the HTTP requests (using [`nock`](https://npmjs.com/package/nock)) made by `GidClient`. There are `mock*` functions for each `GidClient` method, as well as a `clearMocks` function for cleanup.
+The `@globalid/issuer-toolkit/testing` module provides functions for mocking the HTTP requests (using [`nock`](https://npmjs.com/package/nock)) made by `GidIssuerClient`. There are `mock*` functions for each `GidIssuerClient` method, as well as a `clearMocks` function for cleanup.
 
 ```js
-import * as GidClient from '@globalid/issuer-toolkit/testing';
+import * as GidIssuerClient from '@globalid/issuer-toolkit/testing';
 
 afterEach(() => {
-  GidClient.clearMocks();
+  GidIssuerClient.clearMocks();
 });
 
 test('request validation', async () => {
-  GidClient.mockValidateRequest(gidUuid, publicKey);
+  GidIssuerClient.mockValidateRequest(gidUuid, publicKey);
 
-  // call your code that uses GidClient#validateRequest...
+  // call your code that uses GidIssuerClient#validateRequest...
 
   // assertions...
 });
 
 test('sending an offer', async () => {
-  GidClient.mockSendOffer();
+  GidIssuerClient.mockSendOffer();
   // ...
 });
 ```
 
 #### Sinon
 
-The `@globalid/issuer-toolkit/testing/sinon` allows [Sinon](https://sinonjs.org/) users to create a `GidClient` stub.
+The `@globalid/issuer-toolkit/testing/sinon` allows [Sinon](https://sinonjs.org/) users to create a `GidIssuerClient` stub.
 
 ```js
-import stubGidClient from '@globalid/issuer-toolkit/testing/sinon';
+import stubGidIssuerClient from '@globalid/issuer-toolkit/testing/sinon';
 import sinon from 'sinon';
 
-const GidClientStub = stubGidClient();
+const GidIssuerClientStub = stubGidIssuerClient();
 
 afterEach(() => {
   sinon.restore();
 });
 
 test('request validation', async () => {
-  GidClientStub.validateRequest.withArgs(/* ... */).resolves();
+  GidIssuerClientStub.validateRequest.withArgs(/* ... */).resolves();
 
-  // call your code that uses GidClient#validateRequest...
+  // call your code that uses GidIssuerClient#validateRequest...
 
   // assertions...
 });
 
 test('sending an offer', async () => {
-  GidClientStub.sendOffer.withArgs(/* ... */).resolves();
+  GidIssuerClientStub.sendOffer.withArgs(/* ... */).resolves();
   // ...
 });
 ```
