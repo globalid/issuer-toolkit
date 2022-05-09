@@ -10,7 +10,7 @@ const config: Config.InitialOptions = {
       lines: 100,
       statements: 100
     },
-    'src/clients/gid-client.ts': {
+    'src/clients/gid-issuer-client.ts': {
       functions: 66.66
     },
     'src/services/**': {
