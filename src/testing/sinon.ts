@@ -1,20 +1,25 @@
 import { stub, SinonStub } from 'sinon';
-import GidClient from '..';
+import GidIssuerClient from '..';
 
-export function stubGidClient(clientId = 'default-client-id', clientSecret = 'default-client-secret'): GidClientStub {
+export function stubGidIssuerClient(
+  clientId = 'default-client-id',
+  clientSecret = 'default-client-secret'
+): GidIssuerClientStub {
   return {
     clientId,
     clientSecret,
-    getAccessToken: stub(GidClient.prototype, 'getAccessToken'),
-    reportError: stub(GidClient.prototype, 'reportError'),
-    sendOffer: stub(GidClient.prototype, 'sendOffer'),
-    uploadFile: stub(GidClient.prototype, 'uploadFile'),
-    validateRequest: stub(GidClient.prototype, 'validateRequest')
+    getAccessToken: stub(GidIssuerClient.prototype, 'getAccessToken'),
+    reportError: stub(GidIssuerClient.prototype, 'reportError'),
+    sendOffer: stub(GidIssuerClient.prototype, 'sendOffer'),
+    uploadFile: stub(GidIssuerClient.prototype, 'uploadFile'),
+    validateRequest: stub(GidIssuerClient.prototype, 'validateRequest')
   };
 }
 
-export type GidClientStub = {
-  [P in keyof GidClient]: GidClient[P] extends AnyFunction ? SinonMethodStub<GidClient[P]> : GidClient[P];
+export type GidIssuerClientStub = {
+  [P in keyof GidIssuerClient]: GidIssuerClient[P] extends AnyFunction
+    ? SinonMethodStub<GidIssuerClient[P]>
+    : GidIssuerClient[P];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,4 +27,4 @@ type AnyFunction = (...args: any[]) => any;
 
 type SinonMethodStub<T extends AnyFunction> = SinonStub<Parameters<T>, ReturnType<T>>;
 
-export default stubGidClient;
+export default stubGidIssuerClient;
