@@ -20,7 +20,6 @@ export class EpamClient {
         setTimeout(() => {
           this.sendOffer(offer, backOff * 2, retries + 1)
         }, backOff)
-
       }
     }
   }
