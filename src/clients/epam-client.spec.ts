@@ -3,11 +3,12 @@ import '../../test/setup';
 import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
-import { CredentialOffer } from '../common';
+import { CredentialOffer, RETRIES_NUMBER } from '../common';
 import * as epam from '../services/epam';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 import AccessTokenProvider from './access-token-provider';
 import { EpamClient, ERROR_DESCRIPTIONS, ErrorCodes } from './epam-client';
+import { AxiosError, AxiosResponse } from 'axios';
 
 jest.mock('./access-token-provider');
 jest.mock('../services/epam');
@@ -38,6 +39,25 @@ describe('EpamClient', () => {
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+    });
+
+    it('should-retry', async () => {
+      jest.useFakeTimers()
+      const offer = stub<CredentialOffer>();
+      const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
+      const axiosResponse = stub<AxiosResponse>({ status: 404 })
+      const axiosError = stub<AxiosError>({ response: axiosResponse });
+      const mock = jest.spyOn(epamClient, 'sendOffer')
+      const mockDependency = jest.spyOn(epam, 'createCredentialOfferV2')
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      mockDependency.mockRejectedValue(axiosError)
+
+      await epamClient.sendOffer(offer);
+      jest.runAllTimers()
+
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(mock).toHaveBeenCalledTimes(2)
+      expect(mock).toHaveBeenCalledWith(offer, 600, 1)
     });
   });
 

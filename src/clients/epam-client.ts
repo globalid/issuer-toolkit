@@ -1,4 +1,4 @@
-import { DEFAULT_BASE_SSI_URL, CredentialOffer } from '../common';
+import { DEFAULT_BASE_SSI_URL, CredentialOffer, RETRIES_NUMBER } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
@@ -11,9 +11,18 @@ export class EpamClient {
     epam.init(baseSsiUrl);
   }
 
-  async sendOffer(offer: CredentialOffer): Promise<void> {
+  async sendOffer(offer: CredentialOffer, backOff = 300, retries = 0): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
+    try { 
+      await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
+    } catch (e: any) {
+      if(e.response.status >= 400 && retries < RETRIES_NUMBER)  {
+        setTimeout(() => {
+          this.sendOffer(offer, backOff * 2, retries + 1)
+        }, backOff)
+
+      }
+    }
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
