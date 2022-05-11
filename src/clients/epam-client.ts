@@ -1,4 +1,10 @@
-import { DEFAULT_BASE_SSI_URL, CredentialOffer, SEND_OFFER_RETRY_LIMIT, SEND_OFFER_BACK_OFF, BACK_OFF_GROWTH_RATE } from '../common';
+import {
+  DEFAULT_BASE_SSI_URL,
+  CredentialOffer,
+  SEND_OFFER_RETRY_LIMIT,
+  SEND_OFFER_BACK_OFF,
+  BACK_OFF_GROWTH_RATE
+} from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
@@ -11,19 +17,18 @@ export class EpamClient {
   }
 
   private shouldRetry(e: any, retries: number): boolean {
-    console.log(`retries: ${retries}`)
-    if(e.response?.data?.error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
-      if(retries > SEND_OFFER_RETRY_LIMIT) {
-        e.response.data = { 
+    if (e.response?.data?.error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
+      if (retries > SEND_OFFER_RETRY_LIMIT) {
+        e.response.data = {
           ...e.response.data,
           retries_number: retries
-        }
+        };
 
-        throw e
+        throw e;
       }
-      return true
+      return true;
     } else {
-      throw e
+      throw e;
     }
   }
 
@@ -34,17 +39,11 @@ export class EpamClient {
     retries = 0
   ) {
     try {
-      console.log('trying to send')
       await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
     } catch (e: any) {
-      console.log('getting error')
-      console.log(e)
       if (this.shouldRetry(e, retries)) {
-        console.log('about to retry')
-        console.log(backOff)
-        setTimeout(() => {
-          console.log('retrying')
-          this.sendOfferWithRetry(accessToken, offer, backOff * BACK_OFF_GROWTH_RATE, retries + 1);
+        setTimeout(async () => {
+          await this.sendOfferWithRetry(accessToken, offer, backOff * BACK_OFF_GROWTH_RATE, retries + 1);
         }, backOff);
       }
     }
@@ -52,7 +51,7 @@ export class EpamClient {
 
   async sendOffer(offer: CredentialOffer): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    this.sendOfferWithRetry(accessToken, offer)
+    await this.sendOfferWithRetry(accessToken, offer);
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {

@@ -42,21 +42,20 @@ describe('EpamClient', () => {
     });
 
     it('should retry send the offer', async () => {
-      jest.useFakeTimers()
       const offer = stub<CredentialOffer>();
       const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
       const axiosResponse = stub<AxiosResponse>({ status: 404, data: { error_code: 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND' } })
       const axiosError = stub<AxiosError>({ response: axiosResponse });
       const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2')
-      const sendOfferMock = jest.spyOn(EpamClient.prototype as any, 'sendOfferWithRetry')
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
       createCredentialOfferV2Mock.mockRejectedValue(axiosError)
-
+      
+      jest.useFakeTimers()
       await epamClient.sendOffer(offer);
       jest.runAllTimers()
 
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
-      expect(sendOfferMock).toHaveBeenCalledTimes(2)
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(2)
     });
   });
 
