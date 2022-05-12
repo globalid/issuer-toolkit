@@ -8,6 +8,7 @@ import {
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
+import * as _ from 'lodash';
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
 
@@ -17,8 +18,9 @@ export class EpamClient {
   }
 
   private shouldRetry(e: any, retries: number): boolean {
-    if (e.response?.data?.error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
-      if (retries > SEND_OFFER_RETRY_LIMIT) {
+    const error_code = _.get(e, 'response.data.error_code')
+    if (error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
+      if (retries === SEND_OFFER_RETRY_LIMIT) {
         e.response.data = {
           ...e.response.data,
           retries_number: retries

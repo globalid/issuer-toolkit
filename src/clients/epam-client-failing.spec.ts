@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import '../../test/setup';
 
 import { mocked } from 'ts-jest/utils';
@@ -13,11 +14,11 @@ import { AxiosError, AxiosResponse } from 'axios';
 jest.mock('./access-token-provider');
 jest.mock('../services/epam');
 jest.mock('../utils/epam-credential-offer-factory');
+jest.mock('../common')
 
 const mockedCreateEpamCredentialOffer = mocked(createEpamCredentialOffer);
 
-describe('EpamClient', () => {
-  const threadId = 'some-thread-id';
+describe('EpamClient failed cases', () => {
   let accessTokenProvider: AccessTokenProvider;
   let epamClient: EpamClient;
 
@@ -26,51 +27,44 @@ describe('EpamClient', () => {
     epamClient = new EpamClient(accessTokenProvider);
   });
 
-  describe('#offerCredential', () => {
+  describe('#offerCredentialFailed', () => {
     const offer = stub<CredentialOffer>();
     const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
-
-    it('should not throw when offering valid credential', async () => {
-      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
-
-      await epamClient.sendOffer(offer);
-
-      expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
-      expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledTimes(1);
-      expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
-    });
-
-    it('should retry send the offer', async () => {
+    
+    it('should not retry send the offer because retry limit is reached', async () => {
       const axiosResponse = stub<AxiosResponse>({ status: 404, data: { error_code: 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND' } })
       const axiosError = stub<AxiosError>({ response: axiosResponse });
       const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2')
-      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
       createCredentialOfferV2Mock.mockRejectedValue(axiosError)
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
       
-      jest.useFakeTimers()
-      await epamClient.sendOffer(offer);
-      jest.runAllTimers()
+      try {
+        await epamClient.sendOffer(offer);
+      } catch (error: any) {
+        expect(error.response.data.error_code).toBe('ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND');
+        expect(error.response.data.retries_number).toBe(0);
+      }
+      
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1)
+    });
+    
+    it('should retry send the offer', async () => {
+      const axiosResponse = stub<AxiosResponse>({ status: 404, data: { error_code: 'unknown_error' } })
+      const axiosError = stub<AxiosError>({ response: axiosResponse });
+      const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2')
+      createCredentialOfferV2Mock.mockRejectedValue(axiosError)
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      
+      try {
+        await epamClient.sendOffer(offer);
+      } catch (error: any) {
+        expect(error.response.data.error_code).toBe('unknown_error');
+      }
 
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(2)
-    });
-  });
-
-  describe('#reportError', () => {
-    it('should report error to EPAM', async () => {
-      const errorCode = ErrorCodes.GidUnavailable;
-
-      await epamClient.reportError(threadId, ErrorCodes.GidUnavailable);
-
-      expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
-      expect(epam.createErrorReport).toHaveBeenCalledTimes(1);
-      expect(epam.createErrorReport).toHaveBeenCalledWith(accessToken, {
-        code: errorCode,
-        description: ERROR_DESCRIPTIONS[errorCode],
-        thread_id: threadId
-      });
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1)
     });
   });
 });
+
