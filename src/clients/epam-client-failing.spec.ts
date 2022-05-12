@@ -8,7 +8,7 @@ import { CredentialOffer } from '../common';
 import * as epam from '../services/epam';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 import AccessTokenProvider from './access-token-provider';
-import { EpamClient, ERROR_DESCRIPTIONS, ErrorCodes } from './epam-client';
+import { EpamClient } from './epam-client';
 import { AxiosError, AxiosResponse } from 'axios';
 
 jest.mock('./access-token-provider');
@@ -49,7 +49,7 @@ describe('EpamClient failed cases', () => {
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1)
     });
     
-    it('should retry send the offer', async () => {
+    it('should not retry send the offer because credential offer throws unknown error', async () => {
       const axiosResponse = stub<AxiosResponse>({ status: 404, data: { error_code: 'unknown_error' } })
       const axiosError = stub<AxiosError>({ response: axiosResponse });
       const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2')
