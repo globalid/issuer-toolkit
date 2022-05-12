@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import '../../test/setup';
 
 import { mocked } from 'ts-jest/utils';
@@ -13,6 +14,9 @@ import { AxiosError, AxiosResponse } from 'axios';
 jest.mock('./access-token-provider');
 jest.mock('../services/epam');
 jest.mock('../utils/epam-credential-offer-factory');
+jest.mock('../common')
+jest.unmock('../common')
+
 
 const mockedCreateEpamCredentialOffer = mocked(createEpamCredentialOffer);
 
@@ -27,11 +31,34 @@ describe('EpamClient', () => {
   });
 
   describe('#offerCredential', () => {
-    it('should not throw when offering valid credential', async () => {
-      const offer = stub<CredentialOffer>();
-      const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
-      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+    const offer = stub<CredentialOffer>();
+    const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
+    const axiosResponse = stub<AxiosResponse>({ status: 404, data: { error_code: 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND' } })
+    const axiosError = stub<AxiosError>({ response: axiosResponse });
+    const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2')
+    mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+    createCredentialOfferV2Mock.mockRejectedValue(axiosError)
 
+    it('should not retry send the offer because retry limit is reached', async () => {     
+      try {
+        await epamClient.sendOffer(offer);
+      } catch (error: any) {
+        expect(error.response.data.error_code).toBe('ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND')
+        expect(error.response.data.retries_number).toBe(0)
+      }
+
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1)
+    });
+
+    it('should retry send the offer', async () => {      
+      await epamClient.sendOffer(offer);
+
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(2)
+    });
+
+    it('should not throw when offering valid credential', async () => {
       await epamClient.sendOffer(offer);
 
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
@@ -39,23 +66,6 @@ describe('EpamClient', () => {
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
-    });
-
-    it('should retry send the offer', async () => {
-      const offer = stub<CredentialOffer>();
-      const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
-      const axiosResponse = stub<AxiosResponse>({ status: 404, data: { error_code: 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND' } })
-      const axiosError = stub<AxiosError>({ response: axiosResponse });
-      const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2')
-      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
-      createCredentialOfferV2Mock.mockRejectedValue(axiosError)
-      
-      jest.useFakeTimers()
-      await epamClient.sendOffer(offer);
-      jest.runAllTimers()
-
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(2)
     });
   });
 
