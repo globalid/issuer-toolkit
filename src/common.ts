@@ -100,8 +100,8 @@ export interface CredentialRequest<T = unknown> {
 export const DEFAULT_BASE_API_URL = 'https://api.global.id';
 export const DEFAULT_BASE_SSI_URL = 'https://credentials.global.id';
 
-export const SEND_OFFER_RETRY_LIMIT = 5
+export const SEND_OFFER_RETRY_LIMIT = 5;
 
-export const SEND_OFFER_BACK_OFF = 300
+export const SEND_OFFER_BACK_OFF = 300;
 
-export const BACK_OFF_GROWTH_RATE = 2
+export const BACK_OFF_GROWTH_RATE = 2;

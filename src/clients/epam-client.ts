@@ -18,7 +18,7 @@ export class EpamClient {
   }
 
   private shouldRetry(e: any, retries: number): boolean {
-    const error_code = _.get(e, 'response.data.error_code')
+    const error_code = _.get(e, 'response.data.error_code');
     if (error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
       if (retries === SEND_OFFER_RETRY_LIMIT) {
         e.response.data = {
