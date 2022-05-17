@@ -3,7 +3,7 @@ import {
   CredentialOffer,
   SEND_OFFER_RETRY_LIMIT,
   SEND_OFFER_BACK_OFF,
-  BACK_OFF_GROWTH_RATE
+  SEND_OFFER_BACK_OFF_FACTOR
 } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
@@ -18,20 +18,13 @@ export class EpamClient {
   }
 
   private shouldRetry(e: any, retries: number): boolean {
-    const error_code = _.get(e, 'response.data.error_code');
-    if (error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
-      if (retries === SEND_OFFER_RETRY_LIMIT) {
-        e.response.data = {
-          ...e.response.data,
-          retries_number: retries
-        };
-
-        throw e;
-      }
-      return true;
-    } else {
-      throw e;
+    const errorCode = e.response?.data?.error_code;
+    if (errorCode !== 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') return false;
+    if (retries === SEND_OFFER_RETRY_LIMIT) {
+      e.response.data.retries_number = retries
+      return false;
     }
+    return true;
   }
 
   private async sendOfferWithRetry(
@@ -45,8 +38,10 @@ export class EpamClient {
     } catch (e) {
       if (this.shouldRetry(e, retries)) {
         setTimeout(async () => {
-          await this.sendOfferWithRetry(accessToken, offer, backOff * BACK_OFF_GROWTH_RATE, retries + 1);
+          await this.sendOfferWithRetry(accessToken, offer, backOff * SEND_OFFER_BACK_OFF_FACTOR, retries + 1);
         }, backOff);
+      } else {
+        throw e
       }
     }
   }

@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import '../../test/setup';
 
 import { mocked } from 'ts-jest/utils';
@@ -59,6 +60,37 @@ describe('EpamClient', () => {
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(2);
     });
+
+    it('should not retry to send offer because the error does not contains response', async () => {
+      const axiosError = stub<AxiosError>();
+      const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2');
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      createCredentialOfferV2Mock.mockRejectedValue(axiosError);
+
+      try {
+        await epamClient.sendOffer(offer);
+      } catch (error: any) {
+        expect(error.response).toBeUndefined();
+      }
+
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
+    })
+
+    it('should not retry to send offer because the error.response does not contains data', async () => {
+      const axiosResponse = stub<AxiosResponse>({ status: 404 });
+      const axiosError = stub<AxiosError>({ response: axiosResponse });
+      const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2');
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      createCredentialOfferV2Mock.mockRejectedValue(axiosError);
+
+      try {
+        await epamClient.sendOffer(offer);
+      } catch (error: any) {
+        expect(error.response.status).toBe(404)
+        expect(error.response.data).toBeUndefined();
+      }
+    })
   });
 
   describe('#reportError', () => {
