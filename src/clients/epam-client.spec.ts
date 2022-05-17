@@ -67,11 +67,7 @@ describe('EpamClient', () => {
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
       createCredentialOfferV2Mock.mockRejectedValue(axiosError);
 
-      try {
-        await epamClient.sendOffer(offer);
-      } catch (error: any) {
-        expect(error.response).toBeUndefined();
-      }
+      await expect(epamClient.sendOffer(offer)).rejects.toBe(axiosError);
 
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
