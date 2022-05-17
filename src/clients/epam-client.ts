@@ -42,7 +42,7 @@ export class EpamClient {
   ) {
     try {
       await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
-    } catch (e: any) {
+    } catch (e) {
       if (this.shouldRetry(e, retries)) {
         setTimeout(async () => {
           await this.sendOfferWithRetry(accessToken, offer, backOff * BACK_OFF_GROWTH_RATE, retries + 1);
