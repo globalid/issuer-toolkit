@@ -104,4 +104,4 @@ export const SEND_OFFER_RETRY_LIMIT = 5;
 
 export const SEND_OFFER_BACK_OFF = 300;
 
-export const BACK_OFF_GROWTH_RATE = 2;
+export const SEND_OFFER_BACK_OFF_FACTOR = 2;
