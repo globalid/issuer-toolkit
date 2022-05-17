@@ -84,12 +84,7 @@ describe('EpamClient', () => {
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
       createCredentialOfferV2Mock.mockRejectedValue(axiosError);
 
-      try {
-        await epamClient.sendOffer(offer);
-      } catch (error: any) {
-        expect(error.response.status).toBe(404)
-        expect(error.response.data).toBeUndefined();
-      }
+      await expect(epamClient.sendOffer(offer)).rejects.toBe(axiosError);
     })
   });
 
