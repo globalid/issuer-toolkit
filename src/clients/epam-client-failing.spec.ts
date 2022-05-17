@@ -41,12 +41,7 @@ describe('EpamClient failed cases', () => {
       createCredentialOfferV2Mock.mockRejectedValue(axiosError);
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
 
-      try {
-        await epamClient.sendOffer(offer);
-      } catch (error: any) {
-        expect(error.response.data.error_code).toBe('ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND');
-        expect(error.response.data.retries_number).toBe(0);
-      }
+      await expect(epamClient.sendOffer(offer)).rejects.toBe(axiosError);
 
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
