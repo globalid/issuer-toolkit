@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-conditional-expect */
 import '../../test/setup';
 
 import { mocked } from 'ts-jest/utils';
