@@ -8,7 +8,6 @@ import {
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
-import * as _ from 'lodash';
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
 
