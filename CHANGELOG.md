@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2022-05-11
+
 ### Fixed
 
 - Corrected docs around credential request validation
@@ -14,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `GidClient` was renamed to `GidIssuerClient`.
-- `GidIssuerClient` is instatiated with the `createGidIssuerClient` function.
+- `GidIssuerClient` is instantiated with the `createGidIssuerClient` function.
 
 ## [0.2.1] - 2022-03-16
 
@@ -63,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GidClient` for working with issuer-specific operations in the GlobaliD API
 - Testing utilities for [`nock`](https://www.npmjs.com/package/nock) and [`sinon`](https://sinonjs.org/)
 
-[unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/globalid/issuer-toolkit/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/globalid/issuer-toolkit/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/globalid/issuer-toolkit/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/globalid/issuer-toolkit/compare/v0.1.0...v0.1.1
