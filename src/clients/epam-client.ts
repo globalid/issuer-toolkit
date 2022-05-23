@@ -1,13 +1,8 @@
-import {
-  DEFAULT_BASE_SSI_URL,
-  CredentialOffer,
-  SEND_OFFER_RETRY_LIMIT,
-  SEND_OFFER_BACK_OFF,
-  SEND_OFFER_BACK_OFF_FACTOR
-} from '../common';
+import { DEFAULT_BASE_SSI_URL, CredentialOffer } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
+
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
 
@@ -16,38 +11,9 @@ export class EpamClient {
     epam.init(baseSsiUrl);
   }
 
-  private shouldRetry(e: any, retries: number): boolean {
-    const errorCode = e.response?.data?.error_code;
-    if (errorCode !== 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') return false;
-    if (retries === SEND_OFFER_RETRY_LIMIT) {
-      e.response.data.retries_number = retries
-      return false;
-    }
-    return true;
-  }
-
-  private async sendOfferWithRetry(
-    accessToken: string,
-    offer: CredentialOffer,
-    backOff = SEND_OFFER_BACK_OFF,
-    retries = 0
-  ) {
-    try {
-      await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
-    } catch (e) {
-      if (this.shouldRetry(e, retries)) {
-        setTimeout(async () => {
-          await this.sendOfferWithRetry(accessToken, offer, backOff * SEND_OFFER_BACK_OFF_FACTOR, retries + 1);
-        }, backOff);
-      } else {
-        throw e
-      }
-    }
-  }
-
   async sendOffer(offer: CredentialOffer): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await this.sendOfferWithRetry(accessToken, offer);
+    await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
