@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2022-06-01
+
 ### Changed
 
-- `contextUri` and `schemauri` were made optional in `common.ts` and `epam.ts`
+- `contextUri` and `schemaUri` are now optional fields on a `CredentialOffer`
 
 ## [0.3.0] - 2022-05-11
 
@@ -69,7 +71,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `GidClient` for working with issuer-specific operations in the GlobaliD API
 - Testing utilities for [`nock`](https://www.npmjs.com/package/nock) and [`sinon`](https://sinonjs.org/)
 
-[unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/globalid/issuer-toolkit/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/globalid/issuer-toolkit/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/globalid/issuer-toolkit/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/globalid/issuer-toolkit/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/globalid/issuer-toolkit/compare/v0.1.1...v0.2.0
