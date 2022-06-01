@@ -36,9 +36,9 @@ export interface EpamCreateCredentialsOfferV2 {
   thread_id: string;
   name: string;
   description?: string;
-  context_uri: string;
+  context_uri?: string;
   subject_type: string;
-  schema_uri: string;
+  schema_uri?: string;
   attributes: Attributes;
 }
 
