@@ -23,10 +23,10 @@ const fileNamePattern = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}[-_.]\w+\.[
 const schemas = {
   credentialOffer: Joi.object<CredentialOffer>({
     claims: Joi.object().pattern(/.*/, claimValueSchema).required(),
-    contextUri: uriSchema.required(),
+    contextUri: uriSchema,
     description: Joi.string(),
     name: Joi.string().required(),
-    schemaUri: uriSchema.required(),
+    schemaUri: uriSchema,
     subjectType: Joi.string().required(),
     threadId: Joi.string().required()
   })

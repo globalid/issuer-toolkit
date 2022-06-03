@@ -8,7 +8,7 @@ export interface CredentialOffer<T extends Claims = Claims> {
   /**
    * URI of a JSON-LD context describing the credential subject
    */
-  contextUri: string;
+  contextUri?: string;
   /**
    * Descriptive text about the credential being offered
    */
@@ -20,7 +20,7 @@ export interface CredentialOffer<T extends Claims = Claims> {
   /**
    * URI of a JSON Schema describing the data schema of the credential subject's claims
    */
-  schemaUri: string;
+  schemaUri?: string;
   /**
    * JSON-LD `@type` of the credential subject
    */
