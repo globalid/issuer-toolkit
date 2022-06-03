@@ -21,7 +21,7 @@ export class EpamClient {
     const errorCode = e.response?.data?.error_code;
     if (errorCode !== 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') return false;
     if (retries === SEND_OFFER_RETRY_LIMIT) {
-      e.response.data.retries_number = retries
+      e.response.data.retries_number = retries;
       return false;
     }
     return true;
@@ -41,7 +41,7 @@ export class EpamClient {
           await this.sendOfferWithRetry(accessToken, offer, backOff * SEND_OFFER_BACK_OFF_FACTOR, retries + 1);
         }, backOff);
       } else {
-        throw e
+        throw e;
       }
     }
   }

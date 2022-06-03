@@ -70,7 +70,7 @@ describe('EpamClient', () => {
 
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
-    })
+    });
 
     it('should not retry to send offer because the error.response does not contains data', async () => {
       const axiosResponse = stub<AxiosResponse>({ status: 404 });
@@ -80,7 +80,7 @@ describe('EpamClient', () => {
       createCredentialOfferV2Mock.mockRejectedValue(axiosError);
 
       await expect(epamClient.sendOffer(offer)).rejects.toBe(axiosError);
-    })
+    });
   });
 
   describe('#reportError', () => {
