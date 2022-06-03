@@ -16,6 +16,7 @@ export class EpamClient {
     epam.init(baseSsiUrl);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private shouldRetry(e: any, retries: number): boolean {
     const errorCode = e.response?.data?.error_code;
     if (errorCode !== 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') return false;
