@@ -60,7 +60,41 @@ describe('EpamClient', () => {
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(2);
     });
 
+    it('should retry send the offer with 409 error', async () => {
+      const axiosResponse = stub<AxiosResponse>({
+        status: 409,
+        data: { error_code: 'waiting on cache...' }
+      });
+      const axiosError = stub<AxiosError>({ response: axiosResponse });
+      const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2');
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      createCredentialOfferV2Mock.mockRejectedValue(axiosError);
+
+      jest.useFakeTimers();
+      await epamClient.sendOffer(offer);
+      jest.runAllTimers();
+
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(3);
+    });
+
     it('should not retry to send offer because the error does not contains response', async () => {
+      const axiosError = stub<AxiosError>();
+      const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2');
+      mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      createCredentialOfferV2Mock.mockRejectedValue(axiosError);
+
+      await expect(epamClient.sendOffer(offer)).rejects.toBe(axiosError);
+
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not retry to send offer because the error does not contains data', async () => {
+      const axiosResponse = stub<AxiosResponse>({
+        status: 409,
+        data: undefined
+      });
       const axiosError = stub<AxiosError>();
       const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2');
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
