@@ -91,10 +91,6 @@ describe('EpamClient', () => {
     });
 
     it('should not retry to send offer because the error does not contains data', async () => {
-      const axiosResponse = stub<AxiosResponse>({
-        status: 409,
-        data: undefined
-      });
       const axiosError = stub<AxiosError>();
       const createCredentialOfferV2Mock = jest.spyOn(epam, 'createCredentialOfferV2');
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
