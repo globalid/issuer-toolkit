@@ -18,10 +18,10 @@ export class EpamClient {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private shouldRetry(e: any, retries: number): boolean {
-    if (e.response?.status === 409 ||  e.response?.data?.error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
-      return retries !== SEND_OFFER_RETRY_LIMIT
+    if (e.response?.status === 409 || e.response?.data?.error_code === 'ERR_CREDENTIAL_EXCHANGE_RECORD_NOT_FOUND') {
+      return retries !== SEND_OFFER_RETRY_LIMIT;
     }
-    return false
+    return false;
   }
 
   private async sendOfferWithRetry(
