@@ -103,3 +103,4 @@ export const DEFAULT_BASE_SSI_URL = 'https://credentials.global.id';
 export const SEND_OFFER_RETRY_LIMIT = <number>(process.env.SEND_OFFER_RETRY_LIMIT || 10);
 export const SEND_OFFER_BACK_OFF = <number>(process.env.SEND_OFFER_BACK_OFF || 300);
 export const SEND_OFFER_BACK_OFF_FACTOR = <number>(process.env.SEND_OFFER_BACK_OFF_FACTOR || 2);
+export const SEND_OFFER_BACK_OFF_MAX_MILLISECONDS = <number>(process.env.SEND_OFFER_BACK_OFF_MAX_MILLISECONDS ?? 15000);

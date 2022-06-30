@@ -3,7 +3,8 @@ import {
   CredentialOffer,
   SEND_OFFER_RETRY_LIMIT,
   SEND_OFFER_BACK_OFF,
-  SEND_OFFER_BACK_OFF_FACTOR
+  SEND_OFFER_BACK_OFF_FACTOR,
+  SEND_OFFER_BACK_OFF_MAX_MILLISECONDS
 } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
@@ -34,9 +35,12 @@ export class EpamClient {
       await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
     } catch (e) {
       if (this.shouldRetry(e, retries)) {
-        setTimeout(async () => {
-          await this.sendOfferWithRetry(accessToken, offer, backOff * SEND_OFFER_BACK_OFF_FACTOR, retries + 1);
-        }, backOff);
+        setTimeout(
+          async () => {
+            await this.sendOfferWithRetry(accessToken, offer, backOff * SEND_OFFER_BACK_OFF_FACTOR, retries + 1);
+          },
+          backOff > SEND_OFFER_BACK_OFF_MAX_MILLISECONDS ? SEND_OFFER_BACK_OFF_MAX_MILLISECONDS : backOff
+        );
       } else {
         throw e;
       }
