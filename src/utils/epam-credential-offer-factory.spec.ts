@@ -1,9 +1,10 @@
 import { threadId } from '../../test/stubs';
-import { FileType, CredentialOffer } from '../common';
+import { CredentialOffer, FileType } from '../common';
 import createEpamCredentialOffer from './epam-credential-offer-factory';
 
 const name = 'Foo Bar';
 const description = 'Lorem ipsum dolor sit amet';
+const expirationDate = new Date().toISOString();
 const subjectType = 'Foo';
 const contextUri = 'https://example.com/context';
 const schemaUri = 'https://example.com/schema';
@@ -13,6 +14,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
     threadId,
     name,
     description,
+    expirationDate,
     subjectType,
     contextUri,
     schemaUri,
@@ -37,6 +39,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
     thread_id: threadId,
     name: name,
     description,
+    expiration_date: expirationDate,
     subject_type: subjectType,
     context_uri: contextUri,
     schema_uri: schemaUri,

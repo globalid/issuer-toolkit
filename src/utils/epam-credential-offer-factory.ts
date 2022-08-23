@@ -3,13 +3,14 @@ import * as epam from '../services/epam';
 
 export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCreateCredentialsOfferV2 {
   return {
-    thread_id: offer.threadId,
-    name: offer.name,
-    description: offer.description,
+    attributes: toAttributes(offer.claims),
     context_uri: offer.contextUri,
+    description: offer.description,
+    expiration_date: offer.expirationDate,
+    name: offer.name,
     schema_uri: offer.schemaUri,
     subject_type: offer.subjectType,
-    attributes: toAttributes(offer.claims)
+    thread_id: offer.threadId
   };
 }
 
