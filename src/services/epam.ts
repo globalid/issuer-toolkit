@@ -33,13 +33,14 @@ export async function createErrorReport(accessToken: string, body: EpamCredentia
 }
 
 export interface EpamCreateCredentialsOfferV2 {
-  thread_id: string;
-  name: string;
-  description?: string;
-  context_uri?: string;
-  subject_type: string;
-  schema_uri?: string;
   attributes: Attributes;
+  context_uri?: string;
+  description?: string;
+  expiration_date?: string;
+  name: string;
+  schema_uri?: string;
+  subject_type: string;
+  thread_id: string;
 }
 
 export interface EpamCredentialErrorReportBody {

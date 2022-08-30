@@ -14,6 +14,10 @@ export interface CredentialOffer<T extends Claims = Claims> {
    */
   description?: string;
   /**
+   * Date and time the credential ceases to be valid
+   */
+  expirationDate?: string;
+  /**
    * Name of the credential being offered
    */
   name: string;
