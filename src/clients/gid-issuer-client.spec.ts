@@ -118,7 +118,7 @@ describe('GidIssuerClient', () => {
       expect(mockedEncrypt).toHaveBeenCalledTimes(1);
       expect(mockedEncrypt).toHaveBeenCalledWith(content);
       expect(fileUploader.uploadEncryptedFile).toHaveBeenCalledTimes(1);
-      expect(fileUploader.uploadEncryptedFile).toHaveBeenCalledWith(name, type, encryptedContent);
+      expect(fileUploader.uploadEncryptedFile).toHaveBeenCalledWith(stubs.gidUuid, name, type, encryptedContent);
       expect(mockedSha512Sum).toHaveBeenCalledTimes(1);
       expect(mockedSha512Sum).toHaveBeenCalledWith(content);
     });

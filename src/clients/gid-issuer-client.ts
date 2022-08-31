@@ -78,7 +78,7 @@ export class GidIssuerClient {
     validate(file, schemas.fileObject);
 
     const [encryptedContent, decryptionKey] = crypto.encrypt(file.content);
-    const url = await this.#fileUploader.uploadEncryptedFile(file.name, file.type, encryptedContent);
+    const url = await this.#fileUploader.uploadEncryptedFile(gidUuid, file.name, file.type, encryptedContent);
     return {
       url,
       decryptionKey,

@@ -29,6 +29,7 @@ describe('FileUploader', () => {
   });
 
   describe('#uploadEncryptedFile', () => {
+    const gid_uuid = '950db7ed-d4fa-4b7f-b39f-e87268e2d029';
     const name = 'foo.jpg';
     const type = FileType.JPEG;
     const content = Buffer.from('definitely a valid image');
@@ -45,12 +46,13 @@ describe('FileUploader', () => {
       });
       mockedUploadFileV2.mockResolvedValueOnce([mediaUploadInfo]);
 
-      const url = await fileUploader.uploadEncryptedFile(name, type, content);
+      const url = await fileUploader.uploadEncryptedFile(gid_uuid, name, type, content);
 
       expect(url).toBe('https://example.com/uploads/some-key');
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(mockedUploadFileV2).toHaveBeenCalledTimes(1);
       expect(mockedUploadFileV2).toHaveBeenCalledWith(accessToken, {
+        gid_uuid,
         media: [
           {
             type: 'encrypted',
@@ -72,10 +74,11 @@ describe('FileUploader', () => {
     it('should throw error if upload service fails', async () => {
       mockedUploadFileV2.mockResolvedValueOnce([]);
 
-      await expect(fileUploader.uploadEncryptedFile(name, type, content)).rejects.toThrow(FileUploadError);
+      await expect(fileUploader.uploadEncryptedFile(gid_uuid, name, type, content)).rejects.toThrow(FileUploadError);
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(mockedUploadFileV2).toHaveBeenCalledTimes(1);
       expect(mockedUploadFileV2).toHaveBeenCalledWith(accessToken, {
+        gid_uuid,
         media: [
           {
             type: 'encrypted',
