@@ -13,9 +13,9 @@ export class FileUploader {
     upload.init(baseApiUrl);
   }
 
-  async uploadEncryptedFile(name: string, type: FileType, content: Buffer): Promise<string> {
+  async uploadEncryptedFile(gid_uuid: string, name: string, type: FileType, content: Buffer): Promise<string> {
     const accessToken = await this.#accessTokenProvider.getAccessToken();
-    const uploadInfo = await createMediaUpload(accessToken, {
+    const uploadInfo = await createMediaUpload(accessToken, gid_uuid, {
       type: 'encrypted',
       file_name: name,
       content_type: type
@@ -27,9 +27,10 @@ export class FileUploader {
 
 async function createMediaUpload(
   accessToken: string,
+  gid_uuid: string,
   fileInfo: upload.PublicMediaType
 ): Promise<upload.MediaUploadInfo> {
-  const uploadInfos = await upload.uploadFileV2(accessToken, { media: [fileInfo] });
+  const uploadInfos = await upload.uploadFileV2(accessToken, { gid_uuid, media: [fileInfo] });
   if (uploadInfos.length === 0) {
     throw new FileUploadError(fileInfo.file_name);
   }

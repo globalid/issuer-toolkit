@@ -21,6 +21,7 @@ export async function uploadFileV2(accessToken: string, body: PublicMediaRequest
 }
 
 export interface PublicMediaRequestBody {
+  gid_uuid: string;
   media: PublicMediaType[];
 }
 
