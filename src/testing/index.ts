@@ -1,12 +1,12 @@
 import nock from 'nock';
-import { DEFAULT_BASE_API_URL, DEFAULT_BASE_SSI_URL } from '..';
+import { DEFAULT_BASE_API_URL, DEFAULT_BASE_AUTH_URL, DEFAULT_BASE_SSI_URL } from '..';
 
 export function clearMocks() {
   nock.cleanAll();
 }
 
 export function mockGetAccessToken(accessToken = 'mock.access.token'): void {
-  nock(DEFAULT_BASE_API_URL).post('/v1/auth/token').reply(200, {
+  nock(DEFAULT_BASE_AUTH_URL).post('/realms/globalid/protocol/openid-connect/token').reply(200, {
     access_token: accessToken
   });
 }

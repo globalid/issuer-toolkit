@@ -103,3 +103,4 @@ export interface CredentialRequest<T = unknown> {
 
 export const DEFAULT_BASE_API_URL = 'https://api.global.id';
 export const DEFAULT_BASE_SSI_URL = 'https://credentials.global.id';
+export const DEFAULT_BASE_AUTH_URL = 'https://auth.global.id';

@@ -73,7 +73,8 @@ describe('createGidIssuerClient', () => {
     jest.clearAllMocks();
     const baseApiUrl = 'https://api.globalid.dev';
     const baseSsiUrl = 'https://ssi.globalid.dev';
-    const options: gidIssuerClientFactory.GidIssuerClientOptions = { baseApiUrl, baseSsiUrl };
+    const baseAuthUrl = 'https://auth.globalid.dev';
+    const options: gidIssuerClientFactory.GidIssuerClientOptions = { baseApiUrl, baseSsiUrl, baseAuthUrl };
 
     gidIssuerClient = gidIssuerClientFactory.createGidIssuerClient(stubs.clientId, stubs.clientSecret, options);
 
@@ -82,7 +83,7 @@ describe('createGidIssuerClient', () => {
     expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, stubs.clientSecret, validation.schemas.requiredString);
     expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, options, validation.schemas.gidIssuerClientOptions);
     expect(MockedAccessTokenProvider).toHaveBeenCalledTimes(1);
-    expect(MockedAccessTokenProvider).toHaveBeenCalledWith(stubs.clientId, stubs.clientSecret, baseApiUrl);
+    expect(MockedAccessTokenProvider).toHaveBeenCalledWith(stubs.clientId, stubs.clientSecret, baseAuthUrl);
     expect(MockedEpamClient).toHaveBeenCalledTimes(1);
     // TODO: improve assertion
     expect(MockedEpamClient).toHaveBeenCalledWith(expect.anything(), baseSsiUrl);
