@@ -13,7 +13,7 @@ export function createGidIssuerClient(
   validate(clientId, schemas.requiredString);
   validate(clientSecret, schemas.requiredString);
   validate(options, schemas.gidIssuerClientOptions);
-  const accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.baseApiUrl);
+  const accessTokenProvider = new AccessTokenProvider(clientId, clientSecret, options?.baseAuthUrl);
   const epamClient = new EpamClient(accessTokenProvider, options?.baseSsiUrl);
   const fileUploader = new FileUploader(accessTokenProvider, options?.baseApiUrl);
   const publicKeyProvider = new PublicKeyProvider(options?.baseApiUrl);
@@ -24,4 +24,5 @@ export function createGidIssuerClient(
 export interface GidIssuerClientOptions {
   baseApiUrl?: string;
   baseSsiUrl?: string;
+  baseAuthUrl?: string;
 }
