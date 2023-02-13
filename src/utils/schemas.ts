@@ -63,7 +63,8 @@ const schemas = {
 
   gidIssuerClientOptions: Joi.object({
     baseApiUrl: uriSchema,
-    baseSsiUrl: uriSchema
+    baseSsiUrl: uriSchema,
+    baseAuthUrl: uriSchema
   }).unknown(),
 
   requiredString: Joi.string().required(),
