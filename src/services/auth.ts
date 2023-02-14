@@ -13,7 +13,7 @@ export async function issueTokens(body: IssueTokenRequestBody): Promise<AuthToke
     baseURL: baseUrl,
     method: 'post',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: new url.URLSearchParams(<Record<string, string>><unknown> body),
+    data: new url.URLSearchParams(<Record<string, string>>(<unknown>body))
   });
   return response.data;
 }
