@@ -1,11 +1,11 @@
-import { DEFAULT_BASE_API_URL } from '../common';
+import { DEFAULT_BASE_AUTH_URL } from '../common';
 import * as auth from '../services/auth';
 
 export class AccessTokenProvider {
   #clientId: string;
   #clientSecret: string;
 
-  constructor(clientId: string, clientSecret: string, baseApiUrl = DEFAULT_BASE_API_URL) {
+  constructor(clientId: string, clientSecret: string, baseApiUrl = DEFAULT_BASE_AUTH_URL) {
     this.#clientId = clientId;
     this.#clientSecret = clientSecret;
     auth.init(baseApiUrl);
