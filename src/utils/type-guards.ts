@@ -6,6 +6,6 @@ export function isString(value: unknown): value is string {
   return typeof value === 'string';
 }
 
-export function isInStringEnum<T>(value: unknown, enumeration: T): value is T {
+export function isInStringEnum<T extends Record<string, unknown>>(value: unknown, enumeration: T): value is T {
   return Object.values(enumeration).includes(value);
 }

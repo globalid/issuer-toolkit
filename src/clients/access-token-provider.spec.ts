@@ -1,12 +1,10 @@
-import { mocked } from 'ts-jest/utils';
-
 import { stub } from '../../test/stubs';
 import * as auth from '../services/auth';
 import AccessTokenProvider from './access-token-provider';
 
 jest.mock('../services/auth');
 
-const mockedAuth = mocked(auth);
+const mockedAuth = jest.mocked(auth);
 
 describe('AccessTokenProvider', () => {
   const accessTokenProvider = new AccessTokenProvider('some-id', 'some-secret');

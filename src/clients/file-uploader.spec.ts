@@ -1,7 +1,6 @@
 import '../../test/setup';
 
 import FormData from 'form-data';
-import { mocked } from 'ts-jest/utils';
 
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
 import { FileType } from '../common';
@@ -15,9 +14,9 @@ jest.mock('../services/s3');
 jest.mock('../services/upload');
 jest.mock('./access-token-provider');
 
-const MockedFormData = mocked(FormData);
-const mockedS3UploadFile = mocked(s3.uploadFile);
-const mockedUploadFileV2 = mocked(upload.uploadFileV2);
+const MockedFormData = jest.mocked(FormData);
+const mockedS3UploadFile = jest.mocked(s3.uploadFile);
+const mockedUploadFileV2 = jest.mocked(upload.uploadFileV2);
 
 describe('FileUploader', () => {
   let accessTokenProvider: AccessTokenProvider;
