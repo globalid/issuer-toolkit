@@ -1,7 +1,5 @@
 import '../../test/setup';
 
-import { mocked } from 'ts-jest/utils';
-
 import * as stubs from '../../test/stubs';
 import * as validation from '../utils/validation';
 import AccessTokenProvider from './access-token-provider';
@@ -40,11 +38,11 @@ jest.mock('./public-key-provider', () => ({
   }))
 }));
 
-const MockedAccessTokenProvider = mocked(AccessTokenProvider);
-const MockedEpamClient = mocked(EpamClient);
-const MockedFileUploader = mocked(FileUploader);
-const MockedPublicKeyProvider = mocked(PublicKeyProvider);
-const mockedValidation = mocked(validation);
+const MockedAccessTokenProvider = jest.mocked(AccessTokenProvider);
+const MockedEpamClient = jest.mocked(EpamClient);
+const MockedFileUploader = jest.mocked(FileUploader);
+const MockedPublicKeyProvider = jest.mocked(PublicKeyProvider);
+const mockedValidation = jest.mocked(validation);
 
 describe('createGidIssuerClient', () => {
   let gidIssuerClient: GidIssuerClient;

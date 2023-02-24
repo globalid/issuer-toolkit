@@ -1,7 +1,5 @@
 import '../../test/setup';
 
-import { mocked } from 'ts-jest/utils';
-
 import download from '../services/download';
 import { decrypt } from './crypto';
 import { DataIntegrityError, downloadFile, DownloadOptions } from './download-file';
@@ -11,9 +9,9 @@ jest.mock('../services/download');
 jest.mock('./crypto');
 jest.mock('./validation');
 
-const mockedDecrypt = mocked(decrypt);
-const mockedDownload = mocked(download);
-const mockedValidation = mocked(validation);
+const mockedDecrypt = jest.mocked(decrypt);
+const mockedDownload = jest.mocked(download);
+const mockedValidation = jest.mocked(validation);
 
 const url = 'http://example.com/file';
 const file = Buffer.from('Lorem ipsum dolor sit amet');

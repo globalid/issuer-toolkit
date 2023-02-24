@@ -1,7 +1,5 @@
 import '../../test/setup';
 
-import { mocked } from 'ts-jest/utils';
-
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
 import { CredentialOffer } from '../common';
 import * as epam from '../services/epam';
@@ -13,7 +11,7 @@ jest.mock('./access-token-provider');
 jest.mock('../services/epam');
 jest.mock('../utils/epam-credential-offer-factory');
 
-const mockedCreateEpamCredentialOffer = mocked(createEpamCredentialOffer);
+const mockedCreateEpamCredentialOffer = jest.mocked(createEpamCredentialOffer);
 
 describe('EpamClient', () => {
   const threadId = 'some-thread-id';

@@ -1,6 +1,5 @@
 import '../../test/setup';
 
-import { mocked } from 'ts-jest/utils';
 import { createMock } from '@golevelup/ts-jest';
 
 import * as stubs from '../../test/stubs';
@@ -38,11 +37,11 @@ const accessTokenProvider = createMock<AccessTokenProvider>();
 const epamClient = createMock<EpamClient>();
 const fileUploader = createMock<FileUploader>();
 const publicKeyProvider = createMock<PublicKeyProvider>();
-const mockedValidateTimestamp = mocked(validateTimestamp);
-const mockedValidation = mocked(validation);
-const mockedVerifySignature = mocked(verifySignature);
-const mockedEncrypt = mocked(crypto.encrypt);
-const mockedSha512Sum = mocked(crypto.sha512sum);
+const mockedValidateTimestamp = jest.mocked(validateTimestamp);
+const mockedValidation = jest.mocked(validation);
+const mockedVerifySignature = jest.mocked(verifySignature);
+const mockedEncrypt = jest.mocked(crypto.encrypt);
+const mockedSha512Sum = jest.mocked(crypto.sha512sum);
 
 describe('GidIssuerClient', () => {
   let gidIssuerClient: GidIssuerClient;
