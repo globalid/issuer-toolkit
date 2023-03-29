@@ -1,7 +1,7 @@
 import '../../test/setup';
 
 import download from '../services/download';
-import { encryptED25519, sha512sum } from './crypto';
+import { encrypt, sha512sum } from './crypto';
 import { DataIntegrityError, downloadFile } from './download-file';
 import { ED25519 } from 'globalid-crypto-library';
 
@@ -23,7 +23,7 @@ test('should download unencrypted file', async () => {
 test('should download and decrypt encrypted file', async () => {
   const alice = ED25519.generateKeys()
   const bob = ED25519.generateKeys()
-  const encryptedFile = encryptED25519(file, bob.privateKey, alice.publicEncryptionKey)
+  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey)
 
   mockedDownload.mockResolvedValueOnce(encryptedFile);
 
@@ -36,7 +36,7 @@ test('should not throw on valid checksum', async () => {
   const alice = ED25519.generateKeys()
   const bob = ED25519.generateKeys()
   const checksum = sha512sum(file)
-  const encryptedFile = encryptED25519(file, bob.privateKey, alice.publicEncryptionKey)
+  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey)
 
   mockedDownload.mockResolvedValueOnce(encryptedFile);
 
@@ -48,7 +48,7 @@ test('should not throw on valid checksum', async () => {
 test('should throw DataIntegrityError on checksum mismatch', async () => {
   const alice = ED25519.generateKeys()
   const bob = ED25519.generateKeys()
-  const encryptedFile = encryptED25519(file, bob.privateKey, alice.publicEncryptionKey)
+  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey)
 
   mockedDownload.mockResolvedValueOnce(encryptedFile);
 

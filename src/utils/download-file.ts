@@ -1,6 +1,6 @@
 import download from '../services/download';
 import { schemas, validate } from './validation';
-import { decrypt, decryptED25519, sha512sum } from './crypto';
+import { decrypt, sha512sum } from './crypto';
 
 /**
  * Downloads and optionally processes a file at the given URL.
@@ -15,7 +15,7 @@ export async function downloadFile(url: string, options?: DownloadOptions): Prom
 
   let data = await download(url)
   if(options?.privateKey != null && options?.publicEncryptionKey != null) {
-    data = decryptED25519(data, options.privateKey, options.publicEncryptionKey)
+    data = decrypt(data, options.privateKey, options.publicEncryptionKey)
   }
 
   if (options?.sha512sum != null && options.sha512sum !== sha512sum(data)) {

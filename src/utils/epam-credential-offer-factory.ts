@@ -27,7 +27,8 @@ function toAttributes(claims: Claims): epam.Attributes {
 function toAttributeValue(value: ClaimValue): epam.AttributeValue {
   if (isFileClaimValue(value)) {
     return {
-      decryption_key: value.decryptionKey,
+      // TODO: remove decryption key from epam
+      decryption_key: '/',
       file_name: value.name,
       media_type: value.type,
       sha_512_sum: value.sha512sum,

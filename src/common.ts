@@ -40,11 +40,6 @@ export type ClaimValue = boolean | number | string | FileClaimValue;
 
 export interface FileClaimValue {
   /**
-   * Symmetric key used to decrypt (via AES) the payload received by dereferencing the `url`. The key is encrypted using
-   * RSA and the holder's public key.
-   */
-  decryptionKey: string;
-  /**
    * Name of the original file. Should have the form `{UUID}[-_.]{human_readable_name}.{extension}`.
    */
   name: string;
@@ -68,13 +63,7 @@ export enum FileType {
 }
 
 export function isFileClaimValue(value: unknown): value is FileClaimValue {
-  return (
-    isRecord(value) &&
-    isString(value.decryptionKey) &&
-    isString(value.sha512sum) &&
-    isInStringEnum(value.type, FileType) &&
-    isString(value.url)
-  );
+  return isRecord(value) && isString(value.sha512sum) && isInStringEnum(value.type, FileType) && isString(value.url);
 }
 
 export interface CredentialRequest<T = unknown> {

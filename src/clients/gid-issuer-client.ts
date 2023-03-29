@@ -12,6 +12,11 @@ import FileUploader from './file-uploader';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from './public-key-provider';
 
+interface UploadFileParams {
+  gidUuid: string;
+  privateKey: string;
+  publicEncryptionKey: string;
+}
 export class GidIssuerClient {
   #accessTokenProvider: AccessTokenProvider;
   #epamClient: EpamClient;
@@ -59,7 +64,6 @@ export class GidIssuerClient {
 
   /**
    * Send an offer for a credential
-   * @param threadId Thread ID received from the holder
    * @param offer Credential offer to send
    */
   async sendOffer(offer: CredentialOffer): Promise<void> {
@@ -69,19 +73,24 @@ export class GidIssuerClient {
 
   /**
    * Encrypts and uploads a file to GlobaliD's S3 instance.
+   *
    * @param gidUuid UUID of the holder's GlobaliD identity
    * @param file Content and metadata of the file to encrypt and upload
+   * @param privateKey - your ED25519 private key
+   * @param publicEncryptionKey - X25519 public key of the recipient
    * @returns `FileClaimValueObject` to be used in a credential offer
    */
-  async uploadFile(gidUuid: string, file: FileObject): Promise<FileClaimValue> {
+  async uploadFile(
+    file: FileObject,
+    { gidUuid, privateKey, publicEncryptionKey }: UploadFileParams
+  ): Promise<FileClaimValue> {
     validate(gidUuid, schemas.uuid);
     validate(file, schemas.fileObject);
 
-    const [encryptedContent, decryptionKey] = crypto.encrypt(file.content);
+    const encryptedContent = crypto.encrypt(file.content, privateKey, publicEncryptionKey);
     const url = await this.#fileUploader.uploadEncryptedFile(gidUuid, file.name, file.type, encryptedContent);
     return {
       url,
-      decryptionKey,
       name: file.name,
       type: file.type,
       sha512sum: crypto.sha512sum(file.content)

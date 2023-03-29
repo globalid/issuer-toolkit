@@ -1,46 +1,27 @@
-import { AES, ED25519, RSA, Util } from 'globalid-crypto-library';
+import { AES, ED25519, Util } from 'globalid-crypto-library';
 
-export const AES_KEY_LENGTH_IN_BYTES = 32;
-
-export function decryptED25519(ciphertext: Buffer, privateKey: string, publicEncryptionKey: string) {
+/**
+ * Decrypts message using X25519 and AES.
+ *
+ * @param ciphertext - Buffer you want to decrypt
+ * @param privateKey - your ED25519 private key
+ * @param publicEncryptionKey - X25519 public key of the other party
+ */
+export function decrypt(ciphertext: Buffer, privateKey: string, publicEncryptionKey: string) {
   const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey)
   return AES.decryptBuffer(ciphertext, decryptionKey)
 }
 
-export function encryptED25519(plaintext: Buffer, privateKey: string, publicEncryptionKey: string) {
+/**
+ * Encrypts message using X25519 and AES.
+ *
+ * @param plaintext - Buffer you want to encrypt
+ * @param privateKey - your ED25519 private key
+ * @param publicEncryptionKey - X25519 public key of the other party
+ */
+export function encrypt(plaintext: Buffer, privateKey: string, publicEncryptionKey: string) {
   const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey)
   return AES.encryptBuffer(plaintext, decryptionKey)
-}
-
-/**
- * Decrypts the given ciphertext using AES and the given key.
- *
- * If `privateKey` is provided, then the `decryptionKey` is assumed to have been encrypted with RSA and the
- * corresponding public key.
- * @param ciphertext Data to decrypt
- * @param decryptionKey Symmetric key used to decrypt the `ciphertext`
- * @param privateKey Asymmetric private key used to decrypt the `decryptionKey`
- * @returns Plaintext as a `Buffer`
- */
-export function decrypt(ciphertext: Buffer, decryptionKey: string, privateKey?: string): Buffer {
-  if (privateKey != null) {
-    decryptionKey = RSA.decrypt(privateKey, decryptionKey);
-  }
-  return AES.decryptBuffer(ciphertext, decryptionKey);
-}
-
-/**
- * Encrypts the given plaintext using AES and a randomly-generated 256-bit key, which is returned—along with the
- * ciphertext—after being encrypted using RSA and the provided asymmetric public key.
- * @param plaintext Data to encrypt
- * @param publicKey Asymmetric public key used to encrypt the generated symmetric key
- * @returns Ciphertext and encrypted symmetric key as a `Buffer`-`string` pair
- */
-export function encrypt(plaintext: Buffer): [Buffer, string] {
-  const key = Util.bytesToHex(Util.randomBytes(AES_KEY_LENGTH_IN_BYTES));
-  const ciphertext = AES.encryptBuffer(plaintext, key);
-
-  return [ciphertext, key];
 }
 
 export function sha512sum(data: Buffer): string {

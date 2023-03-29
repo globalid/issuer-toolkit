@@ -7,20 +7,12 @@ import { decrypt, encrypt, sha512sum } from './crypto';
 const plaintext = Buffer.from('Lorem ipsum dolor sit amet');
 
 describe('encrypt and decrypt', () => {
-  it('should return plaintext Buffer', () => {
-    const [encrypted, key] = encrypt(plaintext)
+  it('should use X25519 and AES to encrypt/decrypt', () => {
+    const alice = gidCrypto.ED25519.generateKeys();
+    const bob = gidCrypto.ED25519.generateKeys();
+    const encrypted = encrypt(plaintext, alice.privateKey, bob.publicEncryptionKey);
 
-    const result = decrypt(encrypted, key);
-
-    expect(result).toEqual(plaintext);
-  });
-
-  it('should decrypt decryption key when private key is provided', () => {
-    const [ciphertext, key] = encrypt(plaintext)
-    const { private_key, public_key } = gidCrypto.RSA.generateKeyPair()
-    const encryptedDecryptionKey = gidCrypto.RSA.encrypt(public_key, key)
-
-    const result = decrypt(ciphertext, encryptedDecryptionKey, private_key);
+    const result = decrypt(encrypted, bob.privateKey, alice.publicEncryptionKey);
 
     expect(result).toEqual(plaintext);
   });
@@ -29,7 +21,7 @@ describe('encrypt and decrypt', () => {
 describe('sha512sum', () => {
   it('should delegate to globalid-crypto-library', () => {
     const data = Buffer.from('Lorem ipsum dolor sit amet');
-    const cryptoLibraryOutput = gidCrypto.Util.hashSHA512(data)
+    const cryptoLibraryOutput = gidCrypto.Util.hashSHA512(data);
 
     const result = sha512sum(data);
 
