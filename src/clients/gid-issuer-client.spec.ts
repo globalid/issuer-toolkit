@@ -27,8 +27,6 @@ jest.mock('../utils/crypto');
 
 jest.mock('../utils/download-file');
 
-jest.mock('./file-uploader');
-
 const accessTokenProvider = createMock<AccessTokenProvider>();
 const epamClient = createMock<EpamClient>();
 const fileUploader = createMock<FileUploader>();
