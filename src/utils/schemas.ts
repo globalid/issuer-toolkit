@@ -46,6 +46,7 @@ const schemas = {
   downloadOptions: Joi.object({
     decryptionKey: Joi.string(),
     privateKey: Joi.string(),
+    publicEncryptionKey: Joi.string(),
     sha512sum: Joi.string()
   }).unknown(),
 

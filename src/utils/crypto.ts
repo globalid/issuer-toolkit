@@ -1,6 +1,16 @@
-import { AES, RSA, Util } from 'globalid-crypto-library';
+import { AES, ED25519, RSA, Util } from 'globalid-crypto-library';
 
 export const AES_KEY_LENGTH_IN_BYTES = 32;
+
+export function decryptED25519(ciphertext: Buffer, privateKey: string, publicEncryptionKey: string) {
+  const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey)
+  return AES.decryptBuffer(ciphertext, decryptionKey)
+}
+
+export function encryptED25519(plaintext: Buffer, privateKey: string, publicEncryptionKey: string) {
+  const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey)
+  return AES.encryptBuffer(plaintext, decryptionKey)
+}
 
 /**
  * Decrypts the given ciphertext using AES and the given key.

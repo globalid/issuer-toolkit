@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'globalid-crypto-library';
 import { CredentialRequest } from '../src/common';
 
 export const accessToken = 'some-access-token';
@@ -13,26 +13,14 @@ const defaultRequestData = {
   baz: true
 };
 
-export const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
-  modulusLength: 2048,
-  publicKeyEncoding: {
-    type: 'spki',
-    format: 'pem'
-  },
-  privateKeyEncoding: {
-    type: 'pkcs8',
-    format: 'pem'
-  }
-});
-
+export const { privateKey, publicSigningKey, publicEncryptionKey } = crypto.ED25519.generateKeys()
 export const credentialRequest = stubCredentialRequest(Date.now());
 
 export function stubCredentialRequest(timestamp: number, withData = true): CredentialRequest {
   const requestData = withData ? defaultRequestData : undefined;
-  const dataToSign = Buffer.from(
-    `${timestamp}${threadId}${requestData === undefined ? '' : JSON.stringify(requestData)}`
-  );
-  const signature = crypto.sign(null, dataToSign, privateKey).toString('base64');
+  const dataToSign = `${timestamp}${threadId}${requestData === undefined ? '' : JSON.stringify(requestData)}`
+  const signature = crypto.ED25519.signMessage(dataToSign, privateKey);
+
   return {
     gidUuid,
     threadId,

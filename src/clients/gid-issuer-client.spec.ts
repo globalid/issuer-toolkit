@@ -125,7 +125,7 @@ describe('GidIssuerClient', () => {
 
   describe('#validateRequest', () => {
     beforeEach(() => {
-      publicKeyProvider.getPublicSigningKey.mockResolvedValue(stubs.publicKey);
+      publicKeyProvider.getPublicSigningKey.mockResolvedValue(stubs.publicSigningKey);
     });
 
     it('should not report error when request is valid', async () => {
@@ -136,7 +136,7 @@ describe('GidIssuerClient', () => {
       expect(mockedValidation.validate).toHaveBeenCalledWith(stubs.credentialRequest, validation.schemas.credentialRequest);
       expect(publicKeyProvider.getPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
-      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicKey);
+      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicSigningKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
       expect(mockedValidateTimestamp).toHaveBeenCalledWith(stubs.credentialRequest);
       expect(epamClient.reportError).not.toHaveBeenCalled();
@@ -157,7 +157,7 @@ describe('GidIssuerClient', () => {
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, errorCode, validation.schemas.errorCode);
       expect(publicKeyProvider.getPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
-      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicKey);
+      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicSigningKey);
       expect(mockedValidateTimestamp).not.toHaveBeenCalled();
       expect(epamClient.reportError).toHaveBeenCalledTimes(1);
       expect(epamClient.reportError).toHaveBeenCalledWith(stubs.threadId, errorCode);
@@ -177,7 +177,7 @@ describe('GidIssuerClient', () => {
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, errorCode, validation.schemas.errorCode);
       expect(publicKeyProvider.getPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
-      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicKey);
+      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicSigningKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
       expect(mockedValidateTimestamp).toHaveBeenCalledWith(stubs.credentialRequest);
       expect(epamClient.reportError).toHaveBeenCalledTimes(1);
@@ -198,7 +198,7 @@ describe('GidIssuerClient', () => {
       expect(mockedValidation.validate).toHaveBeenNthCalledWith(3, errorCode, validation.schemas.errorCode);
       expect(publicKeyProvider.getPublicSigningKey).toHaveBeenCalledTimes(1);
       expect(mockedVerifySignature).toHaveBeenCalledTimes(1);
-      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicKey);
+      expect(mockedVerifySignature).toHaveBeenCalledWith(stubs.credentialRequest, stubs.publicSigningKey);
       expect(mockedValidateTimestamp).toHaveBeenCalledTimes(1);
       expect(mockedValidateTimestamp).toHaveBeenCalledWith(stubs.credentialRequest);
       expect(epamClient.reportError).toHaveBeenCalledTimes(1);
