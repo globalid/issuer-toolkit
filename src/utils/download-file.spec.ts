@@ -21,39 +21,49 @@ test('should download unencrypted file', async () => {
 });
 
 test('should download and decrypt encrypted file', async () => {
-  const alice = ED25519.generateKeys()
-  const bob = ED25519.generateKeys()
-  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey)
+  const alice = ED25519.generateKeys();
+  const bob = ED25519.generateKeys();
+  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey);
 
   mockedDownload.mockResolvedValueOnce(encryptedFile);
 
-  const result = await downloadFile(url, { privateKey: alice.privateKey, publicEncryptionKey: bob.publicEncryptionKey });
+  const result = await downloadFile(url, {
+    privateKey: alice.privateKey,
+    publicEncryptionKey: bob.publicEncryptionKey
+  });
 
   expect(result).toEqual(file);
 });
 
 test('should not throw on valid checksum', async () => {
-  const alice = ED25519.generateKeys()
-  const bob = ED25519.generateKeys()
-  const checksum = sha512sum(file)
-  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey)
+  const alice = ED25519.generateKeys();
+  const bob = ED25519.generateKeys();
+  const checksum = sha512sum(file);
+  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey);
 
   mockedDownload.mockResolvedValueOnce(encryptedFile);
 
-  const result = await downloadFile(url, { privateKey: alice.privateKey, publicEncryptionKey: bob.publicEncryptionKey, sha512sum: checksum });
+  const result = await downloadFile(url, {
+    privateKey: alice.privateKey,
+    publicEncryptionKey: bob.publicEncryptionKey,
+    sha512sum: checksum
+  });
 
   expect(result).toEqual(file);
 });
 
 test('should throw DataIntegrityError on checksum mismatch', async () => {
-  const alice = ED25519.generateKeys()
-  const bob = ED25519.generateKeys()
-  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey)
+  const alice = ED25519.generateKeys();
+  const bob = ED25519.generateKeys();
+  const encryptedFile = encrypt(file, bob.privateKey, alice.publicEncryptionKey);
 
   mockedDownload.mockResolvedValueOnce(encryptedFile);
 
-  const result = downloadFile(url, { privateKey: alice.privateKey, publicEncryptionKey: bob.publicEncryptionKey, sha512sum: sha512sum(encryptedFile) });
+  const result = downloadFile(url, {
+    privateKey: alice.privateKey,
+    publicEncryptionKey: bob.publicEncryptionKey,
+    sha512sum: sha512sum(encryptedFile)
+  });
 
   await expect(result).rejects.toThrow(DataIntegrityError);
 });
-

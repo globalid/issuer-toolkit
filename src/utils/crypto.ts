@@ -8,8 +8,8 @@ import { AES, ED25519, Util } from 'globalid-crypto-library';
  * @param publicEncryptionKey - X25519 public key of the other party
  */
 export function decrypt(ciphertext: Buffer, privateKey: string, publicEncryptionKey: string) {
-  const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey)
-  return AES.decryptBuffer(ciphertext, decryptionKey)
+  const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey);
+  return AES.decryptBuffer(ciphertext, decryptionKey);
 }
 
 /**
@@ -20,8 +20,8 @@ export function decrypt(ciphertext: Buffer, privateKey: string, publicEncryption
  * @param publicEncryptionKey - X25519 public key of the other party
  */
 export function encrypt(plaintext: Buffer, privateKey: string, publicEncryptionKey: string) {
-  const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey)
-  return AES.encryptBuffer(plaintext, decryptionKey)
+  const decryptionKey = ED25519.getSharedSecretHex(privateKey, publicEncryptionKey);
+  return AES.encryptBuffer(plaintext, decryptionKey);
 }
 
 export function sha512sum(data: Buffer): string {

@@ -10,19 +10,19 @@ import { decrypt, sha512sum } from './crypto';
  * @throws {@linkcode DataIntegrityError} if the checksum of the downloaded file doesn't match the provided `sha512sum`
  */
 export async function downloadFile(url: string, options?: DownloadOptions): Promise<Buffer> {
-  validate(url, schemas.url)
-  validate(options, schemas.downloadOptions)
+  validate(url, schemas.url);
+  validate(options, schemas.downloadOptions);
 
-  let data = await download(url)
-  if(options?.privateKey != null && options?.publicEncryptionKey != null) {
-    data = decrypt(data, options.privateKey, options.publicEncryptionKey)
+  let data = await download(url);
+  if (options?.privateKey != null && options?.publicEncryptionKey != null) {
+    data = decrypt(data, options.privateKey, options.publicEncryptionKey);
   }
 
   if (options?.sha512sum != null && options.sha512sum !== sha512sum(data)) {
-    throw new DataIntegrityError()
+    throw new DataIntegrityError();
   }
 
-  return data
+  return data;
 }
 
 export interface DownloadOptions {
