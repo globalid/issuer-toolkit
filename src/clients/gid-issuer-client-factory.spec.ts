@@ -29,8 +29,8 @@ jest.mock('./file-uploader', () =>
   }))
 );
 
-const mockedGetPublicEncryptionKey = jest.fn().mockResolvedValue(stubs.publicKey);
-const mockedGetPublicSigningKey = jest.fn().mockResolvedValue(stubs.publicKey);
+const mockedGetPublicEncryptionKey = jest.fn().mockResolvedValue(stubs.publicEncryptionKey);
+const mockedGetPublicSigningKey = jest.fn().mockResolvedValue(stubs.publicSigningKey);
 jest.mock('./public-key-provider', () => ({
   PublicKeyProvider: jest.fn(() => ({
     getPublicEncryptionKey: mockedGetPublicEncryptionKey,

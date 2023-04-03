@@ -1,63 +1,57 @@
 import '../../test/setup';
 
 import download from '../services/download';
-import { decrypt } from './crypto';
-import { DataIntegrityError, downloadFile, DownloadOptions } from './download-file';
-import * as validation from './validation';
+import { encrypt, sha512sum } from './crypto';
+import { DataIntegrityError, downloadFile } from './download-file';
 
 jest.mock('../services/download');
-jest.mock('./crypto');
-jest.mock('./validation');
 
-const mockedDecrypt = jest.mocked(decrypt);
 const mockedDownload = jest.mocked(download);
-const mockedValidation = jest.mocked(validation);
 
 const url = 'http://example.com/file';
 const file = Buffer.from('Lorem ipsum dolor sit amet');
-const encryptedFile = Buffer.from('abcdefghijklmnopqrstuvwxyz');
 
 test('should download unencrypted file', async () => {
   mockedDownload.mockResolvedValueOnce(file);
 
   const result = await downloadFile(url);
 
-  expect(result).toBe(file);
-  expect(mockedValidation.validate).toHaveBeenCalledTimes(2);
-  expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, url, validation.schemas.url);
-  expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, undefined, validation.schemas.downloadOptions);
-  expect(mockedDownload).toHaveBeenCalledTimes(1);
-  expect(mockedDownload).toHaveBeenCalledWith(url);
-  expect(mockedDecrypt).not.toHaveBeenCalled();
+  expect(result).toEqual(file);
 });
 
 test('should download and decrypt encrypted file', async () => {
-  const decryptionKey = 'foobar';
-  const options: DownloadOptions = { decryptionKey };
+  const [encryptedFile, decryptionKey] = encrypt(file);
+
   mockedDownload.mockResolvedValueOnce(encryptedFile);
-  mockedDecrypt.mockReturnValueOnce(file);
 
-  const result = await downloadFile(url, options);
+  const result = await downloadFile(url, {decryptionKey});
 
-  expect(result).toBe(file);
-  expect(mockedValidation.validate).toHaveBeenCalledTimes(2);
-  expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, url, validation.schemas.url);
-  expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, options, validation.schemas.downloadOptions);
-  expect(mockedDownload).toHaveBeenCalledTimes(1);
-  expect(mockedDownload).toHaveBeenCalledWith(url);
-  expect(mockedDecrypt).toHaveBeenCalledTimes(1);
-  expect(mockedDecrypt).toHaveBeenCalledWith(encryptedFile, decryptionKey, undefined);
+  expect(result).toEqual(file);
+});
+
+test('should not throw on valid checksum', async () => {
+  const checksum = sha512sum(file);
+  const [encryptedFile, decryptionKey] = encrypt(file);
+
+  mockedDownload.mockResolvedValueOnce(encryptedFile);
+
+  const result = await downloadFile(url, {
+    decryptionKey,
+    sha512sum: checksum
+  });
+
+  expect(result).toEqual(file);
 });
 
 test('should throw DataIntegrityError on checksum mismatch', async () => {
-  const options: DownloadOptions = { sha512sum: 'foo' };
-  mockedDownload.mockResolvedValueOnce(file);
+  const [encryptedFile, decryptionKey] = encrypt(file);
 
-  await expect(downloadFile(url, options)).rejects.toThrow(DataIntegrityError);
-  expect(mockedValidation.validate).toHaveBeenCalledTimes(2);
-  expect(mockedValidation.validate).toHaveBeenNthCalledWith(1, url, validation.schemas.url);
-  expect(mockedValidation.validate).toHaveBeenNthCalledWith(2, options, validation.schemas.downloadOptions);
-  expect(mockedDownload).toHaveBeenCalledTimes(1);
-  expect(mockedDownload).toHaveBeenCalledWith(url);
-  expect(mockedDecrypt).not.toHaveBeenCalled();
+  mockedDownload.mockResolvedValueOnce(encryptedFile);
+
+  const result = downloadFile(url, {
+    decryptionKey,
+    sha512sum: sha512sum(encryptedFile)
+  });
+
+  await expect(result).rejects.toThrow(DataIntegrityError);
 });

@@ -1,20 +1,20 @@
-import crypto from 'crypto';
+import * as crypto from 'globalid-crypto-library';
 
-import { credentialRequest, publicKey, stubCredentialRequest } from '../../test/stubs';
+import { credentialRequest, publicSigningKey, stubCredentialRequest } from '../../test/stubs';
 import { InvalidSignatureError, verifySignature } from './verify-signature';
 
 test('should verify signature', () => {
-  expect(() => verifySignature(credentialRequest, publicKey)).not.toThrow();
+  expect(() => verifySignature(credentialRequest, publicSigningKey)).not.toThrow();
 });
 
 test('should verify signature with no request data', () => {
   const request = stubCredentialRequest(Date.now(), false);
 
-  expect(() => verifySignature(request, publicKey)).not.toThrow();
+  expect(() => verifySignature(request, publicSigningKey)).not.toThrow();
 });
 
-test('should throw InvalidSignatureError if signature is invalid', () => {
-  const { publicKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
+test('should throw InvalidSignatureError if message was not signed with the specified key pair', () => {
+  const { publicSigningKey: publicKey } = crypto.ED25519.generateKeys();
 
   expect(() => verifySignature(credentialRequest, publicKey)).toThrow(InvalidSignatureError);
 });
