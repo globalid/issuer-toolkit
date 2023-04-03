@@ -20,6 +20,7 @@ export class AccessTokenProvider {
   }
 
   async getAccessToken(): Promise<string> {
+    // TODO: only issue a new token, when access token expires
     const authTokenResponse: auth.AuthTokenResponse = await auth.issueTokens({
       client_id: this.#clientId,
       client_secret: this.#clientSecret,
