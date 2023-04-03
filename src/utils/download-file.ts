@@ -12,13 +12,16 @@ import { decrypt, sha512sum } from './crypto';
 export async function downloadFile(url: string, options?: DownloadOptions): Promise<Buffer> {
   validate(url, schemas.url);
   validate(options, schemas.downloadOptions);
+
   let data = await download(url);
   if (options?.decryptionKey != null) {
-    data = decrypt(data, options.decryptionKey, options.privateKey);
+    data = decrypt(data, options.decryptionKey);
   }
+
   if (options?.sha512sum != null && options.sha512sum !== sha512sum(data)) {
     throw new DataIntegrityError();
   }
+
   return data;
 }
 
@@ -28,11 +31,6 @@ export interface DownloadOptions {
    * absent.
    */
   decryptionKey?: string;
-  /**
-   * Asymmetric private key (typically the issuer's) used to decrypt the `decryptionKey` via RSA. The `decryptionKey` is
-   * assumed to be plaintext if this option is absent.
-   */
-  privateKey?: string;
   /**
    * Checksum used to validate the integrity of the downloaded (and possibly decrypted) file
    */

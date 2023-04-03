@@ -11,6 +11,7 @@ const uuidSchema = Joi.string().uuid();
 
 const fileClaimValueSchema = Joi.object<FileClaimValue>({
   decryptionKey: Joi.string().required(),
+  name: Joi.string().required(),
   sha512sum: Joi.string().required(),
   type: fileTypeSchema.required(),
   url: uriSchema.required()
@@ -45,7 +46,6 @@ const schemas = {
 
   downloadOptions: Joi.object({
     decryptionKey: Joi.string(),
-    privateKey: Joi.string(),
     sha512sum: Joi.string()
   }).unknown(),
 

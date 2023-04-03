@@ -1,8 +1,6 @@
-import * as crypto from 'crypto';
+import * as crypto from 'globalid-crypto-library';
 
 import { CredentialRequest } from '../common';
-
-export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.VerifyPublicKeyInput;
 
 /**
  * Verifies the `signature` of the given credential request and throws an error if it's invalid.
@@ -10,11 +8,11 @@ export type PublicKey = crypto.KeyLike | crypto.VerifyKeyObjectInput | crypto.Ve
  * @param publicKey Public key used to verify signature
  * @throws {@linkcode InvalidSignatureError} if `signature` is invalid
  */
-export function verifySignature(request: CredentialRequest, publicKey: PublicKey): void {
+export function verifySignature(request: CredentialRequest, publicKey: string): void {
   const requestData = request.data === undefined ? '' : JSON.stringify(request.data);
-  const data = Buffer.from(`${request.timestamp}${request.threadId}${requestData}`);
-  const signature = Buffer.from(request.signature, 'base64');
-  const valid = crypto.verify(null, data, publicKey, signature);
+  const data = `${request.timestamp}${request.threadId}${requestData}`;
+  const valid = crypto.ED25519.verifySignature(data, publicKey, request.signature);
+
   if (!valid) {
     throw new InvalidSignatureError();
   }
