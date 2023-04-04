@@ -59,7 +59,6 @@ export class GidIssuerClient {
 
   /**
    * Send an offer for a credential
-   * @param threadId Thread ID received from the holder
    * @param offer Credential offer to send
    */
   async sendOffer(offer: CredentialOffer): Promise<void> {
