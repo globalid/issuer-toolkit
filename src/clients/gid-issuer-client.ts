@@ -38,6 +38,13 @@ export class GidIssuerClient {
     return this.#accessTokenProvider.clientSecret;
   }
 
+  public setAppUuid(appUuid: string): void {
+    this.#epamClient.setAppUuid(appUuid);
+  }
+
+  public getAppUuid(): string | undefined {
+    return this.#epamClient.getAppUuid();
+  }
   /**
    * Get an access token for calling protected GlobaliD API endpoints
    * @returns OAuth 2.0 access token

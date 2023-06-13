@@ -24,10 +24,12 @@ describe('EpamClient', () => {
   });
 
   describe('#offerCredential', () => {
+    const appUuid = 'some-app-uuid';
     it('should not throw when offering valid credential', async () => {
       const offer = stub<CredentialOffer>();
       const epamOffer = stub<epam.EpamCreateCredentialsOfferV2>();
       mockedCreateEpamCredentialOffer.mockReturnValueOnce(epamOffer);
+      epamClient.setAppUuid(appUuid);
 
       await epamClient.sendOffer(offer);
 
@@ -35,13 +37,16 @@ describe('EpamClient', () => {
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledTimes(1);
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
-      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer);
+      expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer, appUuid);
     });
   });
 
   describe('#reportError', () => {
+    const appUuid = 'some-app-uuid';
+
     it('should report error to EPAM', async () => {
       const errorCode = ErrorCodes.GidUnavailable;
+      epamClient.setAppUuid(appUuid);
 
       await epamClient.reportError(threadId, ErrorCodes.GidUnavailable);
 
@@ -51,7 +56,28 @@ describe('EpamClient', () => {
         code: errorCode,
         description: ERROR_DESCRIPTIONS[errorCode],
         thread_id: threadId
-      });
+      }, appUuid);
     });
+  });
+
+  describe('#setAppUuid', () => {
+    it('should set app uuid', () => {
+      const appUuid = 'some-app-uuid';
+
+      epamClient.setAppUuid(appUuid);
+
+      expect(epamClient.getAppUuid()).toEqual(appUuid);
+    })
+  });
+
+  describe('#getAppUuid', () => {
+    it('should get app uuid', () => {
+      const appUuid = 'app-uuid';
+      epamClient.setAppUuid(appUuid);
+
+      const result = epamClient.getAppUuid();
+
+      expect(result).toBe(appUuid);
+    })
   });
 });
