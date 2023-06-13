@@ -6,7 +6,11 @@ export function init(serviceUrl: string): void {
   baseUrl = serviceUrl;
 }
 
-export async function createCredentialOfferV2(accessToken: string, body: EpamCreateCredentialsOfferV2, appUuid?: string): Promise<void> {
+export async function createCredentialOfferV2(
+  accessToken: string,
+  body: EpamCreateCredentialsOfferV2,
+  appUuid?: string
+): Promise<void> {
   const response = await axios.request<void>({
     url: '/v2/aries-management/external-party/credentials/offers',
     baseURL: baseUrl,
@@ -20,7 +24,11 @@ export async function createCredentialOfferV2(accessToken: string, body: EpamCre
   return response.data;
 }
 
-export async function createErrorReport(accessToken: string, body: EpamCredentialErrorReportBody, appUuid?: string): Promise<void> {
+export async function createErrorReport(
+  accessToken: string,
+  body: EpamCredentialErrorReportBody,
+  appUuid?: string
+): Promise<void> {
   const response = await axios.request<void>({
     url: '/v2/aries-management/external-party/credentials/error-reports',
     baseURL: baseUrl,

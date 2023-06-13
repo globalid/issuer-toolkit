@@ -153,8 +153,8 @@ describe('GidIssuerClient', () => {
 
       expect(result).toBe('appUuid');
       expect(epamClient.getAppUuid).toHaveBeenCalledTimes(1);
-    })
-  })
+    });
+  });
 
   describe('#setAppUuid', () => {
     it('should set app uuid on EpamClient', async () => {
@@ -162,6 +162,6 @@ describe('GidIssuerClient', () => {
 
       expect(epamClient.setAppUuid).toHaveBeenCalledTimes(1);
       expect(epamClient.setAppUuid).toHaveBeenCalledWith('newAppUuid');
-    })
-  })
+    });
+  });
 });

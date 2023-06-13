@@ -27,11 +27,15 @@ export class EpamClient {
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await epam.createErrorReport(accessToken, {
-      code: errorCode,
-      description: ERROR_DESCRIPTIONS[errorCode],
-      thread_id: threadId
-    }, this.getAppUuid());
+    await epam.createErrorReport(
+      accessToken,
+      {
+        code: errorCode,
+        description: ERROR_DESCRIPTIONS[errorCode],
+        thread_id: threadId
+      },
+      this.getAppUuid()
+    );
   }
 }
 

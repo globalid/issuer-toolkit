@@ -52,11 +52,15 @@ describe('EpamClient', () => {
 
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(epam.createErrorReport).toHaveBeenCalledTimes(1);
-      expect(epam.createErrorReport).toHaveBeenCalledWith(accessToken, {
-        code: errorCode,
-        description: ERROR_DESCRIPTIONS[errorCode],
-        thread_id: threadId
-      }, appUuid);
+      expect(epam.createErrorReport).toHaveBeenCalledWith(
+        accessToken,
+        {
+          code: errorCode,
+          description: ERROR_DESCRIPTIONS[errorCode],
+          thread_id: threadId
+        },
+        appUuid
+      );
     });
   });
 
@@ -67,7 +71,7 @@ describe('EpamClient', () => {
       epamClient.setAppUuid(appUuid);
 
       expect(epamClient.getAppUuid()).toEqual(appUuid);
-    })
+    });
   });
 
   describe('#getAppUuid', () => {
@@ -78,6 +82,6 @@ describe('EpamClient', () => {
       const result = epamClient.getAppUuid();
 
       expect(result).toBe(appUuid);
-    })
+    });
   });
 });
