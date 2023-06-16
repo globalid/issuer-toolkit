@@ -12,7 +12,9 @@ export function stubGidIssuerClient(
     reportError: stub(GidIssuerClient.prototype, 'reportError'),
     sendOffer: stub(GidIssuerClient.prototype, 'sendOffer'),
     uploadFile: stub(GidIssuerClient.prototype, 'uploadFile'),
-    validateRequest: stub(GidIssuerClient.prototype, 'validateRequest')
+    validateRequest: stub(GidIssuerClient.prototype, 'validateRequest'),
+    setAppUuid: stub(GidIssuerClient.prototype, 'setAppUuid'),
+    getAppUuid: stub(GidIssuerClient.prototype, 'getAppUuid')
   };
 }
 

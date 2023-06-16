@@ -144,4 +144,24 @@ describe('GidIssuerClient', () => {
       expect(epamClient.reportError).toHaveBeenCalledWith(stubs.credentialRequest.threadId, '600-7');
     });
   });
+
+  describe('#getAppUuid', () => {
+    it('should get app uuid from EpamClient', async () => {
+      epamClient.getAppUuid.mockReturnValueOnce('appUuid');
+
+      const result = gidIssuerClient.getAppUuid();
+
+      expect(result).toBe('appUuid');
+      expect(epamClient.getAppUuid).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('#setAppUuid', () => {
+    it('should set app uuid on EpamClient', async () => {
+      gidIssuerClient.setAppUuid('newAppUuid');
+
+      expect(epamClient.setAppUuid).toHaveBeenCalledTimes(1);
+      expect(epamClient.setAppUuid).toHaveBeenCalledWith('newAppUuid');
+    });
+  });
 });

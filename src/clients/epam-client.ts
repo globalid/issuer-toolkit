@@ -5,24 +5,37 @@ import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
 
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
+  #appUuid?: string;
 
   constructor(accessTokenProvider: AccessTokenProvider, baseSsiUrl = DEFAULT_BASE_SSI_URL) {
     this.#accessTokenProvider = accessTokenProvider;
     epam.init(baseSsiUrl);
   }
 
+  public getAppUuid(): string | undefined {
+    return this.#appUuid;
+  }
+
+  public setAppUuid(appUuid: string) {
+    this.#appUuid = appUuid;
+  }
+
   async sendOffer(offer: CredentialOffer): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer));
+    await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer), this.getAppUuid());
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await epam.createErrorReport(accessToken, {
-      code: errorCode,
-      description: ERROR_DESCRIPTIONS[errorCode],
-      thread_id: threadId
-    });
+    await epam.createErrorReport(
+      accessToken,
+      {
+        code: errorCode,
+        description: ERROR_DESCRIPTIONS[errorCode],
+        thread_id: threadId
+      },
+      this.getAppUuid()
+    );
   }
 }
 
