@@ -1,5 +1,6 @@
 import { Claims, ClaimValue, CredentialOffer, isFileClaimValue } from '../common';
 import * as epam from '../services/epam';
+import { v4 as uuid } from 'uuid';
 
 export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCreateCredentialsOfferV2 {
   return {
@@ -13,6 +14,20 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
     thread_id: offer.threadId
   };
 }
+
+export function createEpamDirectCredentialOffer(offer: CredentialOffer, gidUuid: string): epam.EpamCreateDirectCredentialOffer {
+  return {
+    id: uuid(),
+    gid_uuid: gidUuid,
+    name: offer.name,
+    description: offer.description,
+    context_uri: <string>offer.contextUri,
+    subject_type: offer.subjectType,
+    schema_uri: <string>offer.schemaUri,
+    attributes: toAttributes(offer.claims)
+  };
+}
+
 
 function toAttributes(claims: Claims): epam.Attributes {
   const attributes = Object.entries(claims).reduce<[string, epam.AttributeValue][]>((attributes, [name, value]) => {

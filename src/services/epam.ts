@@ -24,6 +24,25 @@ export async function createCredentialOfferV2(
   return response.data;
 }
 
+export async function createDirectCredentialOffer(
+  accessToken: string,
+  body: EpamCreateDirectCredentialOffer,
+  appUuid?: string
+): Promise<void> {
+  const response = await axios.request<void>({
+    url: 'v2/aries-management/external-party/credentials/direct-offers',
+    baseURL: baseUrl,
+    method: 'post',
+    data: body,
+    headers: {
+      'x-app-uuid': appUuid,
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
+  return response.data;
+}
+
 export async function createErrorReport(
   accessToken: string,
   body: EpamCredentialErrorReportBody,
@@ -51,6 +70,17 @@ export interface EpamCreateCredentialsOfferV2 {
   schema_uri?: string;
   subject_type: string;
   thread_id: string;
+}
+
+export class EpamCreateDirectCredentialOffer {
+  id?: string
+  gid_uuid!: string
+  name!: string
+  description?: string
+  context_uri!: string
+  subject_type!: string
+  schema_uri!: string
+  attributes!: Record<string, unknown>
 }
 
 export interface EpamCredentialErrorReportBody {
