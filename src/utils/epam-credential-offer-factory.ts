@@ -1,6 +1,5 @@
 import { Claims, ClaimValue, CredentialOffer, isFileClaimValue } from '../common';
 import * as epam from '../services/epam';
-import { v4 as uuid } from 'uuid';
 
 export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCreateCredentialsOfferV2 {
   return {
@@ -17,7 +16,6 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
 
 export function createEpamDirectCredentialOffer(offer: CredentialOffer, gidUuid: string): epam.EpamCreateDirectCredentialOffer {
   return {
-    id: uuid(),
     gid_uuid: gidUuid,
     name: offer.name,
     description: offer.description,

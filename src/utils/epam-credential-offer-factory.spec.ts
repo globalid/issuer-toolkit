@@ -86,8 +86,6 @@ test('should transform GidCredentialOffer into EPAM direct credential offer', ()
 
   const result: EpamCreateDirectCredentialOffer = createEpamDirectCredentialOffer(offer, gidUuid);
 
-  delete result.id;
-
   expect(result).toEqual({
     gid_uuid: gidUuid,
     name: name,
