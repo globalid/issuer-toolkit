@@ -27,7 +27,11 @@ export class EpamClient {
 
   async sendDirectOffer(gidUuid: string, offer: CredentialOffer): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await epam.createDirectCredentialOffer(accessToken, createEpamDirectCredentialOffer(offer, gidUuid), this.getAppUuid());
+    await epam.createDirectCredentialOffer(
+      accessToken,
+      createEpamDirectCredentialOffer(offer, gidUuid),
+      this.getAppUuid()
+    );
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {

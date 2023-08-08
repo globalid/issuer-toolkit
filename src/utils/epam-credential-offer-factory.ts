@@ -14,7 +14,10 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
   };
 }
 
-export function createEpamDirectCredentialOffer(offer: CredentialOffer, gidUuid: string): epam.EpamCreateDirectCredentialOffer {
+export function createEpamDirectCredentialOffer(
+  offer: CredentialOffer,
+  gidUuid: string
+): epam.EpamCreateDirectCredentialOffer {
   return {
     gid_uuid: gidUuid,
     name: offer.name,
@@ -25,7 +28,6 @@ export function createEpamDirectCredentialOffer(offer: CredentialOffer, gidUuid:
     attributes: toAttributes(offer.claims)
   };
 }
-
 
 function toAttributes(claims: Claims): epam.Attributes {
   const attributes = Object.entries(claims).reduce<[string, epam.AttributeValue][]>((attributes, [name, value]) => {

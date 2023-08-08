@@ -46,7 +46,7 @@ describe('EpamClient', () => {
     const appUuid = 'some-app-uuid';
     it('should not throw when offering valid credential', async () => {
       const offer = stub<CredentialOffer>();
-      const gidUuid = 'gidUuid'
+      const gidUuid = 'gidUuid';
       const epamOffer = stub<epam.EpamCreateDirectCredentialOffer>();
       mockedCreateEpamDirectCredentialOffer.mockReturnValueOnce(epamOffer);
       epamClient.setAppUuid(appUuid);

@@ -73,14 +73,14 @@ export interface EpamCreateCredentialsOfferV2 {
 }
 
 export class EpamCreateDirectCredentialOffer {
-  id?: string
-  gid_uuid!: string
-  name!: string
-  description?: string
-  context_uri!: string
-  subject_type!: string
-  schema_uri!: string
-  attributes!: Record<string, unknown>
+  id?: string;
+  gid_uuid!: string;
+  name!: string;
+  description?: string;
+  context_uri!: string;
+  subject_type!: string;
+  schema_uri!: string;
+  attributes!: Record<string, unknown>;
 }
 
 export interface EpamCredentialErrorReportBody {

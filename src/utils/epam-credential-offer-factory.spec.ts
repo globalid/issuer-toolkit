@@ -60,7 +60,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
 });
 
 test('should transform GidCredentialOffer into EPAM direct credential offer', () => {
-  const gidUuid = 'gidUuid'
+  const gidUuid = 'gidUuid';
   const offer: CredentialOffer = {
     threadId,
     name,

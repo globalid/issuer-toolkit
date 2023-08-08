@@ -1,4 +1,4 @@
-name: Default SDK
+name: Test
 on:
   push:
     branches:
@@ -36,3 +36,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ inputs.NPM_TOKEN }}
         run: npm ci --ignore-scripts
       - run: npm run test
+      - run: npm run lint
