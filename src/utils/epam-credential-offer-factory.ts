@@ -1,4 +1,4 @@
-import { Claims, ClaimValue, CredentialOffer, isFileClaimValue } from '../common';
+import { Claims, ClaimValue, CredentialOffer, DirectCredentialOffer, isFileClaimValue } from '../common';
 import * as epam from '../services/epam';
 
 export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCreateCredentialsOfferV2 {
@@ -15,7 +15,7 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
 }
 
 export function createEpamDirectCredentialOffer(
-  offer: CredentialOffer,
+  offer: DirectCredentialOffer,
   gidUuid: string
 ): epam.EpamCreateDirectCredentialOffer {
   return {
