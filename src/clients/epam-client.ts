@@ -1,4 +1,4 @@
-import { DEFAULT_BASE_SSI_URL, CredentialOffer } from '../common';
+import { DEFAULT_BASE_SSI_URL, CredentialOffer, DirectCredentialOffer } from '../common';
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer, { createEpamDirectCredentialOffer } from '../utils/epam-credential-offer-factory';
@@ -25,7 +25,7 @@ export class EpamClient {
     await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer), this.getAppUuid());
   }
 
-  async sendDirectOffer(gidUuid: string, offer: CredentialOffer): Promise<void> {
+  async sendDirectOffer(gidUuid: string, offer: DirectCredentialOffer): Promise<void> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
     await epam.createDirectCredentialOffer(
       accessToken,
