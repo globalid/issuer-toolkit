@@ -1,4 +1,11 @@
-import { Claims, ClaimValue, CredentialOffer, DirectCredentialOffer, isFileClaimValue } from '../common';
+import {
+  Claims,
+  ClaimValue,
+  CredentialOffer,
+  DirectCredentialOfferWithGidUuid,
+  DirectCredentialOfferWithThreadId,
+  isFileClaimValue
+} from '../common';
 import * as epam from '../services/epam';
 
 export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCreateCredentialsOfferV2 {
@@ -15,18 +22,29 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
 }
 
 export function createEpamDirectCredentialOffer(
-  offer: DirectCredentialOffer,
-  gidUuid: string
-): epam.EpamCreateDirectCredentialOffer {
-  return {
-    gid_uuid: gidUuid,
-    name: offer.name,
-    description: offer.description,
-    context_uri: <string>offer.contextUri,
-    subject_type: offer.subjectType,
-    schema_uri: <string>offer.schemaUri,
-    attributes: toAttributes(offer.claims)
-  };
+  offer: DirectCredentialOfferWithThreadId | DirectCredentialOfferWithGidUuid
+): epam.EpamCreateDirectCredentialOfferWithGidUuid | epam.EpamCreateDirectCredentialOfferWithThreadId {
+  if ((<Partial<DirectCredentialOfferWithGidUuid>>offer).gidUuid !== undefined) {
+    return {
+      gid_uuid: (<DirectCredentialOfferWithGidUuid>offer).gidUuid,
+      name: offer.name,
+      description: offer.description,
+      context_uri: <string>offer.contextUri,
+      subject_type: offer.subjectType,
+      schema_uri: <string>offer.schemaUri,
+      attributes: toAttributes(offer.claims)
+    };
+  } else {
+    return {
+      thread_id: (<DirectCredentialOfferWithThreadId>offer).threadId,
+      name: offer.name,
+      description: offer.description,
+      context_uri: <string>offer.contextUri,
+      subject_type: offer.subjectType,
+      schema_uri: <string>offer.schemaUri,
+      attributes: toAttributes(offer.claims)
+    };
+  }
 }
 
 function toAttributes(claims: Claims): epam.Attributes {
