@@ -38,6 +38,14 @@ export interface CredentialOffer<T extends Claims = Claims> extends DirectCreden
   threadId: string;
 }
 
+export type DirectCredentialOfferWithThreadId<T extends Claims = Claims> = CredentialOffer<T>;
+export interface DirectCredentialOfferWithGidUuid<T extends Claims = Claims> extends DirectCredentialOffer<T> {
+  /**
+   * Gid uuid to offer credential to
+   */
+  gidUuid: string;
+}
+
 export type Claims = Record<string, ClaimValue | undefined>;
 export type ClaimValue = boolean | number | string | FileClaimValue;
 

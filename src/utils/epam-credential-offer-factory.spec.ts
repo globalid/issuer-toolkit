@@ -1,6 +1,10 @@
-import { threadId } from '../../test/stubs';
-import { CredentialOffer, FileType } from '../common';
-import { EpamCreateDirectCredentialOffer } from '../services/epam';
+import { threadId, gidUuid } from '../../test/stubs';
+import {
+  CredentialOffer,
+  DirectCredentialOfferWithThreadId,
+  DirectCredentialOfferWithGidUuid,
+  FileType
+} from '../common';
 import createEpamCredentialOffer, { createEpamDirectCredentialOffer } from './epam-credential-offer-factory';
 
 const name = 'Foo Bar';
@@ -60,9 +64,7 @@ test('should transform GidCredentialOffer into EPAM credential offer', () => {
 });
 
 test('should transform GidCredentialOffer into EPAM direct credential offer', () => {
-  const gidUuid = 'gidUuid';
-  const offer: CredentialOffer = {
-    threadId,
+  const offerBase: Omit<CredentialOffer, 'threadId'> = {
     name,
     description,
     expirationDate,
@@ -84,9 +86,41 @@ test('should transform GidCredentialOffer into EPAM direct credential offer', ()
     }
   };
 
-  const result: EpamCreateDirectCredentialOffer = createEpamDirectCredentialOffer(offer, gidUuid);
+  const offerWithThreadId: DirectCredentialOfferWithThreadId = {
+    threadId,
+    ...offerBase
+  };
 
-  expect(result).toEqual({
+  const offerWithGidUuid: DirectCredentialOfferWithGidUuid = {
+    gidUuid,
+    ...offerBase
+  };
+
+  const resultWithThread = createEpamDirectCredentialOffer(offerWithThreadId);
+  const resultWithGid = createEpamDirectCredentialOffer(offerWithGidUuid);
+
+  expect(resultWithThread).toEqual({
+    thread_id: threadId,
+    name: name,
+    description: description,
+    context_uri: contextUri,
+    subject_type: subjectType,
+    schema_uri: schemaUri,
+    attributes: {
+      boolean: false,
+      number: 42,
+      string: 'foobar',
+      file: {
+        media_type: FileType.JPEG,
+        file_name: 'uuid.some-file.jpg',
+        decryption_key: 'foobar',
+        sha_512_sum: 'abcdefg',
+        url: 'https://example.com/some-file'
+      }
+    }
+  });
+
+  expect(resultWithGid).toEqual({
     gid_uuid: gidUuid,
     name: name,
     description: description,

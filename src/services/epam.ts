@@ -26,7 +26,7 @@ export async function createCredentialOfferV2(
 
 export async function createDirectCredentialOffer(
   accessToken: string,
-  body: EpamCreateDirectCredentialOffer,
+  body: EpamCreateDirectCredentialOfferWithGidUuid | EpamCreateDirectCredentialOfferWithThreadId,
   appUuid?: string
 ): Promise<void> {
   const response = await axios.request<void>({
@@ -74,13 +74,20 @@ export interface EpamCreateCredentialsOfferV2 {
 
 export class EpamCreateDirectCredentialOffer {
   id?: string;
-  gid_uuid!: string;
   name!: string;
   description?: string;
   context_uri!: string;
   subject_type!: string;
   schema_uri!: string;
   attributes!: Record<string, unknown>;
+}
+
+export class EpamCreateDirectCredentialOfferWithGidUuid extends EpamCreateDirectCredentialOffer {
+  gid_uuid!: string;
+}
+
+export class EpamCreateDirectCredentialOfferWithThreadId extends EpamCreateDirectCredentialOffer {
+  thread_id!: string;
 }
 
 export interface EpamCredentialErrorReportBody {
