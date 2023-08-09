@@ -46,16 +46,15 @@ describe('EpamClient', () => {
     const appUuid = 'some-app-uuid';
     it('should not throw when offering valid credential', async () => {
       const offer = stub<CredentialOffer>();
-      const gidUuid = 'gidUuid';
-      const epamOffer = stub<epam.EpamCreateDirectCredentialOffer>();
+      const epamOffer = stub<epam.EpamCreateDirectCredentialOfferWithGidUuid>();
       mockedCreateEpamDirectCredentialOffer.mockReturnValueOnce(epamOffer);
       epamClient.setAppUuid(appUuid);
 
-      await epamClient.sendDirectOffer(gidUuid, offer);
+      await epamClient.sendDirectOffer(offer);
 
       expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
       expect(mockedCreateEpamDirectCredentialOffer).toHaveBeenCalledTimes(1);
-      expect(mockedCreateEpamDirectCredentialOffer).toHaveBeenCalledWith(offer, gidUuid);
+      expect(mockedCreateEpamDirectCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createDirectCredentialOffer).toHaveBeenCalledTimes(1);
       expect(epam.createDirectCredentialOffer).toHaveBeenCalledWith(accessToken, epamOffer, appUuid);
     });
