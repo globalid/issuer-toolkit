@@ -3,7 +3,7 @@ import '../../test/setup';
 import { accessToken, clientId, clientSecret, stub } from '../../test/stubs';
 import { CredentialOffer } from '../common';
 import * as epam from '../services/epam';
-import createEpamCredentialOffer from '../utils/epam-credential-offer-factory';
+import createEpamCredentialOffer, { createEpamDirectCredentialOffer } from '../utils/epam-credential-offer-factory';
 import AccessTokenProvider from './access-token-provider';
 import { EpamClient, ERROR_DESCRIPTIONS, ErrorCodes } from './epam-client';
 
@@ -12,6 +12,7 @@ jest.mock('../services/epam');
 jest.mock('../utils/epam-credential-offer-factory');
 
 const mockedCreateEpamCredentialOffer = jest.mocked(createEpamCredentialOffer);
+const mockedCreateEpamDirectCredentialOffer = jest.mocked(createEpamDirectCredentialOffer);
 
 describe('EpamClient', () => {
   const threadId = 'some-thread-id';
@@ -23,7 +24,7 @@ describe('EpamClient', () => {
     epamClient = new EpamClient(accessTokenProvider);
   });
 
-  describe('#offerCredential', () => {
+  describe('#sendOffer', () => {
     const appUuid = 'some-app-uuid';
     it('should not throw when offering valid credential', async () => {
       const offer = stub<CredentialOffer>();
@@ -38,6 +39,24 @@ describe('EpamClient', () => {
       expect(mockedCreateEpamCredentialOffer).toHaveBeenCalledWith(offer);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledTimes(1);
       expect(epam.createCredentialOfferV2).toHaveBeenCalledWith(accessToken, epamOffer, appUuid);
+    });
+  });
+
+  describe('#sendDirectOffer', () => {
+    const appUuid = 'some-app-uuid';
+    it('should not throw when offering valid credential', async () => {
+      const offer = stub<CredentialOffer>();
+      const epamOffer = stub<epam.EpamCreateDirectCredentialOfferWithGidUuid>();
+      mockedCreateEpamDirectCredentialOffer.mockReturnValueOnce(epamOffer);
+      epamClient.setAppUuid(appUuid);
+
+      await epamClient.sendDirectOffer(offer);
+
+      expect(accessTokenProvider.getAccessToken).toHaveBeenCalledTimes(1);
+      expect(mockedCreateEpamDirectCredentialOffer).toHaveBeenCalledTimes(1);
+      expect(mockedCreateEpamDirectCredentialOffer).toHaveBeenCalledWith(offer);
+      expect(epam.createDirectCredentialOffer).toHaveBeenCalledTimes(1);
+      expect(epam.createDirectCredentialOffer).toHaveBeenCalledWith(accessToken, epamOffer, appUuid);
     });
   });
 

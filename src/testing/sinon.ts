@@ -11,6 +11,7 @@ export function stubGidIssuerClient(
     getAccessToken: stub(GidIssuerClient.prototype, 'getAccessToken'),
     reportError: stub(GidIssuerClient.prototype, 'reportError'),
     sendOffer: stub(GidIssuerClient.prototype, 'sendOffer'),
+    sendDirectOffer: stub(GidIssuerClient.prototype, 'sendDirectOffer'),
     uploadFile: stub(GidIssuerClient.prototype, 'uploadFile'),
     validateRequest: stub(GidIssuerClient.prototype, 'validateRequest'),
     setAppUuid: stub(GidIssuerClient.prototype, 'setAppUuid'),

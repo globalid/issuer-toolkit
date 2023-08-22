@@ -1,6 +1,13 @@
 import '../services/interceptors';
 
-import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
+import {
+  CredentialOffer,
+  DirectCredentialOfferWithThreadId,
+  DirectCredentialOfferWithGidUuid,
+  CredentialRequest,
+  FileClaimValue,
+  FileType
+} from '../common';
 import crypto from '../utils/crypto';
 import { EagerRequestError, StaleRequestError, validateTimestamp } from '../utils/validate-timestamp';
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';
@@ -71,6 +78,16 @@ export class GidIssuerClient {
   async sendOffer(offer: CredentialOffer): Promise<void> {
     validate(offer, schemas.credentialOffer);
     await this.#epamClient.sendOffer(offer);
+  }
+
+  /**
+   * Send a "direct" (no thread_id) offer for a credential
+   * @param gidUuid string uuid of globalid user
+   * @param offer DirectCredentialOffer offer to send
+   */
+  async sendDirectOffer(offer: DirectCredentialOfferWithGidUuid | DirectCredentialOfferWithThreadId): Promise<void> {
+    validate(offer, schemas.credentialOffer);
+    await this.#epamClient.sendDirectOffer(offer);
   }
 
   /**

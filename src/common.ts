@@ -1,6 +1,6 @@
 import { isInStringEnum, isRecord, isString } from './utils/type-guards';
 
-export interface CredentialOffer<T extends Claims = Claims> {
+export interface DirectCredentialOffer<T extends Claims = Claims> {
   /**
    * Claims about the credential subject
    */
@@ -29,10 +29,21 @@ export interface CredentialOffer<T extends Claims = Claims> {
    * JSON-LD `@type` of the credential subject
    */
   subjectType: string;
+}
+
+export interface CredentialOffer<T extends Claims = Claims> extends DirectCredentialOffer<T> {
   /**
    * ID correlating interactions related to this credential request
    */
   threadId: string;
+}
+
+export type DirectCredentialOfferWithThreadId<T extends Claims = Claims> = CredentialOffer<T>;
+export interface DirectCredentialOfferWithGidUuid<T extends Claims = Claims> extends DirectCredentialOffer<T> {
+  /**
+   * Gid uuid to offer credential to
+   */
+  gidUuid: string;
 }
 
 export type Claims = Record<string, ClaimValue | undefined>;
