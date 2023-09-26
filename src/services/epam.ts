@@ -73,6 +73,7 @@ export interface EpamCreateCredentialsOfferV2 {
 }
 
 export class EpamCreateDirectCredentialOffer {
+  auto_issue?: boolean;
   id?: string;
   name!: string;
   description?: string;
