@@ -86,7 +86,7 @@ export class GidIssuerClient {
    * @param offer DirectCredentialOffer offer to send
    */
   async sendDirectOffer(offer: DirectCredentialOfferWithGidUuid | DirectCredentialOfferWithThreadId): Promise<void> {
-    validate(offer, schemas.credentialOffer);
+    validate(offer, schemas.credentialOfferWithGidOrThreadId);
     await this.#epamClient.sendDirectOffer(offer);
   }
 
