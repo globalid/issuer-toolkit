@@ -1,24 +1,35 @@
 import nock from 'nock';
 import { DEFAULT_BASE_API_URL, DEFAULT_BASE_AUTH_URL, DEFAULT_BASE_SSI_URL } from '..';
 
+export const gidUrls = {
+  baseApiUrl: DEFAULT_BASE_API_URL,
+  baseuAuthUrl: DEFAULT_BASE_AUTH_URL,
+  baseSsiUrl: DEFAULT_BASE_SSI_URL
+};
+
+export type GidUrlsI = Partial<typeof gidUrls>;
+
 export function clearMocks() {
   nock.cleanAll();
 }
 
-export function mockGetAccessToken(accessToken = 'mock.access.token'): void {
-  nock(DEFAULT_BASE_AUTH_URL).post('/realms/globalid/protocol/openid-connect/token').reply(200, {
+export function mockGetAccessToken(accessToken = 'mock.access.token', urlOverride?: GidUrlsI): void {
+  const { baseuAuthUrl } = getUrls(urlOverride);
+  nock(baseuAuthUrl).post('/realms/globalid/protocol/openid-connect/token').reply(200, {
     access_token: accessToken
   });
 }
 
-export function mockReportError(): void {
-  mockGetAccessToken();
-  nock(DEFAULT_BASE_SSI_URL).post('/v2/aries-management/external-party/credentials/error-reports').reply(204);
+export function mockReportError(urlOverride?: GidUrlsI): void {
+  const { baseuAuthUrl, baseSsiUrl } = getUrls(urlOverride);
+  mockGetAccessToken(undefined, { baseuAuthUrl });
+  nock(baseSsiUrl).post('/v2/aries-management/external-party/credentials/error-reports').reply(204);
 }
 
-export function mockSendOffer(error?: string | object): void {
-  mockGetAccessToken();
-  const interceptor = nock(DEFAULT_BASE_SSI_URL).post('/v2/aries-management/external-party/credentials/offers');
+export function mockSendOffer(error?: string | object, urlOverride?: GidUrlsI): void {
+  const { baseSsiUrl } = getUrls(urlOverride);
+  mockGetAccessToken(undefined, urlOverride);
+  const interceptor = nock(baseSsiUrl).post('/v2/aries-management/external-party/credentials/offers');
   if (error == null) {
     interceptor.reply(204);
   } else {
@@ -26,13 +37,25 @@ export function mockSendOffer(error?: string | object): void {
   }
 }
 
-export function mockUploadFile(gidUuid: string, publicKey: string): void {
-  mockPublicKeyProvider(gidUuid, publicKey);
+export function mockSendDirectOffer(error?: string | object, urlOverride?: GidUrlsI): void {
+  const { baseSsiUrl } = getUrls(urlOverride);
+  mockGetAccessToken(undefined, urlOverride);
+  const interceptor = nock(baseSsiUrl).post('/v2/aries-management/external-party/credentials/direct-offers');
+  if (error == null) {
+    interceptor.reply(204);
+  } else {
+    interceptor.replyWithError(error);
+  }
+}
 
-  mockGetAccessToken();
+export function mockUploadFile(gidUuid: string, publicKey: string, urlOverride?: GidUrlsI): void {
+  const { baseApiUrl } = getUrls(urlOverride);
+  mockPublicKeyProvider(gidUuid, publicKey, urlOverride);
+
+  mockGetAccessToken(undefined, urlOverride);
 
   const uploadUrl = 'http://example.com/upload';
-  nock(DEFAULT_BASE_API_URL)
+  nock(baseApiUrl)
     .post('/v2/upload')
     .reply(201, [
       {
@@ -47,16 +70,24 @@ export function mockUploadFile(gidUuid: string, publicKey: string): void {
   nock(uploadUrl).post('/').reply(204);
 }
 
-function mockPublicKeyProvider(gidUuid: string, publicKey: string): void {
-  nock(DEFAULT_BASE_API_URL).get(`/v1/identities/${gidUuid}`).reply(200, {
+function mockPublicKeyProvider(gidUuid: string, publicKey: string, urlOverride?: GidUrlsI): void {
+  const { baseApiUrl } = getUrls(urlOverride);
+  nock(baseApiUrl).get(`/v1/identities/${gidUuid}`).reply(200, {
     public_signing_key: publicKey,
     public_encryption_key: publicKey
   });
 }
 
-export function mockValidateRequest(gidUuid: string, publicKey: string): void {
-  mockPublicKeyProvider(gidUuid, publicKey);
-  mockReportError();
+export function mockValidateRequest(gidUuid: string, publicKey: string, urlOverride?: GidUrlsI): void {
+  mockPublicKeyProvider(gidUuid, publicKey, urlOverride);
+  mockReportError(urlOverride);
+}
+
+function getUrls(optGidUrls: GidUrlsI = gidUrls): typeof gidUrls {
+  return {
+    ...gidUrls,
+    ...optGidUrls
+  };
 }
 
 export default {
