@@ -13,7 +13,7 @@ import { EagerRequestError, StaleRequestError, validateTimestamp } from '../util
 import { InvalidSignatureError, verifySignature } from '../utils/verify-signature';
 import { schemas, validate } from '../utils/validation';
 import AccessTokenProvider from './access-token-provider';
-import { EpamClient, ErrorCode, ErrorCodes } from './epam-client';
+import { EpamClient, EpamDirectOfferResponse, ErrorCode, ErrorCodes } from './epam-client';
 import FileUploader from './file-uploader';
 // imports needed for JSDocs
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -85,9 +85,12 @@ export class GidIssuerClient {
    * @param gidUuid string uuid of globalid user
    * @param offer DirectCredentialOffer offer to send
    */
-  async sendDirectOffer(offer: DirectCredentialOfferWithGidUuid | DirectCredentialOfferWithThreadId): Promise<void> {
-    validate(offer, schemas.credentialOffer);
-    await this.#epamClient.sendDirectOffer(offer);
+  async sendDirectOffer(
+    offer: DirectCredentialOfferWithGidUuid | DirectCredentialOfferWithThreadId
+  ): Promise<EpamDirectOfferResponse> {
+    validate(offer, schemas.credentialOfferWithGidOrThreadId);
+
+    return await this.#epamClient.sendDirectOffer(offer);
   }
 
   /**

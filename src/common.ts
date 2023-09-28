@@ -29,6 +29,11 @@ export interface DirectCredentialOffer<T extends Claims = Claims> {
    * JSON-LD `@type` of the credential subject
    */
   subjectType: string;
+
+  /**
+   * Credential will be auto issued if allowed for auth client being used
+   */
+  autoIssue?: boolean;
 }
 
 export interface CredentialOffer<T extends Claims = Claims> extends DirectCredentialOffer<T> {

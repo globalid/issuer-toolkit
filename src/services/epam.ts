@@ -28,8 +28,8 @@ export async function createDirectCredentialOffer(
   accessToken: string,
   body: EpamCreateDirectCredentialOfferWithGidUuid | EpamCreateDirectCredentialOfferWithThreadId,
   appUuid?: string
-): Promise<void> {
-  const response = await axios.request<void>({
+): Promise<EpamDirectOfferResponse> {
+  const response = await axios.request<EpamDirectOfferResponse>({
     url: 'v2/aries-management/external-party/credentials/direct-offers',
     baseURL: baseUrl,
     method: 'post',
@@ -73,6 +73,7 @@ export interface EpamCreateCredentialsOfferV2 {
 }
 
 export class EpamCreateDirectCredentialOffer {
+  auto_issue?: boolean;
   id?: string;
   name!: string;
   description?: string;
@@ -88,6 +89,10 @@ export class EpamCreateDirectCredentialOfferWithGidUuid extends EpamCreateDirect
 
 export class EpamCreateDirectCredentialOfferWithThreadId extends EpamCreateDirectCredentialOffer {
   thread_id!: string;
+}
+
+export interface EpamDirectOfferResponse {
+  thread_id: string;
 }
 
 export interface EpamCredentialErrorReportBody {

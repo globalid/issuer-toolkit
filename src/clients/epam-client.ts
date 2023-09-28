@@ -8,6 +8,8 @@ import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer, { createEpamDirectCredentialOffer } from '../utils/epam-credential-offer-factory';
 
+export { EpamDirectOfferResponse } from '../services/epam';
+
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
   #appUuid?: string;
@@ -30,9 +32,15 @@ export class EpamClient {
     await epam.createCredentialOfferV2(accessToken, createEpamCredentialOffer(offer), this.getAppUuid());
   }
 
-  async sendDirectOffer(offer: DirectCredentialOfferWithGidUuid | DirectCredentialOfferWithThreadId): Promise<void> {
+  async sendDirectOffer(
+    offer: DirectCredentialOfferWithGidUuid | DirectCredentialOfferWithThreadId
+  ): Promise<epam.EpamDirectOfferResponse> {
     const accessToken: string = await this.#accessTokenProvider.getAccessToken();
-    await epam.createDirectCredentialOffer(accessToken, createEpamDirectCredentialOffer(offer), this.getAppUuid());
+    return await epam.createDirectCredentialOffer(
+      accessToken,
+      createEpamDirectCredentialOffer(offer),
+      this.getAppUuid()
+    );
   }
 
   async reportError(threadId: string, errorCode: ErrorCode): Promise<void> {

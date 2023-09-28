@@ -24,25 +24,25 @@ export function createEpamCredentialOffer(offer: CredentialOffer): epam.EpamCrea
 export function createEpamDirectCredentialOffer(
   offer: DirectCredentialOfferWithThreadId | DirectCredentialOfferWithGidUuid
 ): epam.EpamCreateDirectCredentialOfferWithGidUuid | epam.EpamCreateDirectCredentialOfferWithThreadId {
+  const prepared: epam.EpamCreateDirectCredentialOffer = {
+    auto_issue: offer.autoIssue,
+    name: offer.name,
+    description: offer.description,
+    context_uri: <string>offer.contextUri,
+    subject_type: offer.subjectType,
+    schema_uri: <string>offer.schemaUri,
+    attributes: toAttributes(offer.claims)
+  };
+
   if ((<Partial<DirectCredentialOfferWithGidUuid>>offer).gidUuid !== undefined) {
     return {
-      gid_uuid: (<DirectCredentialOfferWithGidUuid>offer).gidUuid,
-      name: offer.name,
-      description: offer.description,
-      context_uri: <string>offer.contextUri,
-      subject_type: offer.subjectType,
-      schema_uri: <string>offer.schemaUri,
-      attributes: toAttributes(offer.claims)
+      ...prepared,
+      gid_uuid: (<DirectCredentialOfferWithGidUuid>offer).gidUuid
     };
   } else {
     return {
-      thread_id: (<DirectCredentialOfferWithThreadId>offer).threadId,
-      name: offer.name,
-      description: offer.description,
-      context_uri: <string>offer.contextUri,
-      subject_type: offer.subjectType,
-      schema_uri: <string>offer.schemaUri,
-      attributes: toAttributes(offer.claims)
+      ...prepared,
+      thread_id: (<DirectCredentialOfferWithThreadId>offer).threadId
     };
   }
 }
