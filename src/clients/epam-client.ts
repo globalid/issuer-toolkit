@@ -7,8 +7,21 @@ import {
 import * as epam from '../services/epam';
 import AccessTokenProvider from './access-token-provider';
 import createEpamCredentialOffer, { createEpamDirectCredentialOffer } from '../utils/epam-credential-offer-factory';
+import { ERROR_DESCRIPTIONS } from './issuer-error-codes';
 
 export { EpamDirectOfferResponse } from '../services/epam';
+
+export { ERROR_DESCRIPTIONS };
+export type ErrorCode = keyof typeof ERROR_DESCRIPTIONS;
+
+export enum ErrorCodes {
+  DocumentUnsupported = '300-8',
+  CredentialRequestFailed = '600-1',
+  VerificationCancelled = '600-3',
+  GidUnavailable = '600-7',
+  IssuerUnavailable = '600-8',
+  RequestValidationFailed = '600-16'
+}
 
 export class EpamClient {
   #accessTokenProvider: AccessTokenProvider;
@@ -55,26 +68,6 @@ export class EpamClient {
       this.getAppUuid()
     );
   }
-}
-
-export type ErrorCode = keyof typeof ERROR_DESCRIPTIONS;
-
-export const ERROR_DESCRIPTIONS = {
-  '300-8': 'The document provided is not supported and could not be verified',
-  '600-1': 'Credential request failed because some information could not be verified',
-  '600-3': 'Verification process was cancelled by the user',
-  '600-7': 'GlobaliD erred or is not available at the moment',
-  '600-8': 'Issuer erred or is not available at the moment',
-  '600-16': 'Validation of credential request failed'
-};
-
-export enum ErrorCodes {
-  DocumentUnsupported = '300-8',
-  CredentialRequestFailed = '600-1',
-  VerificationCancelled = '600-3',
-  GidUnavailable = '600-7',
-  IssuerUnavailable = '600-8',
-  RequestValidationFailed = '600-16'
 }
 
 export default EpamClient;
