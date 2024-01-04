@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import { ErrorCodes } from '../clients/epam-client';
+import { ERROR_DESCRIPTIONS } from '../clients/epam-client';
 import { CredentialOffer, CredentialRequest, FileClaimValue, FileType } from '../common';
 
 const fileTypeSchema = Joi.string().valid(...Object.values(FileType));
@@ -58,7 +58,7 @@ const schemas = {
   }).unknown(),
 
   errorCode: Joi.string()
-    .valid(...Object.values(ErrorCodes))
+    .valid(...Object.keys(ERROR_DESCRIPTIONS))
     .required(),
 
   fileObject: Joi.object({
