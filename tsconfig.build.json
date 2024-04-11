@@ -4,6 +4,5 @@
     "declaration": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["**/*.spec.ts", "jest.config.ts", "**/__mocks__"]
+  "include": ["src/**/*.ts"]
 }
