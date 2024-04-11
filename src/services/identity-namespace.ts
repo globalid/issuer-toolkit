@@ -8,50 +8,25 @@ export function init(serviceUrl: string): void {
 
 export async function getIdentityPublic(gidUuid: string): Promise<Identity> {
   const response = await axios.request<Identity>({
-    url: `/v1/identities/${gidUuid}`,
+    url: `/v1/directory/${gidUuid}`,
     baseURL: baseUrl,
     method: 'get'
   });
   return response.data;
 }
 
-export interface Identity extends PrivateIdentity {
-  purpose_personal?: boolean;
-  purpose_professional?: boolean;
-  purpose_recreational?: boolean;
-  display_name?: string;
-  description?: string;
-  display_image_url?: string;
-  region_code?: string;
-  region_name?: string;
-  country_code?: string;
-  country_name?: string;
-  state_code?: string;
-  state_name?: string;
-  metro_code?: string;
-  metro_name?: string;
-  signup_type?: IdentitySignupType;
-  encrypted_signup_challenge?: string;
-  profile_picture_verified?: boolean;
+export enum IdentityType {
+  USEER = 'USER',
+  ORG = 'ORG',
+  APP = 'APP'
 }
 
-export interface PrivateIdentity {
+export interface Identity {
+  name: string;
   gid_uuid: string;
-  gid_name: string;
-  type: string;
-  status: string;
+  display_name?: string;
+  profile_photo: string;
+  public_key: string;
+  type: IdentityType;
   created_at: string;
-  released_at?: string;
-  completed: boolean;
-  gid_name_moderation_status: string;
-  public_signing_key: string;
-  public_encryption_key: string;
-  signup_type?: IdentitySignupType;
-  is_private: boolean;
-  has_wallet: boolean;
-}
-
-export enum IdentitySignupType {
-  Localid = 'localid',
-  Globalid = 'globalid'
 }

@@ -15,13 +15,13 @@ import {
   FileType,
   GidIssuerClient,
   InvalidSignatureError,
-  PublicKeyNotFoundError,
   StaleRequestError
 } from './gid-issuer-client';
 import { PublicKeyProvider } from './public-key-provider';
 import { sha512sum } from '../utils/crypto';
 import { AES, ED25519 } from 'globalid-crypto-library';
 import dayjs from 'dayjs';
+import { IdentityNotFoundError } from '../../dist';
 
 jest.mock('../utils/download-file');
 
@@ -95,7 +95,7 @@ describe('GidIssuerClient', () => {
 
   describe('#validateRequest', () => {
     beforeEach(() => {
-      publicKeyProvider.getPublicSigningKey.mockResolvedValue(stubs.publicSigningKey);
+      publicKeyProvider.getPublicKey.mockResolvedValue(stubs.publicSigningKey);
     });
 
     it('should not report error when request is valid', async () => {
@@ -136,9 +136,9 @@ describe('GidIssuerClient', () => {
     });
 
     it('should report 600-7 for any other error', async () => {
-      publicKeyProvider.getPublicSigningKey.mockRejectedValueOnce(new PublicKeyNotFoundError('gid'));
+      publicKeyProvider.getPublicKey.mockRejectedValueOnce(new IdentityNotFoundError('gid'));
 
-      await expect(gidIssuerClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(PublicKeyNotFoundError);
+      await expect(gidIssuerClient.validateRequest(stubs.credentialRequest)).rejects.toThrow(IdentityNotFoundError);
 
       expect(epamClient.reportError).toHaveBeenCalledTimes(1);
       expect(epamClient.reportError).toHaveBeenCalledWith(stubs.credentialRequest.threadId, '600-7');
