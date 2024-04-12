@@ -1,6 +1,6 @@
 {
   "name": "@globalid/issuer-toolkit",
-  "version": "0.5.0",
+  "version": "1.4.0-alpha.2",
   "description": "Library for credential issuers integrated with GlobaliD",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
