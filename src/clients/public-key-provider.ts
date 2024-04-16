@@ -6,26 +6,9 @@ export class PublicKeyProvider {
     identityNamespace.init(baseApiUrl);
   }
 
-  async getPublicEncryptionKey(gidUuid: string): Promise<string> {
-    return getPublicKey(gidUuid, PublicKeyType.Encryption);
+  async getPublicKey(gidUuid: string): Promise<string> {
+    return (await getIdentity(gidUuid)).public_key;
   }
-
-  async getPublicSigningKey(gidUuid: string): Promise<string> {
-    return getPublicKey(gidUuid, PublicKeyType.Signing);
-  }
-}
-
-async function getPublicKey(gidUuid: string, type: PublicKeyType): Promise<string> {
-  const identity = await getIdentity(gidUuid);
-  if (typeof identity[type] !== 'string') {
-    throw new PublicKeyNotFoundError(gidUuid);
-  }
-  return identity[type];
-}
-
-enum PublicKeyType {
-  Encryption = 'public_encryption_key',
-  Signing = 'public_signing_key'
 }
 
 async function getIdentity(gidUuid: string): Promise<identityNamespace.Identity> {
@@ -39,12 +22,6 @@ async function getIdentity(gidUuid: string): Promise<identityNamespace.Identity>
 export class IdentityNotFoundError extends Error {
   constructor(gidUuid: string) {
     super(`No identity found with GlobaliD UUID ${gidUuid}`);
-  }
-}
-
-export class PublicKeyNotFoundError extends Error {
-  constructor(gidUuid: string) {
-    super(`No public key found corresponding to the GlobaliD UUID ${gidUuid}`);
   }
 }
 

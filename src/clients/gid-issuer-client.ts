@@ -17,7 +17,7 @@ import { EpamClient, EpamDirectOfferResponse, ErrorCode, ErrorCodes } from './ep
 import FileUploader from './file-uploader';
 // imports needed for JSDocs
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { IdentityNotFoundError, PublicKeyNotFoundError, PublicKeyProvider } from './public-key-provider';
+import { IdentityNotFoundError, PublicKeyProvider } from './public-key-provider';
 
 export class GidIssuerClient {
   #accessTokenProvider: AccessTokenProvider;
@@ -123,7 +123,6 @@ export class GidIssuerClient {
    * * All other errors &rarr; `600-7`
    * @param request Credential request to validate
    * @throws {@linkcode IdentityNotFoundError} if request's `gidUuid` is invalid
-   * @throws {@linkcode PublicKeyNotFoundError} if no public key found corresponding to request's `gidUuid`
    * @throws {@linkcode InvalidSignatureError} if request's `signature` is invalid
    * @throws {@linkcode StaleRequestError} if request's `timestamp` is more than 5 minutes in the past
    * @throws {@linkcode EagerRequestError} if request's `timestamp` is more than 1 minute in the future
@@ -131,7 +130,7 @@ export class GidIssuerClient {
   async validateRequest(request: CredentialRequest): Promise<void> {
     validate(request, schemas.credentialRequest);
     try {
-      const publicKey = await this.#publicKeyProvider.getPublicSigningKey(request.gidUuid);
+      const publicKey = await this.#publicKeyProvider.getPublicKey(request.gidUuid);
       verifySignature(request, publicKey);
       validateTimestamp(request);
     } catch (error) {
@@ -167,5 +166,5 @@ export * from '../common';
 export { EagerRequestError, StaleRequestError } from '../utils/validate-timestamp';
 export { InvalidSignatureError } from '../utils/verify-signature';
 export { ErrorCode, ErrorCodes } from './epam-client';
-export { IdentityNotFoundError, PublicKeyNotFoundError } from './public-key-provider';
+export { IdentityNotFoundError } from './public-key-provider';
 export default GidIssuerClient;
